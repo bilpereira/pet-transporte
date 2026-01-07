@@ -10,24 +10,24 @@
         .container { max-width: 1200px; margin: 0 auto; }
         .header { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
         .header-content { flex: 1; }
-        .header h1 { font-size: 28px; color: #1f2937; margin-bottom: 5px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .header p { color: #6b7280; font-size: 14px; }
-        .user-badge { background: #3b82f6; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; white-space: nowrap; }
+        .header h1 { font-size: 30px; color: #1f2937; margin-bottom: 5px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header p { color: #6b7280; font-size: 15px; }
+        .user-badge { background: #3b82f6; color: white; padding: 8px 18px; border-radius: 20px; font-size: 15px; font-weight: 600; white-space: nowrap; }
         .user-badge.admin { background: linear-gradient(90deg, #10b981, #059669); }
-        .sync-status { background: #fef3c7; padding: 12px 20px; border-radius: 8px; margin: 15px 0; font-size: 14px; color: #92400e; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .sync-btn { background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; }
-        .add-btn { width: 100%; background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); color: white; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s; display: none; }
+        .sync-status { background: #fef3c7; padding: 12px 20px; border-radius: 8px; margin: 15px 0; font-size: 15px; color: #92400e; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .sync-btn { background: #3b82f6; color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: 600; }
+        .add-btn { width: 100%; background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); color: white; border: none; padding: 18px; border-radius: 12px; font-size: 18px; font-weight: 600; cursor: pointer; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s; display: none; }
         .add-btn.visible { display: block; }
         .add-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
         .form-container { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px; display: none; }
         .form-container.active { display: block; }
-        .form-container h2 { font-size: 22px; color: #1f2937; margin-bottom: 20px; }
+        .form-container h2 { font-size: 24px; color: #1f2937; margin-bottom: 20px; }
         .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; font-weight: 600; color: #374151; margin-bottom: 8px; font-size: 14px; }
-        .form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 15px; transition: border-color 0.3s; }
+        .form-group label { display: block; font-weight: 600; color: #374151; margin-bottom: 8px; font-size: 15px; }
+        .form-group input, .form-group select { width: 100%; padding: 14px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 16px; transition: border-color 0.3s; }
         .form-group input:focus, .form-group select:focus { outline: none; border-color: #3b82f6; }
         .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .submit-btn { width: 100%; background: linear-gradient(90deg, #10b981, #059669); color: white; border: none; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .submit-btn { width: 100%; background: linear-gradient(90deg, #10b981, #059669); color: white; border: none; padding: 16px; border-radius: 8px; font-size: 17px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3); }
         .submit-btn:disabled { background: #9ca3af; cursor: not-allowed; transform: none; }
         .pets-list { display: grid; gap: 20px; }
@@ -36,45 +36,47 @@
         .pet-card.arquivado { border-left: 5px solid #9ca3af; opacity: 0.8; background: #f9fafb; }
         .pet-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
         .pet-name-section { flex: 1; min-width: 200px; }
-        .pet-name-section h3 { font-size: 26px; color: #1f2937; margin-bottom: 5px; font-weight: 700; background: linear-gradient(90deg, #1f2937, #374151); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .pet-name-section p { font-size: 16px; color: #6b7280; font-weight: 500; }
+        .pet-name-section h3 { font-size: 28px; color: #1f2937; margin-bottom: 5px; font-weight: 700; background: linear-gradient(90deg, #1f2937, #374151); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .pet-name-section p { font-size: 17px; color: #6b7280; font-weight: 500; }
         .pet-details-right { text-align: right; }
-        .badge-status { display: inline-block; background: #f59e0b; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-right: 8px; margin-bottom: 8px; }
+        .badge-status { display: inline-block; background: #f59e0b; color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-right: 8px; margin-bottom: 8px; }
         .badge-status.aguardando { background: linear-gradient(90deg, #f59e0b, #d97706); }
         .badge-status.caminho { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
         .badge-status.entregue { background: linear-gradient(90deg, #10b981, #047857); }
         .badge-status.pago { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
         .badge-status.nao-pago { background: linear-gradient(90deg, #ef4444, #dc2626); }
-        .pet-time { color: #6b7280; font-size: 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
-        .hora-entregue { color: #10b981; font-weight: 600; font-size: 13px; margin-top: 5px; }
-        .delete-btn { background: linear-gradient(90deg, #ef4444, #dc2626); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.3s; display: none; }
+        .pet-time { color: #6b7280; font-size: 15px; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+        .pet-time strong { color: #374151; }
+        .hora-entregue { color: #10b981; font-weight: 600; font-size: 14px; margin-top: 3px; }
+        .delete-btn { background: linear-gradient(90deg, #ef4444, #dc2626); color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: 600; transition: all 0.3s; display: none; }
         .delete-btn.visible { display: block; }
         .delete-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3); }
-        .pet-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; font-size: 14px; background: #f8fafc; padding: 15px; border-radius: 8px; }
+        .pet-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; font-size: 15px; background: #f8fafc; padding: 15px; border-radius: 8px; }
         .pet-info-item { color: #4b5563; }
         .pet-info-item strong { color: #1f2937; }
-        .pet-address { margin-bottom: 15px; padding: 15px; background: #f0f9ff; border-radius: 8px; border: 2px solid #dbeafe; }
-        .pet-address p { color: #1e40af; margin-bottom: 8px; font-size: 14px; font-weight: 500; }
-        .copy-address-btn { background: linear-gradient(90deg, #60a5fa, #3b82f6); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; margin-top: 8px; transition: all 0.3s; }
+        .pet-address { margin-bottom: 20px; padding: 15px; background: #f0f9ff; border-radius: 8px; border: 2px solid #dbeafe; }
+        .pet-address p { color: #1e40af; margin-bottom: 8px; font-size: 15px; font-weight: 500; }
+        .copy-address-btn { background: linear-gradient(90deg, #60a5fa, #3b82f6); color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; margin-top: 8px; transition: all 0.3s; }
         .copy-address-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3); }
         .status-section { padding-top: 20px; border-top: 2px solid #e5e7eb; }
         .status-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
-        .status-btn { flex: 1; min-width: 130px; padding: 12px; border: none; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.3s; background: #e5e7eb; color: #374151; text-align: center; }
+        .status-btn { flex: 1; min-width: 140px; padding: 14px; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.3s; background: #e5e7eb; color: #374151; text-align: center; }
         .status-btn.active { background: linear-gradient(90deg, #3b82f6, #1d4ed8); color: white; }
         .status-btn.pago-btn { background: linear-gradient(90deg, #8b5cf6, #7c3aed); color: white; }
         .status-btn.nao-pago-btn { background: linear-gradient(90deg, #ef4444, #dc2626); color: white; }
+        .status-btn.sutil { background: linear-gradient(90deg, #93c5fd, #60a5fa); color: white; }
         .status-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         .status-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
         .observacoes-container { margin-top: 20px; }
-        .observacoes-label { font-weight: 600; color: #374151; font-size: 14px; margin-bottom: 8px; display: block; }
-        .observacoes { width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-family: inherit; font-size: 14px; margin-bottom: 15px; min-height: 80px; resize: vertical; }
+        .observacoes-label { font-weight: 600; color: #374151; font-size: 15px; margin-bottom: 8px; display: block; }
+        .observacoes { width: 100%; padding: 14px; border: 2px solid #d1d5db; border-radius: 8px; font-family: inherit; font-size: 15px; margin-bottom: 15px; min-height: 90px; resize: vertical; }
         .observacoes-admin { border-color: #10b981; background: #f0fdf4; }
         .observacoes-motorista { border-color: #3b82f6; background: #eff6ff; }
         .observacoes-readonly { background: #f9fafb; color: #6b7280; }
         .empty-state { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 50px 25px; text-align: center; color: #6b7280; }
-        .empty-state p:first-child { font-size: 18px; margin-bottom: 10px; font-weight: 600; }
-        .empty-state p:last-child { font-size: 14px; }
-        .mobile-warning { display: none; background: #fef3c7; padding: 10px; border-radius: 8px; margin: 10px 0; text-align: center; font-size: 13px; color: #92400e; }
+        .empty-state p:first-child { font-size: 20px; margin-bottom: 10px; font-weight: 600; }
+        .empty-state p:last-child { font-size: 15px; }
+        .mobile-warning { display: none; background: #fef3c7; padding: 12px; border-radius: 8px; margin: 10px 0; text-align: center; font-size: 14px; color: #92400e; }
         
         @media (max-width: 768px) {
             .header { flex-direction: column; text-align: center; gap: 15px; }
@@ -91,8 +93,8 @@
         @media (max-width: 480px) {
             body { padding: 15px; }
             .header, .pet-card, .form-container { padding: 20px; }
-            .header h1 { font-size: 24px; }
-            .pet-name-section h3 { font-size: 22px; }
+            .header h1 { font-size: 26px; }
+            .pet-name-section h3 { font-size: 24px; }
         }
     </style>
 </head>
@@ -131,19 +133,21 @@
             
             <div class="form-row">
                 <div class="form-group">
-                    <label>Pet (Tipo)</label>
-                    <select id="pet" onchange="atualizarRacas()">
-                        <option value="">Selecione</option>
-                        <option>Cachorro</option>
-                        <option>Gato</option>
-                        <option>Outro</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
                     <label>Raça</label>
                     <select id="raca">
-                        <option value="">Selecione primeiro o tipo</option>
+                        <option value="">Selecione</option>
+                        <option>Shitzu</option>
+                        <option>Maltes</option>
+                        <option>Yokshire</option>
+                        <option>Poodle</option>
+                        <option>Labrador</option>
+                        <option>Bulldog frances</option>
+                        <option>Golden</option>
+                        <option>Vira-lata</option>
+                        <option>Persa</option>
+                        <option>Siamês</option>
+                        <option>Maine Coon</option>
+                        <option>Outro</option>
                     </select>
                 </div>
                 
@@ -156,18 +160,18 @@
                         <option>Preto</option>
                         <option>Caramelo</option>
                         <option>Cinza</option>
-                        <option>Malhado</option>
+                        <option>Rajado</option>
                         <option>Outra</option>
                     </select>
                 </div>
-            </div>
-            
-            <div class="form-row">
+                
                 <div class="form-group">
                     <label>Tempo do Percurso</label>
                     <input type="text" id="tempo" placeholder="Ex: 12 minutos">
                 </div>
-                
+            </div>
+            
+            <div class="form-row">
                 <div class="form-group">
                     <label>Hora Retirada</label>
                     <input type="time" id="horaRetirada" value="14:30">
@@ -215,30 +219,6 @@
                 userBadge.textContent = 'Motorista';
                 userBadge.classList.remove('admin');
                 userRole.textContent = 'Sistema de transporte - Modo Motorista';
-            }
-            
-            // Inicializar raças
-            atualizarRacas();
-        }
-
-        function atualizarRacas() {
-            const racasPorPet = {
-                'Cachorro': ['Shitzu', 'Poodle', 'Labrador', 'Bulldog', 'Golden', 'Vira-lata', 'Outro'],
-                'Gato': ['Persa', 'Siamês', 'Maine Coon', 'Vira-lata', 'Outro'],
-                'Outro': ['Não especificado']
-            };
-            
-            const pet = document.getElementById('pet').value;
-            const select = document.getElementById('raca');
-            select.innerHTML = '<option value="">Selecione</option>';
-            
-            if (pet && racasPorPet[pet]) {
-                racasPorPet[pet].forEach(raca => {
-                    const option = document.createElement('option');
-                    option.value = raca;
-                    option.textContent = raca;
-                    select.appendChild(option);
-                });
             }
         }
 
@@ -293,7 +273,6 @@
                 id: Date.now(),
                 cliente: document.getElementById('cliente').value.trim(),
                 nomePet: document.getElementById('nomePet').value.trim(),
-                pet: document.getElementById('pet').value,
                 raca: document.getElementById('raca').value,
                 cor: document.getElementById('cor').value,
                 endereco: document.getElementById('endereco').value.trim(),
@@ -309,7 +288,7 @@
             };
 
             // Validar
-            if (!pet.cliente || !pet.nomePet || !pet.pet || !pet.raca || !pet.cor || !pet.endereco) {
+            if (!pet.cliente || !pet.nomePet || !pet.raca || !pet.cor || !pet.endereco) {
                 alert('Preencha todos os campos obrigatórios!');
                 return;
             }
@@ -320,7 +299,6 @@
             // Limpar formulário
             document.getElementById('cliente').value = '';
             document.getElementById('nomePet').value = '';
-            document.getElementById('pet').value = '';
             document.getElementById('raca').value = '';
             document.getElementById('cor').value = '';
             document.getElementById('endereco').value = '';
@@ -428,22 +406,24 @@
                         <div class="pet-name-section">
                             <h3>${pet.nomePet}</h3>
                             <p>${pet.cliente}</p>
-                            <div>
-                                <span class="badge-status ${pet.status.replace(/ /g, '-').toLowerCase()}">
-                                    ${pet.status}
-                                </span>
-                                <span class="badge-status ${pet.pagamento === 'Pago' ? 'pago' : 'nao-pago'}">
-                                    ${pet.pagamento}
-                                </span>
-                            </div>
+                            ${isAdmin ? `
+                                <div>
+                                    <span class="badge-status ${pet.status.replace(/ /g, '-').toLowerCase()}">
+                                        ${pet.status}
+                                    </span>
+                                    <span class="badge-status ${pet.pagamento === 'Pago' ? 'pago' : 'nao-pago'}">
+                                        ${pet.pagamento}
+                                    </span>
+                                </div>
+                            ` : ''}
                         </div>
                         <div class="pet-details-right">
                             <div class="pet-time">
-                                <span>⏰ Retirada: ${pet.horaRetirada || '--:--'}</span>
+                                <span>⏰ <strong>Retirada:</strong> ${pet.horaRetirada || '--:--'}</span>
                             </div>
                             ${pet.horaEntregue ? `
                                 <div class="hora-entregue">
-                                    ✅ Entregue: ${pet.horaEntregue}
+                                    ✅ <strong>Entregue:</strong> ${pet.horaEntregue}
                                 </div>
                             ` : ''}
                             ${isAdmin ? `
@@ -455,9 +435,6 @@
                     </div>
                     
                     <div class="pet-info">
-                        <div class="pet-info-item">
-                            <strong>Pet:</strong> ${pet.pet}
-                        </div>
                         <div class="pet-info-item">
                             <strong>Raça:</strong> ${pet.raca}
                         </div>
@@ -471,14 +448,16 @@
                     
                     <div class="pet-address">
                         <p>📍 <strong>Endereço:</strong> ${pet.endereco}</p>
-                        <button class="copy-address-btn" onclick="copiarEndereco('${pet.endereco.replace(/'/g, "\\'")}')">
-                            📋 Copiar Endereço
-                        </button>
+                        ${!isAdmin ? `
+                            <button class="copy-address-btn" onclick="copiarEndereco('${pet.endereco.replace(/'/g, "\\'")}')">
+                                📋 Copiar Endereço
+                            </button>
+                        ` : ''}
                     </div>
                     
                     <div class="status-section">
                         ${!isAdmin ? `
-                            <!-- BOTÕES DE STATUS (SÓ MOTORISTA) -->
+                            <!-- MOTORISTA: botões de status SÓ na seção de status -->
                             <div class="status-buttons">
                                 ${['Aguardando retirada', 'A caminho da loja', 'A caminho da entrega', 'Entregue'].map(status => `
                                     <button class="status-btn ${pet.status === status ? 'active' : ''}" 
@@ -490,25 +469,19 @@
                             </div>
                             
                             <div class="status-buttons" style="margin-top: 10px;">
-                                <button class="status-btn ${pet.pagamento === 'Pago' ? 'pago-btn active' : 'pago-btn'}" 
+                                <button class="status-btn sutil ${pet.pagamento === 'Pago' ? 'active' : ''}" 
                                         onclick="atualizarPetStatus(${pet.id}, 'pagamento', 'Pago')"
                                         ${isArquivado ? 'disabled' : ''}>
                                     ✓ Pago
                                 </button>
-                                <button class="status-btn ${pet.pagamento === 'Não pago' ? 'nao-pago-btn active' : 'nao-pago-btn'}" 
+                                <button class="status-btn sutil ${pet.pagamento === 'Não pago' ? 'active' : ''}" 
                                         onclick="atualizarPetStatus(${pet.id}, 'pagamento', 'Não pago')"
                                         ${isArquivado ? 'disabled' : ''}>
                                     ✗ Não Pago
                                 </button>
                             </div>
                         ` : `
-                            <!-- ADMIN só vê o status atual -->
-                            <div style="margin-bottom: 15px; padding: 12px; background: #f3f4f6; border-radius: 8px;">
-                                <strong>Status atual:</strong> ${pet.status}
-                                <br>
-                                <strong>Pagamento:</strong> ${pet.pagamento}
-                                ${pet.horaEntregue ? `<br><strong>Entregue às:</strong> ${pet.horaEntregue}` : ''}
-                            </div>
+                            <!-- ADMIN: só vê os badges no topo, nada aqui -->
                         `}
                         
                         <!-- OBSERVAÇÕES SEPARADAS -->
