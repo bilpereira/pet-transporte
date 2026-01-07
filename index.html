@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🐾 Pet Shop Transport</title>
     <style>
-        /* MANTENHA TODO O CSS ANTERIOR IGUAL */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: linear-gradient(135deg, #e0f2fe 0%, #e9d5ff 100%); min-height: 100vh; padding: 20px; }
         .container { max-width: 1200px; margin: 0 auto; }
@@ -56,7 +55,11 @@
         .status-btn.pago-btn { background: #8b5cf6; color: white; }
         .status-btn:hover:not(:disabled) { opacity: 0.9; }
         .status-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .observacoes { width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; margin-top: 10px; font-family: inherit; font-size: 14px; }
+        .observacoes-container { margin-top: 15px; }
+        .observacoes-label { font-weight: 600; color: #374151; font-size: 14px; margin-bottom: 8px; display: block; }
+        .observacoes { width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-family: inherit; font-size: 14px; margin-bottom: 10px; }
+        .observacoes-admin { border-color: #10b981; background: #f0fdf4; }
+        .observacoes-motorista { border-color: #3b82f6; background: #eff6ff; }
         .empty-state { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 60px 30px; text-align: center; color: #6b7280; }
         .empty-state p:first-child { font-size: 20px; margin-bottom: 10px; }
         .empty-state p:last-child { font-size: 14px; }
@@ -105,7 +108,7 @@
     </div>
 
     <script>
-        // ========== CONFIGURAÇÃO SIMPLES ==========
+        // ========== CONFIGURAÇÃO ==========
         const JSONBIN_CONFIG = {
             BIN_ID: '695de16743b1c97be91e7eeb',
             API_KEY: '$2a$10$Wmft46BmqMcXpiI3zbasQ.4xVnNwAtOSxia383nb1GxXxojFbX.Nm', // COLE SUA CHAVE AQUI
@@ -120,12 +123,21 @@
 
         // ========== FUNÇÕES BÁSICAS ==========
         function configurarInterface() {
-            document.getElementById('addBtn').classList.toggle('visible', isAdmin);
-            document.getElementById('userBadge').textContent = isAdmin ? 'Administrador' : 'Motorista';
-            document.getElementById('userBadge').classList.toggle('admin', isAdmin);
-            document.getElementById('userRole').textContent = isAdmin ? 
-                'Sistema de transporte - Modo Administrador' : 
-                'Sistema de transporte - Modo Motorista';
+            const addBtn = document.getElementById('addBtn');
+            const userBadge = document.getElementById('userBadge');
+            const userRole = document.getElementById('userRole');
+            
+            if (isAdmin) {
+                addBtn.classList.add('visible');
+                userBadge.textContent = 'Administrador';
+                userBadge.classList.add('admin');
+                userRole.textContent = 'Sistema de transporte - Modo Administrador';
+            } else {
+                addBtn.classList.remove('visible');
+                userBadge.textContent = 'Motorista';
+                userBadge.classList.remove('admin');
+                userRole.textContent = 'Sistema de transporte - Modo Motorista';
+            }
             
             // Inicializar raças
             atualizarRacas();
@@ -207,7 +219,8 @@
                 horaRetirada: document.getElementById('horaRetirada').value || '14:30',
                 status: 'Aguardando retirada',
                 pagamento: 'Pendente',
-                observacoes: '',
+                observacoesAdmin: '',       // Observação do ADMIN
+                observacoesMotorista: '',   // Observação do MOTORISTA
                 dataCriacao: new Date().toISOString()
             };
 
@@ -231,6 +244,9 @@
         }
 
         async function atualizarPetStatus(petId, campo, valor) {
+            // ADMIN NÃO PODE ALTERAR STATUS, só motorista
+            if (isAdmin) return;
+            
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
@@ -245,11 +261,17 @@
             mostrarPets();
         }
 
-        async function atualizarObservacoes(petId, texto) {
+        async function atualizarObservacoes(petId, tipo, texto) {
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
-            pet.observacoes = texto;
+            // Cada um atualiza sua própria observação
+            if (tipo === 'admin') {
+                pet.observacoesAdmin = texto;
+            } else {
+                pet.observacoesMotorista = texto;
+            }
+            
             await salvarPets();
         }
 
@@ -312,28 +334,62 @@
                     </div>
                     
                     <div class="status-section">
-                        <div class="status-buttons">
-                            ${['Aguardando retirada', 'A caminho da loja', 'A caminho da entrega', 'Entregue'].map(status => `
-                                <button class="status-btn ${pet.status === status ? 'active' : ''}" 
-                                        onclick="atualizarPetStatus(${pet.id}, 'status', '${status}')"
+                        <!-- BOTÕES DE STATUS (SÓ MOTORISTA VÊ/ USA) -->
+                        ${!isAdmin ? `
+                            <div class="status-buttons">
+                                ${['Aguardando retirada', 'A caminho da loja', 'A caminho da entrega', 'Entregue'].map(status => `
+                                    <button class="status-btn ${pet.status === status ? 'active' : ''}" 
+                                            onclick="atualizarPetStatus(${pet.id}, 'status', '${status}')"
+                                            ${pet.arquivado ? 'disabled' : ''}>
+                                        ${status}
+                                    </button>
+                                `).join('')}
+                            </div>
+                            
+                            <div style="margin-top: 15px;">
+                                <button class="status-btn ${pet.pagamento === 'Pago' ? 'pago-btn' : ''}" 
+                                        onclick="atualizarPetStatus(${pet.id}, 'pagamento', '${pet.pagamento === 'Pago' ? 'Pendente' : 'Pago'}')"
                                         ${pet.arquivado ? 'disabled' : ''}>
-                                    ${status}
+                                    ${pet.pagamento === 'Pago' ? '✓ Pago' : 'Marcar como Pago'}
                                 </button>
-                            `).join('')}
-                        </div>
+                            </div>
+                        ` : `
+                            <!-- ADMIN só vê o status atual -->
+                            <div style="margin-bottom: 15px;">
+                                <strong>Status atual:</strong> ${pet.status}
+                                ${pet.pagamento === 'Pago' ? ' | <strong>Pagamento:</strong> Pago' : ''}
+                            </div>
+                        `}
                         
-                        <div style="margin-top: 15px;">
-                            <button class="status-btn ${pet.pagamento === 'Pago' ? 'pago-btn' : ''}" 
-                                    onclick="atualizarPetStatus(${pet.id}, 'pagamento', '${pet.pagamento === 'Pago' ? 'Pendente' : 'Pago'}')">
-                                ${pet.pagamento === 'Pago' ? '✓ Pago' : 'Marcar como Pago'}
-                            </button>
-                        </div>
-                        
-                        <div style="margin-top: 15px;">
-                            <label style="font-weight: 600; color: #374151; font-size: 14px;">📝 Observações:</label>
-                            <textarea class="observacoes" 
-                                      onchange="atualizarObservacoes(${pet.id}, this.value)"
-                                      placeholder="Digite observações...">${pet.observacoes || ''}</textarea>
+                        <!-- OBSERVAÇÕES SEPARADAS -->
+                        <div class="observacoes-container">
+                            ${isAdmin ? `
+                                <!-- ADMIN vê e edita SUA observação -->
+                                <div>
+                                    <span class="observacoes-label">📝 Minhas Observações (Admin):</span>
+                                    <textarea class="observacoes observacoes-admin" 
+                                              onchange="atualizarObservacoes(${pet.id}, 'admin', this.value)"
+                                              placeholder="Digite observações administrativas...">${pet.observacoesAdmin || ''}</textarea>
+                                    
+                                    <span class="observacoes-label">📝 Observações do Motorista:</span>
+                                    <textarea class="observacoes observacoes-motorista" 
+                                              readonly
+                                              placeholder="Observações do motorista aparecerão aqui...">${pet.observacoesMotorista || ''}</textarea>
+                                </div>
+                            ` : `
+                                <!-- MOTORISTA vê e edita SUA observação -->
+                                <div>
+                                    <span class="observacoes-label">📝 Observações do Admin:</span>
+                                    <textarea class="observacoes observacoes-admin" 
+                                              readonly
+                                              placeholder="Observações do admin aparecerão aqui...">${pet.observacoesAdmin || ''}</textarea>
+                                    
+                                    <span class="observacoes-label">📝 Minhas Observações (Motorista):</span>
+                                    <textarea class="observacoes observacoes-motorista" 
+                                              onchange="atualizarObservacoes(${pet.id}, 'motorista', this.value)"
+                                              placeholder="Digite suas observações...">${pet.observacoesMotorista || ''}</textarea>
+                                </div>
+                            `}
                         </div>
                     </div>
                 </div>
@@ -357,4 +413,3 @@
     </script>
 </body>
 </html>
-
