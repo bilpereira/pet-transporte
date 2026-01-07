@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🐾 Pet Shop Transport</title>
+    <script src="https://unpkg.com/airtable@0.12.2/build/airtable.browser.js"></script>
     <style>
         * {
             margin: 0;
@@ -35,14 +36,14 @@
         }
         
         .header h1 {
-            font-size: 32px;
+            font-size: 28px;
             color: #1f2937;
             margin-bottom: 8px;
         }
         
         .header p {
             color: #6b7280;
-            font-size: 16px;
+            font-size: 14px;
         }
         
         .user-badge {
@@ -60,24 +61,12 @@
         
         .sync-status {
             background: #fef3c7;
-            padding: 10px 20px;
+            padding: 12px 20px;
             border-radius: 8px;
             margin: 15px 0;
-            font-size: 14px;
+            font-size: 13px;
             color: #92400e;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .sync-btn {
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
+            text-align: center;
         }
         
         .add-btn {
@@ -102,14 +91,13 @@
         
         .add-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
         
         .form-container {
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 30px;
+            padding: 25px;
             margin-bottom: 30px;
             display: none;
         }
@@ -119,13 +107,13 @@
         }
         
         .form-container h2 {
-            font-size: 24px;
+            font-size: 22px;
             color: #1f2937;
             margin-bottom: 20px;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
         
         .form-group label {
@@ -189,7 +177,7 @@
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 25px;
+            padding: 20px;
             border-left: 5px solid #3b82f6;
         }
         
@@ -197,25 +185,25 @@
             display: flex;
             justify-content: space-between;
             align-items: start;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .pet-card-header h3 {
-            font-size: 28px;
+            font-size: 24px;
             color: #1f2937;
             margin-bottom: 5px;
         }
         
         .pet-card-header p {
-            font-size: 18px;
+            font-size: 16px;
             color: #6b7280;
         }
         
         .pet-info {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 15px;
             font-size: 14px;
         }
         
@@ -236,26 +224,23 @@
         
         .pet-address p {
             color: #374151;
-            margin-bottom: 8px;
             font-size: 14px;
         }
         
         .status-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            padding-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding-top: 15px;
             border-top: 2px solid #e5e7eb;
         }
         
         .status-btn {
-            flex: 1;
-            min-width: 120px;
             padding: 12px;
             border: none;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             transition: all 0.3s;
             background: #e5e7eb;
@@ -282,17 +267,8 @@
             color: white;
         }
         
-        .status-btn:hover:not(:disabled) {
-            background: #d1d5db;
-        }
-        
-        .status-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        .status-btn.active:hover:not(:disabled) {
-            opacity: 0.9;
+        .status-btn:active {
+            transform: scale(0.95);
         }
         
         .observacoes {
@@ -310,42 +286,37 @@
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 60px 30px;
+            padding: 50px 30px;
             text-align: center;
             color: #6b7280;
         }
         
         .empty-state p:first-child {
-            font-size: 20px;
+            font-size: 18px;
             margin-bottom: 10px;
         }
         
-        .empty-state p:last-child {
-            font-size: 14px;
-        }
-        
-        .loading {
-            opacity: 0.7;
-            pointer-events: none;
-        }
-        
         @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            
-            .status-buttons {
-                flex-direction: column;
-            }
-            
-            .status-btn {
-                min-width: 100%;
-            }
-            
             .header {
                 flex-direction: column;
                 text-align: center;
                 gap: 15px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .pet-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .status-buttons {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -361,8 +332,7 @@
         </div>
         
         <div class="sync-status" id="syncStatus">
-            <span>🔄 Conectado ao Airtable | Última atualização: <span id="lastUpdate">--:--:--</span></span>
-            <button class="sync-btn" onclick="loadPets()">Atualizar Agora</button>
+            🔄 Carregando...
         </div>
         
         <button class="add-btn" id="addBtn" onclick="toggleForm()">➕ Adicionar Novo Pet</button>
@@ -389,10 +359,12 @@
                 <div class="form-group">
                     <label>Raça</label>
                     <select id="raca">
-                        <option value="">Selecione primeiro o tipo</option>
+                        <option value="">Primeiro selecione o tipo</option>
                     </select>
                 </div>
-                
+            </div>
+            
+            <div class="form-row">
                 <div class="form-group">
                     <label>Cor</label>
                     <select id="cor">
@@ -406,11 +378,11 @@
                         <option>Outra</option>
                     </select>
                 </div>
-            </div>
-            
-            <div class="form-group">
-                <label>Nome do Pet</label>
-                <input type="text" id="nomePet" placeholder="Ex: Nick">
+                
+                <div class="form-group">
+                    <label>Nome do Pet</label>
+                    <input type="text" id="nomePet" placeholder="Ex: Nick">
+                </div>
             </div>
             
             <div class="form-group">
@@ -437,11 +409,21 @@
     </div>
 
     <script>
-        const AIRTABLE_TOKEN = 'patHnDB7MtTpp432z.9cff9d1afa8d7dd43371a2716199ff004a5bcfa0fca1405b48a93529d2687c3b';
-        const BASE_ID = 'appjQY5LMgmxwxYFR';
-        const TABLE_ID = 'tblnLF22aJA7KsoH6';
+        const AIRTABLE_API_KEY = 'patHnDB7MtTpp432z.9cff9d1afa8d7dd43371a2716199ff004a5bcfa0fca1405b48a93529d2687c3b';
+        const AIRTABLE_BASE_ID = 'appjQY5LMgmxwxYFR';
+        const AIRTABLE_TABLE_NAME = 'tblnLF22aJA7KsoH6';
+
+        let base;
+        let table;
         
-        const API_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`;
+        try {
+            const Airtable = window.Airtable;
+            Airtable.configure({ apiKey: AIRTABLE_API_KEY });
+            base = Airtable.base(AIRTABLE_BASE_ID);
+            table = base(AIRTABLE_TABLE_NAME);
+        } catch (e) {
+            console.error('Erro ao configurar Airtable:', e);
+        }
 
         const urlParams = new URLSearchParams(window.location.search);
         const modo = urlParams.get('modo') || 'motorista';
@@ -463,49 +445,42 @@
             
             if (isAdmin) {
                 addBtn.classList.add('visible');
-                userBadge.textContent = 'Administrador';
+                userBadge.textContent = 'Admin';
                 userBadge.classList.add('admin');
                 userRole.textContent = 'Modo Administrador';
             } else {
-                addBtn.classList.remove('visible');
                 userBadge.textContent = 'Motorista';
-                userBadge.classList.remove('admin');
                 userRole.textContent = 'Modo Motorista';
             }
         }
 
-        async function loadPets() {
-            if (isLoading) return;
+        function loadPets() {
+            if (isLoading || !table) return;
             
             isLoading = true;
-            showMessage('🔄 Carregando pets...', 'loading');
+            showMessage('🔄 Carregando pets...');
+            pets = [];
             
-            try {
-                const response = await fetch(API_URL, {
-                    headers: {
-                        'Authorization': `Bearer ${AIRTABLE_TOKEN}`
-                    }
-                });
+            table.select({
+                view: 'Grid view'
+            }).eachPage((records, fetchNextPage) => {
+                pets = pets.concat(records);
+                fetchNextPage();
+            }, (err) => {
+                isLoading = false;
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
+                if (err) {
+                    console.error('Erro:', err);
+                    showMessage('❌ Erro ao carregar pets');
+                    return;
                 }
                 
-                const data = await response.json();
-                pets = data.records || [];
-                
                 renderPets();
-                updateLastSync();
-                showMessage('✅ Pets carregados!', 'success');
-            } catch (error) {
-                console.error('Erro ao carregar:', error);
-                showMessage('❌ Erro ao carregar. Verifique a conexão.', 'error');
-            } finally {
-                isLoading = false;
-            }
+                showMessage(`✅ ${pets.length} pet(s) carregado(s)`);
+            });
         }
 
-        async function addPet() {
+        function addPet() {
             const cliente = document.getElementById('cliente').value.trim();
             const pet = document.getElementById('pet').value;
             const raca = document.getElementById('raca').value;
@@ -516,47 +491,42 @@
             const horaRetirada = document.getElementById('horaRetirada').value;
 
             if (!cliente || !pet || !raca || !cor || !nomePet || !endereco || !tempo) {
-                showMessage('⚠️ Preencha todos os campos!', 'warning');
+                showMessage('⚠️ Preencha todos os campos!');
                 return;
             }
 
-            if (isLoading) return;
+            if (isLoading || !table) return;
             isLoading = true;
             
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.textContent = 'Adicionando...';
             submitBtn.disabled = true;
 
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        fields: {
-                            'Cliente': cliente,
-                            'Pet': pet,
-                            'Raca': raca,
-                            'Cor': cor,
-                            'Nome_Pet': nomePet,
-                            'Endereco': endereco,
-                            'Tempo_Percurso': tempo,
-                            'Status_Transporte': 'Aguardando retirada',
-                            'Status_Pagamento': 'Pendente',
-                            'Hora_Retirada': horaRetirada,
-                            'Observacoes_Motorista': ''
-                        }
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error('Erro Airtable:', errorData);
-                    throw new Error('Falha ao adicionar');
+            table.create([{
+                fields: {
+                    'Cliente': cliente,
+                    'Pet': pet,
+                    'Raca': raca,
+                    'Cor': cor,
+                    'Nome_Pet': nomePet,
+                    'Endereco': endereco,
+                    'Tempo_Percurso': tempo,
+                    'Status_Transporte': 'Aguardando retirada',
+                    'Status_Pagamento': 'Pendente',
+                    'Hora_Retirada': horaRetirada,
+                    'Observacoes_Motorista': ''
                 }
-
+            }], (err, records) => {
+                isLoading = false;
+                submitBtn.textContent = 'Adicionar Pet';
+                submitBtn.disabled = false;
+                
+                if (err) {
+                    console.error('Erro ao adicionar:', err);
+                    showMessage('❌ Erro ao adicionar: ' + err.message);
+                    return;
+                }
+                
                 document.getElementById('cliente').value = '';
                 document.getElementById('pet').value = '';
                 document.getElementById('raca').value = '';
@@ -567,63 +537,44 @@
                 document.getElementById('horaRetirada').value = '14:30';
                 
                 toggleForm();
-                showMessage('✅ Pet adicionado!', 'success');
-                setTimeout(loadPets, 1000);
-            } catch (error) {
-                console.error('Erro:', error);
-                showMessage('❌ Erro ao adicionar. Tente novamente.', 'error');
-            } finally {
-                isLoading = false;
-                submitBtn.textContent = 'Adicionar Pet';
-                submitBtn.disabled = false;
-            }
+                showMessage('✅ Pet adicionado com sucesso!');
+                setTimeout(loadPets, 500);
+            });
         }
 
-        async function updateStatus(recordId, field, value) {
-            if (isLoading) return;
+        function updateStatus(recordId, field, value) {
+            if (isLoading || !table) return;
             
-            try {
-                const response = await fetch(`${API_URL}/${recordId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        fields: {
-                            [field]: value
-                        }
-                    })
-                });
-
-                if (response.ok) {
-                    showMessage('✅ Status atualizado!', 'success');
-                    setTimeout(loadPets, 500);
+            const updates = {};
+            updates[field] = value;
+            
+            table.update([{
+                id: recordId,
+                fields: updates
+            }], (err) => {
+                if (err) {
+                    console.error('Erro:', err);
+                    showMessage('❌ Erro ao atualizar');
+                    return;
                 }
-            } catch (error) {
-                console.error('Erro:', error);
-                showMessage('❌ Erro ao atualizar', 'error');
-            }
+                showMessage('✅ Status atualizado!');
+                setTimeout(loadPets, 300);
+            });
         }
 
-        async function updateObservacoes(recordId, observacoes) {
-            try {
-                await fetch(`${API_URL}/${recordId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        fields: {
-                            'Observacoes_Motorista': observacoes
-                        }
-                    })
-                });
-                showMessage('✅ Observação salva!', 'success');
-            } catch (error) {
-                console.error('Erro:', error);
-            }
+        function updateObservacoes(recordId, observacoes) {
+            if (!table) return;
+            
+            table.update([{
+                id: recordId,
+                fields: { 'Observacoes_Motorista': observacoes }
+            }], (err) => {
+                if (err) {
+                    console.error('Erro:', err);
+                    return;
+                }
+                showMessage('✅ Observação salva!');
+            });
         }
 
         function toggleForm() {
@@ -657,7 +608,7 @@
                 container.innerHTML = `
                     <div class="empty-state">
                         <p>📭 Nenhum pet cadastrado</p>
-                        <p>${isAdmin ? 'Adicione um pet clicando no botão acima' : 'Aguardando pets para transporte'}</p>
+                        <p>${isAdmin ? 'Adicione pets usando o botão acima' : 'Aguardando pets'}</p>
                     </div>
                 `;
                 return;
@@ -685,7 +636,7 @@
                         </div>
                         
                         <div class="pet-address">
-                            <p>📍 <strong>Endereço:</strong> ${f.Endereco || '-'}</p>
+                            <p>📍 ${f.Endereco || 'Sem endereço'}</p>
                         </div>
                         
                         <div class="status-buttons">
@@ -708,7 +659,7 @@
                         </div>
                         
                         <div style="margin-top: 15px;">
-                            <label style="font-weight: 600; color: #374151; font-size: 14px;">📝 Observações:</label>
+                            <label style="font-weight: 600; color: #374151; font-size: 13px; display: block; margin-bottom: 8px;">📝 Observações:</label>
                             <textarea class="observacoes" 
                                       placeholder="Digite observações..." 
                                       onchange="updateObservacoes('${record.id}', this.value)">${f.Observacoes_Motorista || ''}</textarea>
@@ -718,52 +669,23 @@
             }).join('');
         }
 
-        function showMessage(text, type) {
-            const status = document.getElementById('syncStatus');
-            const colors = {
-                success: '#d1fae5',
-                error: '#fee2e2',
-                warning: '#fef3c7',
-                loading: '#dbeafe'
-            };
-            
-            const textColors = {
-                success: '#065f46',
-                error: '#991b1b',
-                warning: '#92400e',
-                loading: '#1e40af'
-            };
-            
-            status.style.background = colors[type] || '#f3f4f6';
-            status.style.color = textColors[type] || '#1f2937';
-            status.firstElementChild.innerHTML = text;
-            
-            if (type !== 'loading') {
-                setTimeout(() => {
-                    status.style.background = '#fef3c7';
-                    status.style.color = '#92400e';
-                    updateLastSync();
-                }, 3000);
-            }
-        }
-
-        function updateLastSync() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('pt-BR');
-            document.getElementById('lastUpdate').textContent = timeString;
-            const span = document.getElementById('syncStatus').firstElementChild;
-            span.innerHTML = `🔄 Conectado | Última atualização: ${timeString}`;
+        function showMessage(text) {
+            document.getElementById('syncStatus').innerHTML = text;
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             configurarInterface();
-            loadPets();
             
-            setInterval(() => {
-                if (!isLoading && document.visibilityState === 'visible') {
-                    loadPets();
-                }
-            }, 30000);
+            if (table) {
+                loadPets();
+                setInterval(() => {
+                    if (!isLoading && document.visibilityState === 'visible') {
+                        loadPets();
+                    }
+                }, 30000);
+            } else {
+                showMessage('❌ Erro ao conectar com Airtable');
+            }
         });
     </script>
 </body>
