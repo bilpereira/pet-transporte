@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🐾 Pet Shop Transport</title>
-    <script src="https://unpkg.com/airtable@0.12.2/build/airtable.browser.js"></script>
     <style>
+        /* (MANTENHA TODO O CSS ANTERIOR - é o mesmo) */
         * {
             margin: 0;
             padding: 0;
@@ -36,14 +36,14 @@
         }
         
         .header h1 {
-            font-size: 28px;
+            font-size: 32px;
             color: #1f2937;
             margin-bottom: 8px;
         }
         
         .header p {
             color: #6b7280;
-            font-size: 14px;
+            font-size: 16px;
         }
         
         .user-badge {
@@ -61,12 +61,24 @@
         
         .sync-status {
             background: #fef3c7;
-            padding: 12px 20px;
+            padding: 10px 20px;
             border-radius: 8px;
             margin: 15px 0;
-            font-size: 13px;
+            font-size: 14px;
             color: #92400e;
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .sync-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
         }
         
         .add-btn {
@@ -91,13 +103,14 @@
         
         .add-btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
         
         .form-container {
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 25px;
+            padding: 30px;
             margin-bottom: 30px;
             display: none;
         }
@@ -107,13 +120,13 @@
         }
         
         .form-container h2 {
-            font-size: 22px;
+            font-size: 24px;
             color: #1f2937;
             margin-bottom: 20px;
         }
         
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
         
         .form-group label {
@@ -177,7 +190,7 @@
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 20px;
+            padding: 25px;
             border-left: 5px solid #3b82f6;
         }
         
@@ -185,25 +198,25 @@
             display: flex;
             justify-content: space-between;
             align-items: start;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
         .pet-card-header h3 {
-            font-size: 24px;
+            font-size: 28px;
             color: #1f2937;
             margin-bottom: 5px;
         }
         
         .pet-card-header p {
-            font-size: 16px;
+            font-size: 18px;
             color: #6b7280;
         }
         
         .pet-info {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
             font-size: 14px;
         }
         
@@ -224,23 +237,26 @@
         
         .pet-address p {
             color: #374151;
+            margin-bottom: 8px;
             font-size: 14px;
         }
         
         .status-buttons {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            padding-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-top: 20px;
             border-top: 2px solid #e5e7eb;
         }
         
         .status-btn {
+            flex: 1;
+            min-width: 120px;
             padding: 12px;
             border: none;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 14px;
             cursor: pointer;
             transition: all 0.3s;
             background: #e5e7eb;
@@ -267,8 +283,17 @@
             color: white;
         }
         
-        .status-btn:active {
-            transform: scale(0.95);
+        .status-btn:hover:not(:disabled) {
+            background: #d1d5db;
+        }
+        
+        .status-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .status-btn.active:hover:not(:disabled) {
+            opacity: 0.9;
         }
         
         .observacoes {
@@ -279,44 +304,48 @@
             margin-top: 10px;
             font-family: inherit;
             font-size: 14px;
-            min-height: 80px;
         }
         
         .empty-state {
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 50px 30px;
+            padding: 60px 30px;
             text-align: center;
             color: #6b7280;
         }
         
         .empty-state p:first-child {
-            font-size: 18px;
+            font-size: 20px;
             margin-bottom: 10px;
         }
         
+        .empty-state p:last-child {
+            font-size: 14px;
+        }
+        
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
         @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
-            }
-            
-            .header h1 {
-                font-size: 24px;
-            }
-            
             .form-row {
                 grid-template-columns: 1fr;
             }
             
-            .pet-info {
-                grid-template-columns: 1fr;
+            .status-buttons {
+                flex-direction: column;
             }
             
-            .status-buttons {
-                grid-template-columns: 1fr;
+            .status-btn {
+                min-width: 100%;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
             }
         }
     </style>
@@ -332,7 +361,8 @@
         </div>
         
         <div class="sync-status" id="syncStatus">
-            🔄 Carregando...
+            <span>🔄 Conectado | Última atualização: <span id="lastUpdate">--:--:--</span></span>
+            <button class="sync-btn" onclick="loadPets()">Atualizar Agora</button>
         </div>
         
         <button class="add-btn" id="addBtn" onclick="toggleForm()">➕ Adicionar Novo Pet</button>
@@ -359,12 +389,10 @@
                 <div class="form-group">
                     <label>Raça</label>
                     <select id="raca">
-                        <option value="">Primeiro selecione o tipo</option>
+                        <option value="">Selecione primeiro o tipo</option>
                     </select>
                 </div>
-            </div>
-            
-            <div class="form-row">
+                
                 <div class="form-group">
                     <label>Cor</label>
                     <select id="cor">
@@ -378,11 +406,11 @@
                         <option>Outra</option>
                     </select>
                 </div>
-                
-                <div class="form-group">
-                    <label>Nome do Pet</label>
-                    <input type="text" id="nomePet" placeholder="Ex: Nick">
-                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Nome do Pet</label>
+                <input type="text" id="nomePet" placeholder="Ex: Nick">
             </div>
             
             <div class="form-group">
@@ -409,22 +437,15 @@
     </div>
 
     <script>
-        const AIRTABLE_API_KEY = 'patHnDB7MtTpp432z.9cff9d1afa8d7dd43371a2716199ff004a5bcfa0fca1405b48a93529d2687c3b';
-        const AIRTABLE_BASE_ID = 'appjQY5LMgmxwxYFR';
-        const AIRTABLE_TABLE_NAME = 'tblnLF22aJA7KsoH6';
+        // ========== CONFIGURAÇÃO JSONBIN.IO ==========
+        // VOCÊ VAI PRECISAR CRIAR SUA CONTA E SUBSTITUIR ESTES VALORES:
+        const JSONBIN_CONFIG = {
+            BIN_ID: 'SEU_BIN_ID_AQUI', // Ex: '67a3d9b2ad19ca34f8b12345'
+            MASTER_KEY: '$2a$10$SUA_MASTER_KEY_AQUI', // Encontre na sua conta
+            API_URL: 'https://api.jsonbin.io/v3/b'
+        };
 
-        let base;
-        let table;
-        
-        try {
-            const Airtable = window.Airtable;
-            Airtable.configure({ apiKey: AIRTABLE_API_KEY });
-            base = Airtable.base(AIRTABLE_BASE_ID);
-            table = base(AIRTABLE_TABLE_NAME);
-        } catch (e) {
-            console.error('Erro ao configurar Airtable:', e);
-        }
-
+        // ========== DETECTAR MODO ==========
         const urlParams = new URLSearchParams(window.location.search);
         const modo = urlParams.get('modo') || 'motorista';
         const isAdmin = modo === 'admin';
@@ -438,6 +459,58 @@
         let pets = [];
         let isLoading = false;
 
+        // ========== FUNÇÕES JSONBIN ==========
+        async function fetchFromJSONBin() {
+            try {
+                const response = await fetch(`${JSONBIN_CONFIG.API_URL}/${JSONBIN_CONFIG.BIN_ID}/latest`, {
+                    headers: {
+                        'X-Master-Key': JSONBIN_CONFIG.MASTER_KEY,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                return data.record.pets || [];
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+                // Se falhar, usar dados locais
+                const localData = localStorage.getItem('pets_backup');
+                return localData ? JSON.parse(localData) : [];
+            }
+        }
+
+        async function saveToJSONBin(petsArray) {
+            try {
+                const response = await fetch(`${JSONBIN_CONFIG.API_URL}/${JSONBIN_CONFIG.BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'X-Master-Key': JSONBIN_CONFIG.MASTER_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ pets: petsArray })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                // Backup local também
+                localStorage.setItem('pets_backup', JSON.stringify(petsArray));
+                
+                return true;
+            } catch (error) {
+                console.error('Erro ao salvar:', error);
+                // Backup local se falhar
+                localStorage.setItem('pets_backup', JSON.stringify(petsArray));
+                return false;
+            }
+        }
+
+        // ========== FUNÇÕES DA INTERFACE ==========
         function configurarInterface() {
             const addBtn = document.getElementById('addBtn');
             const userBadge = document.getElementById('userBadge');
@@ -445,42 +518,37 @@
             
             if (isAdmin) {
                 addBtn.classList.add('visible');
-                userBadge.textContent = 'Admin';
+                userBadge.textContent = 'Administrador';
                 userBadge.classList.add('admin');
-                userRole.textContent = 'Modo Administrador';
+                userRole.textContent = 'Sistema de transporte de pets - Modo Administrador';
             } else {
+                addBtn.classList.remove('visible');
                 userBadge.textContent = 'Motorista';
-                userRole.textContent = 'Modo Motorista';
+                userBadge.classList.remove('admin');
+                userRole.textContent = 'Sistema de transporte de pets - Modo Motorista';
             }
         }
 
-        function loadPets() {
-            if (isLoading || !table) return;
+        async function loadPets() {
+            if (isLoading) return;
             
             isLoading = true;
-            showMessage('🔄 Carregando pets...');
-            pets = [];
+            showMessage('🔄 Carregando pets...', 'loading');
             
-            table.select({
-                view: 'Grid view'
-            }).eachPage((records, fetchNextPage) => {
-                pets = pets.concat(records);
-                fetchNextPage();
-            }, (err) => {
-                isLoading = false;
-                
-                if (err) {
-                    console.error('Erro:', err);
-                    showMessage('❌ Erro ao carregar pets');
-                    return;
-                }
-                
+            try {
+                pets = await fetchFromJSONBin();
                 renderPets();
-                showMessage(`✅ ${pets.length} pet(s) carregado(s)`);
-            });
+                updateLastSync();
+                showMessage(`✅ ${pets.length} pets carregados`, 'success');
+            } catch (error) {
+                console.error('Erro ao carregar:', error);
+                showMessage('⚠️ Usando dados locais', 'warning');
+            } finally {
+                isLoading = false;
+            }
         }
 
-        function addPet() {
+        async function addPet() {
             const cliente = document.getElementById('cliente').value.trim();
             const pet = document.getElementById('pet').value;
             const raca = document.getElementById('raca').value;
@@ -491,90 +559,106 @@
             const horaRetirada = document.getElementById('horaRetirada').value;
 
             if (!cliente || !pet || !raca || !cor || !nomePet || !endereco || !tempo) {
-                showMessage('⚠️ Preencha todos os campos!');
+                showMessage('⚠️ Preencha todos os campos!', 'warning');
                 return;
             }
 
-            if (isLoading || !table) return;
+            if (isLoading) return;
             isLoading = true;
             
             const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.textContent;
             submitBtn.textContent = 'Adicionando...';
             submitBtn.disabled = true;
 
-            table.create([{
-                fields: {
-                    'Cliente': cliente,
-                    'Pet': pet,
-                    'Raca': raca,
-                    'Cor': cor,
-                    'Nome_Pet': nomePet,
-                    'Endereco': endereco,
-                    'Tempo_Percurso': tempo,
-                    'Status_Transporte': 'Aguardando retirada',
-                    'Status_Pagamento': 'Pendente',
-                    'Hora_Retirada': horaRetirada,
-                    'Observacoes_Motorista': ''
+            try {
+                const newPet = {
+                    id: Date.now(),
+                    cliente,
+                    pet,
+                    raca,
+                    cor,
+                    nomePet,
+                    endereco,
+                    tempo,
+                    status: 'Aguardando retirada',
+                    pagamento: 'Pendente',
+                    horaRetirada: horaRetirada || '14:30',
+                    observacoes: '',
+                    dataCriacao: new Date().toISOString()
+                };
+
+                // Carregar pets existentes
+                const existingPets = await fetchFromJSONBin();
+                const updatedPets = [...existingPets, newPet];
+                
+                // Salvar
+                const saved = await saveToJSONBin(updatedPets);
+                
+                if (saved) {
+                    // Limpar formulário
+                    document.getElementById('cliente').value = '';
+                    document.getElementById('nomePet').value = '';
+                    document.getElementById('endereco').value = '';
+                    document.getElementById('tempo').value = '';
+                    document.getElementById('raca').value = '';
+                    document.getElementById('cor').value = '';
+                    document.getElementById('horaRetirada').value = '14:30';
+                    
+                    toggleForm();
+                    showMessage('✅ Pet adicionado com sucesso!', 'success');
+                    
+                    // Recarregar lista
+                    pets = updatedPets;
+                    renderPets();
                 }
-            }], (err, records) => {
+            } catch (error) {
+                console.error('Erro ao adicionar:', error);
+                showMessage('❌ Erro ao adicionar pet', 'error');
+            } finally {
                 isLoading = false;
-                submitBtn.textContent = 'Adicionar Pet';
+                submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
-                
-                if (err) {
-                    console.error('Erro ao adicionar:', err);
-                    showMessage('❌ Erro ao adicionar: ' + err.message);
-                    return;
-                }
-                
-                document.getElementById('cliente').value = '';
-                document.getElementById('pet').value = '';
-                document.getElementById('raca').value = '';
-                document.getElementById('cor').value = '';
-                document.getElementById('nomePet').value = '';
-                document.getElementById('endereco').value = '';
-                document.getElementById('tempo').value = '';
-                document.getElementById('horaRetirada').value = '14:30';
-                
-                toggleForm();
-                showMessage('✅ Pet adicionado com sucesso!');
-                setTimeout(loadPets, 500);
-            });
+            }
         }
 
-        function updateStatus(recordId, field, value) {
-            if (isLoading || !table) return;
+        async function updateStatus(petId, field, value) {
+            if (isLoading) return;
             
-            const updates = {};
-            updates[field] = value;
+            // Atualizar localmente primeiro
+            const petIndex = pets.findIndex(p => p.id === petId);
+            if (petIndex === -1) return;
             
-            table.update([{
-                id: recordId,
-                fields: updates
-            }], (err) => {
-                if (err) {
-                    console.error('Erro:', err);
-                    showMessage('❌ Erro ao atualizar');
-                    return;
-                }
-                showMessage('✅ Status atualizado!');
-                setTimeout(loadPets, 300);
-            });
+            const originalValue = pets[petIndex][field];
+            pets[petIndex][field] = value;
+            
+            // Feedback visual
+            renderPets();
+            
+            try {
+                // Salvar no JSONBin
+                await saveToJSONBin(pets);
+                showMessage('✅ Status atualizado!', 'success');
+            } catch (error) {
+                // Reverter se falhar
+                pets[petIndex][field] = originalValue;
+                renderPets();
+                showMessage('❌ Erro ao salvar. Verifique conexão.', 'error');
+            }
         }
 
-        function updateObservacoes(recordId, observacoes) {
-            if (!table) return;
+        async function updateObservacoes(petId, observacoes) {
+            const petIndex = pets.findIndex(p => p.id === petId);
+            if (petIndex === -1) return;
             
-            table.update([{
-                id: recordId,
-                fields: { 'Observacoes_Motorista': observacoes }
-            }], (err) => {
-                if (err) {
-                    console.error('Erro:', err);
-                    return;
-                }
-                showMessage('✅ Observação salva!');
-            });
+            pets[petIndex].observacoes = observacoes;
+            
+            try {
+                await saveToJSONBin(pets);
+                showMessage('✅ Observação salva!', 'success');
+            } catch (error) {
+                showMessage('⚠️ Observação salva localmente', 'warning');
+            }
         }
 
         function toggleForm() {
@@ -605,87 +689,123 @@
             const container = document.getElementById('petsList');
             
             if (!pets || pets.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <p>📭 Nenhum pet cadastrado</p>
-                        <p>${isAdmin ? 'Adicione pets usando o botão acima' : 'Aguardando pets'}</p>
-                    </div>
-                `;
+                renderEmpty();
                 return;
             }
 
-            container.innerHTML = pets.map(record => {
-                const f = record.fields;
-                return `
-                    <div class="pet-card">
-                        <div class="pet-card-header">
-                            <div>
-                                <h3>${f.Nome_Pet || 'Sem nome'}</h3>
-                                <p>${f.Cliente || 'Sem cliente'}</p>
-                            </div>
-                            <div style="color: #6b7280; font-size: 14px;">
-                                ⏰ ${f.Hora_Retirada || '--:--'}
-                            </div>
+            // Ordenar por hora
+            const petsOrdenados = [...pets].sort((a, b) => {
+                return (a.horaRetirada || '').localeCompare(b.horaRetirada || '');
+            });
+
+            container.innerHTML = petsOrdenados.map(pet => `
+                <div class="pet-card">
+                    <div class="pet-card-header">
+                        <div>
+                            <h3>${pet.nomePet}</h3>
+                            <p>${pet.cliente}</p>
                         </div>
-                        
-                        <div class="pet-info">
-                            <div class="pet-info-item"><strong>Pet:</strong> ${f.Pet || '-'}</div>
-                            <div class="pet-info-item"><strong>Raça:</strong> ${f.Raca || '-'}</div>
-                            <div class="pet-info-item"><strong>Cor:</strong> ${f.Cor || '-'}</div>
-                            <div class="pet-info-item"><strong>Tempo:</strong> ${f.Tempo_Percurso || '-'}</div>
-                        </div>
-                        
-                        <div class="pet-address">
-                            <p>📍 ${f.Endereco || 'Sem endereço'}</p>
-                        </div>
-                        
-                        <div class="status-buttons">
-                            <button class="status-btn ${f.Status_Transporte === 'Aguardando retirada' ? 'active aguardando' : ''}" 
-                                    onclick="updateStatus('${record.id}', 'Status_Transporte', 'Aguardando retirada')">
-                                ${f.Status_Transporte === 'Aguardando retirada' ? '✓ ' : ''}Aguardando
-                            </button>
-                            <button class="status-btn ${(f.Status_Transporte || '').includes('caminho') ? 'active caminho' : ''}" 
-                                    onclick="updateStatus('${record.id}', 'Status_Transporte', 'Em caminho')">
-                                ${(f.Status_Transporte || '').includes('caminho') ? '✓ ' : ''}Em Transporte
-                            </button>
-                            <button class="status-btn ${f.Status_Transporte === 'Entregue' ? 'active entregue' : ''}" 
-                                    onclick="updateStatus('${record.id}', 'Status_Transporte', 'Entregue')">
-                                ${f.Status_Transporte === 'Entregue' ? '✓ ' : ''}Entregue
-                            </button>
-                            <button class="status-btn ${f.Status_Pagamento === 'Pago' ? 'active pago' : ''}" 
-                                    onclick="updateStatus('${record.id}', 'Status_Pagamento', '${f.Status_Pagamento === 'Pago' ? 'Pendente' : 'Pago'}')">
-                                ${f.Status_Pagamento === 'Pago' ? '✓ ' : ''}${f.Status_Pagamento || 'Pendente'}
-                            </button>
-                        </div>
-                        
-                        <div style="margin-top: 15px;">
-                            <label style="font-weight: 600; color: #374151; font-size: 13px; display: block; margin-bottom: 8px;">📝 Observações:</label>
-                            <textarea class="observacoes" 
-                                      placeholder="Digite observações..." 
-                                      onchange="updateObservacoes('${record.id}', this.value)">${f.Observacoes_Motorista || ''}</textarea>
+                        <div style="color: #6b7280; font-size: 14px;">
+                            ⏰ ${pet.horaRetirada || '--:--'}
                         </div>
                     </div>
-                `;
-            }).join('');
+                    
+                    <div class="pet-info">
+                        <div class="pet-info-item">
+                            <strong>Pet:</strong> ${pet.pet}
+                        </div>
+                        <div class="pet-info-item">
+                            <strong>Raça:</strong> ${pet.raca}
+                        </div>
+                        <div class="pet-info-item">
+                            <strong>Cor:</strong> ${pet.cor}
+                        </div>
+                        <div class="pet-info-item">
+                            <strong>Tempo:</strong> ${pet.tempo}
+                        </div>
+                    </div>
+                    
+                    <div class="pet-address">
+                        <p>📍 <strong>Endereço:</strong> ${pet.endereco}</p>
+                    </div>
+                    
+                    <div class="status-buttons">
+                        <button class="status-btn ${pet.status === 'Aguardando retirada' ? 'active aguardando' : ''}" 
+                                onclick="updateStatus(${pet.id}, 'status', 'Aguardando retirada')"
+                                ${isLoading ? 'disabled' : ''}>
+                            ${pet.status === 'Aguardando retirada' ? '✓ ' : ''}Aguardando
+                        </button>
+                        <button class="status-btn ${pet.status && pet.status.includes('caminho') ? 'active caminho' : ''}" 
+                                onclick="updateStatus(${pet.id}, 'status', '${pet.status && pet.status.includes('loja') ? 'A caminho da entrega' : 'A caminho da loja'}')"
+                                ${isLoading ? 'disabled' : ''}>
+                            ${pet.status && pet.status.includes('caminho') ? '✓ ' : ''}Em Transporte
+                        </button>
+                        <button class="status-btn ${pet.status === 'Entregue' ? 'active entregue' : ''}" 
+                                onclick="updateStatus(${pet.id}, 'status', 'Entregue')"
+                                ${isLoading ? 'disabled' : ''}>
+                            ${pet.status === 'Entregue' ? '✓ ' : ''}Entregue
+                        </button>
+                        <button class="status-btn ${pet.pagamento === 'Pago' ? 'active pago' : ''}" 
+                                onclick="updateStatus(${pet.id}, 'pagamento', '${pet.pagamento === 'Pago' ? 'Pendente' : 'Pago'}')"
+                                ${isLoading ? 'disabled' : ''}>
+                            ${pet.pagamento === 'Pago' ? '✓ ' : ''}${pet.pagamento}
+                        </button>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <label style="font-weight: 600; color: #374151; font-size: 14px;">📝 Observações:</label>
+                        <textarea class="observacoes" 
+                                  placeholder="Digite observações..." 
+                                  onchange="updateObservacoes(${pet.id}, this.value)"
+                                  ${isLoading ? 'disabled' : ''}>${pet.observacoes || ''}</textarea>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        function showMessage(text) {
-            document.getElementById('syncStatus').innerHTML = text;
+        function renderEmpty() {
+            const container = document.getElementById('petsList');
+            container.innerHTML = `
+                <div class="empty-state">
+                    <p>📭 Nenhum pet cadastrado</p>
+                    <p>${isAdmin ? 'Adicione o primeiro pet!' : 'Aguardando pets para transporte'}</p>
+                </div>
+            `;
         }
 
+        function showMessage(text, type) {
+            const status = document.getElementById('syncStatus');
+            const colors = {
+                success: '#d1fae5',
+                error: '#fee2e2',
+                warning: '#fef3c7',
+                loading: '#dbeafe'
+            };
+            
+            status.style.background = colors[type] || '#f3f4f6';
+            status.firstElementChild.innerHTML = text;
+            
+            if (type !== 'loading') {
+                setTimeout(() => {
+                    status.style.background = '#fef3c7';
+                    updateLastSync();
+                }, 3000);
+            }
+        }
+
+        function updateLastSync() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString('pt-BR');
+        }
+
+        // ========== INICIALIZAÇÃO ==========
         document.addEventListener('DOMContentLoaded', () => {
             configurarInterface();
+            updateRacas();
+            loadPets();
             
-            if (table) {
-                loadPets();
-                setInterval(() => {
-                    if (!isLoading && document.visibilityState === 'visible') {
-                        loadPets();
-                    }
-                }, 30000);
-            } else {
-                showMessage('❌ Erro ao conectar com Airtable');
-            }
+            // Auto-refresh
+            setInterval(loadPets, 30000);
         });
     </script>
 </body>
