@@ -27,7 +27,6 @@
         .form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 15px; transition: border-color 0.3s; }
         .form-group input:focus, .form-group select:focus { outline: none; border-color: #3b82f6; }
         .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .form-row-duo { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; }
         .submit-btn { width: 100%; background: linear-gradient(90deg, #10b981, #059669); color: white; border: none; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3); }
         .submit-btn:disabled { background: #9ca3af; cursor: not-allowed; transform: none; }
@@ -47,6 +46,7 @@
         .badge-status.pago { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
         .badge-status.nao-pago { background: linear-gradient(90deg, #ef4444, #dc2626); }
         .pet-time { color: #6b7280; font-size: 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
+        .hora-entregue { color: #10b981; font-weight: 600; font-size: 13px; margin-top: 5px; }
         .delete-btn { background: linear-gradient(90deg, #ef4444, #dc2626); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.3s; display: none; }
         .delete-btn.visible { display: block; }
         .delete-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3); }
@@ -79,7 +79,7 @@
         @media (max-width: 768px) {
             .header { flex-direction: column; text-align: center; gap: 15px; }
             .header-content { text-align: center; }
-            .form-row, .form-row-duo, .status-buttons { grid-template-columns: 1fr; }
+            .form-row, .status-buttons { grid-template-columns: 1fr; }
             .status-btn { min-width: 100%; }
             .pet-card-header { flex-direction: column; }
             .pet-name-section, .pet-details-right { text-align: center; width: 100%; }
@@ -118,25 +118,39 @@
         <div class="form-container" id="formContainer">
             <h2>📝 Novo Transporte</h2>
             
-            <div class="form-row-duo">
+            <div class="form-row">
                 <div class="form-group">
-                    <label>Cliente e Pet</label>
-                    <input type="text" id="clientePet" placeholder="Ex: Bil Silva - Nick (Shitzu)">
+                    <label>Cliente</label>
+                    <input type="text" id="cliente" placeholder="Ex: Bil Silva">
                 </div>
                 <div class="form-group">
-                    <label>Tipo</label>
-                    <select id="tipo">
-                        <option>Cachorro</option>
-                        <option>Gato</option>
-                        <option>Outro</option>
-                    </select>
+                    <label>Nome do Pet</label>
+                    <input type="text" id="nomePet" placeholder="Ex: Nick">
                 </div>
             </div>
             
             <div class="form-row">
                 <div class="form-group">
+                    <label>Pet (Tipo)</label>
+                    <select id="pet" onchange="atualizarRacas()">
+                        <option value="">Selecione</option>
+                        <option>Cachorro</option>
+                        <option>Gato</option>
+                        <option>Outro</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Raça</label>
+                    <select id="raca">
+                        <option value="">Selecione primeiro o tipo</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
                     <label>Cor</label>
                     <select id="cor">
+                        <option value="">Selecione</option>
                         <option>Marrom</option>
                         <option>Branco</option>
                         <option>Preto</option>
@@ -146,7 +160,9 @@
                         <option>Outra</option>
                     </select>
                 </div>
-                
+            </div>
+            
+            <div class="form-row">
                 <div class="form-group">
                     <label>Tempo do Percurso</label>
                     <input type="text" id="tempo" placeholder="Ex: 12 minutos">
@@ -200,6 +216,30 @@
                 userBadge.classList.remove('admin');
                 userRole.textContent = 'Sistema de transporte - Modo Motorista';
             }
+            
+            // Inicializar raças
+            atualizarRacas();
+        }
+
+        function atualizarRacas() {
+            const racasPorPet = {
+                'Cachorro': ['Shitzu', 'Poodle', 'Labrador', 'Bulldog', 'Golden', 'Vira-lata', 'Outro'],
+                'Gato': ['Persa', 'Siamês', 'Maine Coon', 'Vira-lata', 'Outro'],
+                'Outro': ['Não especificado']
+            };
+            
+            const pet = document.getElementById('pet').value;
+            const select = document.getElementById('raca');
+            select.innerHTML = '<option value="">Selecione</option>';
+            
+            if (pet && racasPorPet[pet]) {
+                racasPorPet[pet].forEach(raca => {
+                    const option = document.createElement('option');
+                    option.value = raca;
+                    option.textContent = raca;
+                    select.appendChild(option);
+                });
+            }
         }
 
         function mostrarFormulario() {
@@ -249,26 +289,12 @@
         async function adicionarPet() {
             if (!isAdmin) return;
             
-            const inputClientePet = document.getElementById('clientePet').value.trim();
-            if (!inputClientePet) {
-                alert('Digite o cliente e nome do pet!');
-                return;
-            }
-            
-            // Separar cliente e pet (formato: "Cliente - Pet (Raça)")
-            const partes = inputClientePet.split('-');
-            const cliente = partes[0]?.trim() || '';
-            const resto = partes[1]?.trim() || '';
-            const petMatch = resto.match(/(.+?)(?:\((.+)\))?$/);
-            const nomePet = petMatch ? petMatch[1].trim() : resto;
-            const raca = petMatch && petMatch[2] ? petMatch[2].trim() : 'Não especificado';
-
             const pet = {
                 id: Date.now(),
-                cliente: cliente,
-                nomePet: nomePet,
-                raca: raca,
-                tipo: document.getElementById('tipo').value,
+                cliente: document.getElementById('cliente').value.trim(),
+                nomePet: document.getElementById('nomePet').value.trim(),
+                pet: document.getElementById('pet').value,
+                raca: document.getElementById('raca').value,
                 cor: document.getElementById('cor').value,
                 endereco: document.getElementById('endereco').value.trim(),
                 tempo: document.getElementById('tempo').value.trim(),
@@ -277,12 +303,13 @@
                 pagamento: 'Pendente',
                 observacoesAdmin: '',
                 observacoesMotorista: '',
+                horaEntregue: null,
                 dataCriacao: new Date().toISOString(),
                 arquivado: false
             };
 
             // Validar
-            if (!pet.cliente || !pet.nomePet || !pet.endereco) {
+            if (!pet.cliente || !pet.nomePet || !pet.pet || !pet.raca || !pet.cor || !pet.endereco) {
                 alert('Preencha todos os campos obrigatórios!');
                 return;
             }
@@ -291,7 +318,11 @@
             await salvarPets();
             
             // Limpar formulário
-            document.getElementById('clientePet').value = '';
+            document.getElementById('cliente').value = '';
+            document.getElementById('nomePet').value = '';
+            document.getElementById('pet').value = '';
+            document.getElementById('raca').value = '';
+            document.getElementById('cor').value = '';
             document.getElementById('endereco').value = '';
             document.getElementById('tempo').value = '';
             document.getElementById('horaRetirada').value = '14:30';
@@ -310,7 +341,17 @@
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
+            const valorAnterior = pet[campo];
             pet[campo] = valor;
+            
+            // Se marcou como ENTREGUE, registrar a hora
+            if (campo === 'status' && valor === 'Entregue' && valorAnterior !== 'Entregue') {
+                const agora = new Date();
+                pet.horaEntregue = agora.toLocaleTimeString('pt-BR', { 
+                    hour: '2-digit', 
+                    minute: '2-digit'
+                });
+            }
             
             // Se marcou como pago ou não pago, arquivar
             if (campo === 'pagamento' && (valor === 'Pago' || valor === 'Não pago')) {
@@ -375,7 +416,7 @@
                 return;
             }
 
-            // Ordenar por hora
+            // Ordenar por hora de retirada
             petsVisiveis.sort((a, b) => (a.horaRetirada || '').localeCompare(b.horaRetirada || ''));
 
             container.innerHTML = petsVisiveis.map(pet => {
@@ -386,7 +427,7 @@
                     <div class="pet-card-header">
                         <div class="pet-name-section">
                             <h3>${pet.nomePet}</h3>
-                            <p>${pet.cliente} | ${pet.tipo} ${pet.raca ? `(${pet.raca})` : ''}</p>
+                            <p>${pet.cliente}</p>
                             <div>
                                 <span class="badge-status ${pet.status.replace(/ /g, '-').toLowerCase()}">
                                     ${pet.status}
@@ -398,8 +439,13 @@
                         </div>
                         <div class="pet-details-right">
                             <div class="pet-time">
-                                <span>⏰ ${pet.horaRetirada || '--:--'}</span>
+                                <span>⏰ Retirada: ${pet.horaRetirada || '--:--'}</span>
                             </div>
+                            ${pet.horaEntregue ? `
+                                <div class="hora-entregue">
+                                    ✅ Entregue: ${pet.horaEntregue}
+                                </div>
+                            ` : ''}
                             ${isAdmin ? `
                                 <button class="delete-btn visible" onclick="removerPet(${pet.id})">
                                     🗑️ Remover
@@ -410,13 +456,16 @@
                     
                     <div class="pet-info">
                         <div class="pet-info-item">
+                            <strong>Pet:</strong> ${pet.pet}
+                        </div>
+                        <div class="pet-info-item">
+                            <strong>Raça:</strong> ${pet.raca}
+                        </div>
+                        <div class="pet-info-item">
                             <strong>Cor:</strong> ${pet.cor}
                         </div>
                         <div class="pet-info-item">
                             <strong>Tempo:</strong> ${pet.tempo}
-                        </div>
-                        <div class="pet-info-item">
-                            <strong>Tipo:</strong> ${pet.tipo}
                         </div>
                     </div>
                     
@@ -458,6 +507,7 @@
                                 <strong>Status atual:</strong> ${pet.status}
                                 <br>
                                 <strong>Pagamento:</strong> ${pet.pagamento}
+                                ${pet.horaEntregue ? `<br><strong>Entregue às:</strong> ${pet.horaEntregue}` : ''}
                             </div>
                         `}
                         
