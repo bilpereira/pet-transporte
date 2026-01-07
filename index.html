@@ -29,6 +29,9 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             padding: 30px;
             margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
         .header h1 {
@@ -40,6 +43,41 @@
         .header p {
             color: #6b7280;
             font-size: 16px;
+        }
+        
+        .user-badge {
+            background: #3b82f6;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .user-badge.admin {
+            background: #10b981;
+        }
+        
+        .sync-status {
+            background: #fef3c7;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 14px;
+            color: #92400e;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .sync-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
         }
         
         .add-btn {
@@ -55,6 +93,11 @@
             margin-bottom: 30px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             transition: transform 0.2s;
+            display: none;
+        }
+        
+        .add-btn.visible {
+            display: block;
         }
         
         .add-btn:hover {
@@ -132,6 +175,11 @@
             background: #059669;
         }
         
+        .submit-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        
         .pets-list {
             display: grid;
             gap: 20px;
@@ -172,6 +220,11 @@
             cursor: pointer;
             font-size: 14px;
             transition: background 0.3s;
+            display: none;
+        }
+        
+        .delete-btn.visible {
+            display: block;
         }
         
         .delete-btn:hover {
@@ -229,17 +282,47 @@
             color: #374151;
         }
         
-        .status-btn.active {
+        .status-btn.active.aguardando {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .status-btn.active.coletado {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .status-btn.active.entregue {
             background: #10b981;
             color: white;
         }
         
-        .status-btn:hover {
+        .status-btn.active.pago {
+            background: #8b5cf6;
+            color: white;
+        }
+        
+        .status-btn:hover:not(:disabled) {
             background: #d1d5db;
         }
         
-        .status-btn.active:hover {
+        .status-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .status-btn.active:hover:not(:disabled) {
             opacity: 0.9;
+        }
+        
+        .observacoes {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: inherit;
+            font-size: 14px;
         }
         
         .empty-state {
@@ -260,6 +343,11 @@
             font-size: 14px;
         }
         
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
         @media (max-width: 768px) {
             .form-row {
                 grid-template-columns: 1fr;
@@ -272,17 +360,31 @@
             .status-btn {
                 min-width: 100%;
             }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🐾 Pet Shop Transport</h1>
-            <p>Sistema de transporte de pets</p>
+            <div>
+                <h1>🐾 Pet Bosque</h1>
+                <p id="userRole">Transporte pets</p>
+            </div>
+            <div class="user-badge" id="userBadge">Motorista</div>
         </div>
         
-        <button class="add-btn" onclick="toggleForm()">➕ Adicionar Novo Pet</button>
+        <div class="sync-status" id="syncStatus">
+            <span>🔄 Sincronizado com nuvem | Última atualização: <span id="lastUpdate">--:--:--</span></span>
+            <button class="sync-btn" onclick="loadPets()">Atualizar Agora</button>
+        </div>
+        
+        <button class="add-btn" id="addBtn" onclick="toggleForm()">➕ Adicionar Novo Pet</button>
         
         <div class="form-container" id="formContainer">
             <h2>📝 Novo Transporte</h2>
@@ -296,6 +398,7 @@
                 <div class="form-group">
                     <label>Pet</label>
                     <select id="pet" onchange="updateRacas()">
+                        <option value="">Selecione</option>
                         <option>Cachorro</option>
                         <option>Gato</option>
                         <option>Outro</option>
@@ -305,7 +408,7 @@
                 <div class="form-group">
                     <label>Raça</label>
                     <select id="raca">
-                        <option value="">Selecione</option>
+                        <option value="">Selecione primeiro o tipo</option>
                     </select>
                 </div>
                 
@@ -334,24 +437,36 @@
                 <input type="text" id="endereco" placeholder="Ex: Avenida Nossa Sr da Saúde 403">
             </div>
             
-            <div class="form-group">
-                <label>Tempo do Percurso</label>
-                <input type="text" id="tempo" placeholder="Ex: 12 minutos">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Tempo do Percurso</label>
+                    <input type="text" id="tempo" placeholder="Ex: 12 minutos">
+                </div>
+                
+                <div class="form-group">
+                    <label>Hora Retirada</label>
+                    <input type="time" id="horaRetirada" value="14:30">
+                </div>
             </div>
             
-            <button class="submit-btn" onclick="addPet()">Adicionar Pet</button>
+            <button class="submit-btn" id="submitBtn" onclick="addPet()">Adicionar Pet</button>
         </div>
         
         <div class="pets-list" id="petsList"></div>
     </div>
 
     <script>
-        // Configuração do JSONBin.io
+        // ========== CONFIGURAÇÃO ==========
         const JSONBIN_CONFIG = {
             BIN_ID: '695de16743b1c97be91e7eeb',
-            API_KEY: '$2a$10$Wmft46BmqMcXpiI3zbasQ.4xVnNwAtOSxia383nb1GxXxojFbX.Nm', // Substitua pela sua chave real
+            API_KEY: '$2a$10$Wmft46BmqMcXpiI3zbasQ.4xVnNwAtOSxia383nb1GxXxojFbX.Nm', // SUBSTITUA PELA SUA CHAVE DO JSONBIN
             API_URL: 'https://api.jsonbin.io/v3/b'
         };
+
+        // ========== DETECTAR MODO ==========
+        const urlParams = new URLSearchParams(window.location.search);
+        const modo = urlParams.get('modo') || 'motorista';
+        const isAdmin = modo === 'admin';
 
         const racasPorPet = {
             'Cachorro': ['Shitzu', 'Poodle', 'Labrador', 'Bulldog', 'Golden', 'Vira-lata', 'Outro'],
@@ -360,59 +475,241 @@
         };
 
         let pets = [];
+        let isLoading = false;
 
-        // Funções para JSONBin
-        async function loadPets() {
-            try {
-                const response = await fetch(`${JSONBIN_CONFIG.API_URL}/${JSONBIN_CONFIG.BIN_ID}/latest`, {
-                    headers: {
-                        'X-Master-Key': JSONBIN_CONFIG.API_KEY
-                    }
-                });
-                
-                const data = await response.json();
-                pets = data.record.pets || [];
-                renderPets();
-            } catch (error) {
-                console.log('Usando dados locais');
-                const localData = localStorage.getItem('pets-list');
-                if (localData) {
-                    pets = JSON.parse(localData);
-                    renderPets();
-                } else {
-                    renderEmpty();
-                }
+        // ========== CONFIGURAR INTERFACE ==========
+        function configurarInterface() {
+            const addBtn = document.getElementById('addBtn');
+            const userBadge = document.getElementById('userBadge');
+            const userRole = document.getElementById('userRole');
+            
+            if (isAdmin) {
+                // MODO ADMIN
+                addBtn.classList.add('visible');
+                userBadge.textContent = 'Administrador';
+                userBadge.classList.add('admin');
+                userRole.textContent = 'Sistema de transporte - Modo Administrador';
+            } else {
+                // MODO MOTORISTA
+                addBtn.classList.remove('visible');
+                userBadge.textContent = 'Motorista';
+                userBadge.classList.remove('admin');
+                userRole.textContent = 'Sistema de transporte - Modo Motorista';
             }
         }
 
-        async function savePets() {
+        // ========== FUNÇÕES JSONBIN ==========
+        async function fetchFromJSONBin() {
             try {
-                // Salvar no JSONBin
-                await fetch(`${JSONBIN_CONFIG.API_URL}/${JSONBIN_CONFIG.BIN_ID}`, {
+                const response = await fetch(`${JSONBIN_CONFIG.API_URL}/${JSONBIN_CONFIG.BIN_ID}/latest`, {
+                    headers: {
+                        'X-Master-Key': JSONBIN_CONFIG.API_KEY,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                return data.record.pets || [];
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+                // Fallback para localStorage
+                const localData = localStorage.getItem('pets_backup');
+                return localData ? JSON.parse(localData) : [];
+            }
+        }
+
+        async function saveToJSONBin(petsArray) {
+            try {
+                const response = await fetch(`${JSONBIN_CONFIG.API_URL}/${JSONBIN_CONFIG.BIN_ID}`, {
                     method: 'PUT',
                     headers: {
                         'X-Master-Key': JSONBIN_CONFIG.API_KEY,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        pets: pets
-                    })
+                    body: JSON.stringify({ pets: petsArray })
                 });
                 
-                // Salvar localmente também
-                localStorage.setItem('pets-list', JSON.stringify(pets));
-                renderPets();
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                // Backup local
+                localStorage.setItem('pets_backup', JSON.stringify(petsArray));
+                return true;
             } catch (error) {
                 console.error('Erro ao salvar:', error);
-                // Salvar localmente se falhar
-                localStorage.setItem('pets-list', JSON.stringify(pets));
+                // Backup local apenas
+                localStorage.setItem('pets_backup', JSON.stringify(petsArray));
+                return false;
+            }
+        }
+
+        // ========== FUNÇÕES PRINCIPAIS ==========
+        async function loadPets() {
+            if (isLoading) return;
+            
+            isLoading = true;
+            showMessage('🔄 Carregando pets...', 'loading');
+            
+            try {
+                pets = await fetchFromJSONBin();
                 renderPets();
+                updateLastSync();
+                showMessage(`✅ ${pets.length} pets carregados`, 'success');
+            } catch (error) {
+                console.error('Erro:', error);
+                showMessage('⚠️ Usando dados locais', 'warning');
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        async function addPet() {
+            if (!isAdmin) return;
+            
+            const cliente = document.getElementById('cliente').value.trim();
+            const pet = document.getElementById('pet').value;
+            const raca = document.getElementById('raca').value;
+            const cor = document.getElementById('cor').value;
+            const nomePet = document.getElementById('nomePet').value.trim();
+            const endereco = document.getElementById('endereco').value.trim();
+            const tempo = document.getElementById('tempo').value.trim();
+            const horaRetirada = document.getElementById('horaRetirada').value;
+
+            if (!cliente || !pet || !raca || !cor || !nomePet || !endereco || !tempo) {
+                showMessage('⚠️ Preencha todos os campos!', 'warning');
+                return;
+            }
+
+            if (isLoading) return;
+            isLoading = true;
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.textContent = 'Adicionando...';
+            submitBtn.disabled = true;
+
+            try {
+                const newPet = {
+                    id: Date.now(),
+                    cliente,
+                    pet,
+                    raca,
+                    cor,
+                    nomePet,
+                    endereco,
+                    tempo,
+                    horaRetirada: horaRetirada || '14:30',
+                    status: 'aguardando',
+                    coletado: false,
+                    entregue: false,
+                    pago: false,
+                    observacoes: '',
+                    dataCriacao: new Date().toISOString()
+                };
+
+                // Carregar existentes
+                const existingPets = await fetchFromJSONBin();
+                const updatedPets = [...existingPets, newPet];
+                
+                // Salvar
+                const saved = await saveToJSONBin(updatedPets);
+                
+                if (saved) {
+                    // Limpar formulário
+                    document.getElementById('cliente').value = '';
+                    document.getElementById('nomePet').value = '';
+                    document.getElementById('endereco').value = '';
+                    document.getElementById('tempo').value = '';
+                    document.getElementById('raca').value = '';
+                    document.getElementById('cor').value = '';
+                    document.getElementById('horaRetirada').value = '14:30';
+                    
+                    toggleForm();
+                    showMessage('✅ Pet adicionado com sucesso!', 'success');
+                    
+                    // Atualizar lista
+                    pets = updatedPets;
+                    renderPets();
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showMessage('❌ Erro ao adicionar', 'error');
+            } finally {
+                isLoading = false;
+                submitBtn.textContent = 'Adicionar Pet';
+                submitBtn.disabled = false;
+            }
+        }
+
+        async function updateStatus(petId, field, value) {
+            if (isLoading) return;
+            
+            const petIndex = pets.findIndex(p => p.id === petId);
+            if (petIndex === -1) return;
+            
+            const originalValue = pets[petIndex][field];
+            pets[petIndex][field] = value;
+            
+            // Atualizar status geral
+            if (field === 'coletado' && value === true) {
+                pets[petIndex].status = 'coletado';
+            } else if (field === 'entregue' && value === true) {
+                pets[petIndex].status = 'entregue';
+            }
+            
+            // Renderizar imediatamente
+            renderPets();
+            
+            try {
+                await saveToJSONBin(pets);
+                showMessage('✅ Status atualizado!', 'success');
+            } catch (error) {
+                // Reverter
+                pets[petIndex][field] = originalValue;
+                renderPets();
+                showMessage('⚠️ Alteração salva localmente', 'warning');
+            }
+        }
+
+        async function updateObservacoes(petId, observacoes) {
+            const petIndex = pets.findIndex(p => p.id === petId);
+            if (petIndex === -1) return;
+            
+            pets[petIndex].observacoes = observacoes;
+            
+            try {
+                await saveToJSONBin(pets);
+                showMessage('✅ Observação salva!', 'success');
+            } catch (error) {
+                showMessage('⚠️ Observação salva localmente', 'warning');
+            }
+        }
+
+        async function deletePet(petId) {
+            if (!isAdmin) return;
+            if (!confirm('Tem certeza que deseja remover este pet?')) return;
+            
+            const updatedPets = pets.filter(p => p.id !== petId);
+            
+            try {
+                await saveToJSONBin(updatedPets);
+                pets = updatedPets;
+                renderPets();
+                showMessage('✅ Pet removido!', 'success');
+            } catch (error) {
+                showMessage('❌ Erro ao remover', 'error');
             }
         }
 
         function toggleForm() {
+            if (!isAdmin) return;
+            
             const form = document.getElementById('formContainer');
-            const btn = document.querySelector('.add-btn');
+            const btn = document.getElementById('addBtn');
             form.classList.toggle('active');
             btn.textContent = form.classList.contains('active') ? '❌ Cancelar' : '➕ Adicionar Novo Pet';
         }
@@ -422,86 +719,41 @@
             const racaSelect = document.getElementById('raca');
             racaSelect.innerHTML = '<option value="">Selecione</option>';
             
-            racasPorPet[petType].forEach(raca => {
-                const option = document.createElement('option');
-                option.value = raca;
-                option.textContent = raca;
-                racaSelect.appendChild(option);
-            });
-        }
-
-        function addPet() {
-            const cliente = document.getElementById('cliente').value;
-            const pet = document.getElementById('pet').value;
-            const raca = document.getElementById('raca').value;
-            const cor = document.getElementById('cor').value;
-            const nomePet = document.getElementById('nomePet').value;
-            const endereco = document.getElementById('endereco').value;
-            const tempo = document.getElementById('tempo').value;
-
-            if (!cliente || !raca || !cor || !nomePet || !endereco || !tempo) {
-                alert('Por favor, preencha todos os campos!');
-                return;
-            }
-
-            const newPet = {
-                id: Date.now(),
-                cliente,
-                pet,
-                raca,
-                cor,
-                nomePet,
-                endereco,
-                tempo,
-                coletado: false,
-                entregue: false,
-                pago: false
-            };
-
-            pets.push(newPet);
-            savePets();
-
-            document.getElementById('cliente').value = '';
-            document.getElementById('nomePet').value = '';
-            document.getElementById('endereco').value = '';
-            document.getElementById('tempo').value = '';
-            document.getElementById('raca').value = '';
-            document.getElementById('cor').value = '';
-            
-            toggleForm();
-        }
-
-        function toggleStatus(id, field) {
-            const pet = pets.find(p => p.id === id);
-            if (pet) {
-                pet[field] = !pet[field];
-                savePets();
-            }
-        }
-
-        function deletePet(id) {
-            if (confirm('Tem certeza que deseja remover este pet?')) {
-                pets = pets.filter(p => p.id !== id);
-                savePets();
+            if (petType && racasPorPet[petType]) {
+                racasPorPet[petType].forEach(raca => {
+                    const option = document.createElement('option');
+                    option.value = raca;
+                    option.textContent = raca;
+                    racaSelect.appendChild(option);
+                });
             }
         }
 
         function renderPets() {
             const container = document.getElementById('petsList');
             
-            if (pets.length === 0) {
+            if (!pets || pets.length === 0) {
                 renderEmpty();
                 return;
             }
 
-            container.innerHTML = pets.map(pet => `
+            // Ordenar por hora
+            const petsOrdenados = [...pets].sort((a, b) => {
+                return (a.horaRetirada || '').localeCompare(b.horaRetirada || '');
+            });
+
+            container.innerHTML = petsOrdenados.map(pet => `
                 <div class="pet-card">
                     <div class="pet-card-header">
                         <div>
                             <h3>${pet.nomePet}</h3>
                             <p>${pet.cliente}</p>
                         </div>
-                        <button class="delete-btn" onclick="deletePet(${pet.id})">🗑️ Remover</button>
+                        <button class="delete-btn ${isAdmin ? 'visible' : ''}" 
+                                onclick="deletePet(${pet.id})"
+                                ${!isAdmin ? 'style="display:none"' : ''}>
+                            🗑️ Remover
+                        </button>
                     </div>
                     
                     <div class="pet-info">
@@ -514,6 +766,9 @@
                         <div class="pet-info-item">
                             <strong>Cor:</strong> ${pet.cor}
                         </div>
+                        <div class="pet-info-item">
+                            <strong>Hora:</strong> ${pet.horaRetirada || '--:--'}
+                        </div>
                     </div>
                     
                     <div class="pet-address">
@@ -522,18 +777,30 @@
                     </div>
                     
                     <div class="status-buttons">
-                        <button class="status-btn ${pet.coletado ? 'active' : ''}" 
-                                onclick="toggleStatus(${pet.id}, 'coletado')">
-                            ${pet.coletado ? '✓ ' : ''}Coletado
+                        <button class="status-btn ${pet.status === 'aguardando' ? 'active aguardando' : ''} 
+                                               ${pet.coletado ? 'active coletado' : ''}" 
+                                onclick="updateStatus(${pet.id}, 'coletado', ${!pet.coletado})"
+                                ${isLoading ? 'disabled' : ''}>
+                            ${pet.coletado ? '✓ ' : ''}${pet.status === 'aguardando' ? 'Aguardando' : 'Coletado'}
                         </button>
-                        <button class="status-btn ${pet.entregue ? 'active' : ''}" 
-                                onclick="toggleStatus(${pet.id}, 'entregue')">
+                        <button class="status-btn ${pet.entregue ? 'active entregue' : ''}" 
+                                onclick="updateStatus(${pet.id}, 'entregue', ${!pet.entregue})"
+                                ${isLoading ? 'disabled' : ''}>
                             ${pet.entregue ? '✓ ' : ''}Entregue
                         </button>
-                        <button class="status-btn ${pet.pago ? 'active' : ''}" 
-                                onclick="toggleStatus(${pet.id}, 'pago')">
+                        <button class="status-btn ${pet.pago ? 'active pago' : ''}" 
+                                onclick="updateStatus(${pet.id}, 'pago', ${!pet.pago})"
+                                ${isLoading ? 'disabled' : ''}>
                             ${pet.pago ? '✓ ' : ''}Pago
                         </button>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <label style="font-weight: 600; color: #374151; font-size: 14px;">📝 Observações:</label>
+                        <textarea class="observacoes" 
+                                  placeholder="Digite observações..." 
+                                  onchange="updateObservacoes(${pet.id}, this.value)"
+                                  ${isLoading ? 'disabled' : ''}>${pet.observacoes || ''}</textarea>
                     </div>
                 </div>
             `).join('');
@@ -543,15 +810,45 @@
             const container = document.getElementById('petsList');
             container.innerHTML = `
                 <div class="empty-state">
-                    <p>Nenhum pet cadastrado ainda.</p>
-                    <p>Clique em "Adicionar Novo Pet" para começar!</p>
+                    <p>📭 Nenhum pet cadastrado</p>
+                    <p>${isAdmin ? 'Adicione o primeiro pet!' : 'Aguardando pets para transporte'}</p>
                 </div>
             `;
         }
 
-        // Inicialização
-        updateRacas();
-        loadPets();
+        function showMessage(text, type) {
+            const status = document.getElementById('syncStatus');
+            const colors = {
+                success: '#d1fae5',
+                error: '#fee2e2',
+                warning: '#fef3c7',
+                loading: '#dbeafe'
+            };
+            
+            status.style.background = colors[type] || '#f3f4f6';
+            status.firstElementChild.innerHTML = text;
+            
+            if (type !== 'loading') {
+                setTimeout(() => {
+                    status.style.background = '#fef3c7';
+                    updateLastSync();
+                }, 3000);
+            }
+        }
+
+        function updateLastSync() {
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('pt-BR');
+        }
+
+        // ========== INICIALIZAÇÃO ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            configurarInterface();
+            updateRacas();
+            loadPets();
+            
+            // Auto-refresh
+            setInterval(loadPets, 30000);
+        });
     </script>
 </body>
 </html>
