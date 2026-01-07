@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐾 Pet Shop Transport</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #e9d5ff 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            color: #6b7280;
+            font-size: 16px;
+        }
+        
+        .sync-status {
+            background: #fef3c7;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 14px;
+            color: #92400e;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .sync-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .add-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .form-container.active {
+            display: block;
+        }
+        
+        .form-container h2 {
+            font-size: 24px;
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background: #059669;
+        }
+        
+        .pets-list {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .pet-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 25px;
+            border-left: 5px solid #3b82f6;
+        }
+        
+        .pet-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+        
+        .pet-card-header h3 {
+            font-size: 28px;
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+        
+        .pet-card-header p {
+            font-size: 18px;
+            color: #6b7280;
+        }
+        
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .delete-btn:hover {
+            background: #dc2626;
+        }
+        
+        .pet-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .pet-info-item {
+            color: #4b5563;
+        }
+        
+        .pet-info-item strong {
+            color: #374151;
+        }
+        
+        .pet-address {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f3f4f6;
+            border-radius: 8px;
+        }
+        
+        .pet-address p {
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .status-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-top: 20px;
+            border-top: 2px solid #e5e7eb;
+        }
+        
+        .status-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .status-btn.active.aguardando {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .status-btn.active.caminho {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .status-btn.active.entregue {
+            background: #10b981;
+            color: white;
+        }
+        
+        .status-btn.active.pago {
+            background: #8b5cf6;
+            color: white;
+        }
+        
+        .status-btn:hover {
+            background: #d1d5db;
+        }
+        
+        .status-btn.active:hover {
+            opacity: 0.9;
+        }
+        
+        .observacoes {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        
+        .empty-state {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 60px 30px;
+            text-align: center;
+            color: #6b7280;
+        }
+        
+        .empty-state p:first-child {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .empty-state p:last-child {
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .status-buttons {
+                flex-direction: column;
+            }
+            
+            .status-btn {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐾 Pet Shop Transport</h1>
+            <p>Sistema de transporte de pets - Conectado ao Airtable</p>
+        </div>
+        
+        <div class="sync-status" id="syncStatus">
+            <span>🔄 Conectado ao Airtable | Última atualização: <span id="lastUpdate">--:--:--</span></span>
+            <button class="sync-btn" onclick="loadPetsFromAirtable()">Atualizar Agora</button>
+        </div>
+        
+        <button class="add-btn" onclick="toggleForm()">➕ Adicionar Novo Pet</button>
+        
+        <div class="form-container" id="formContainer">
+            <h2>📝 Novo Transporte</h2>
+            
+            <div class="form-group">
+                <label>Cliente</label>
+                <input type="text" id="cliente" placeholder="Ex: Bil Silva">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Pet</label>
+                    <select id="pet" onchange="updateRacas()">
+                        <option value="">Selecione</option>
+                        <option>Cachorro</option>
+                        <option>Gato</option>
+                        <option>Outro</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Raça</label>
+                    <select id="raca">
+                        <option value="">Selecione primeiro o tipo</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Cor</label>
+                    <select id="cor">
+                        <option value="">Selecione</option>
+                        <option>Marrom</option>
+                        <option>Branco</option>
+                        <option>Preto</option>
+                        <option>Caramelo</option>
+                        <option>Cinza</option>
+                        <option>Malhado</option>
+                        <option>Outra</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Nome do Pet</label>
+                <input type="text" id="nomePet" placeholder="Ex: Nick">
+            </div>
+            
+            <div class="form-group">
+                <label>Endereço</label>
+                <input type="text" id="endereco" placeholder="Ex: Avenida Nossa Sr da Saúde 403">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Tempo do Percurso</label>
+                    <input type="text" id="tempo" placeholder="Ex: 12 minutos">
+                </div>
+                
+                <div class="form-group">
+                    <label>Hora Retirada</label>
+                    <input type="time" id="horaRetirada" value="14:30">
+                </div>
+            </div>
+            
+            <button class="submit-btn" onclick="addPetToAirtable()">Adicionar ao Airtable</button>
+        </div>
+        
+        <div class="pets-list" id="petsList"></div>
+    </div>
+
+    <script>
+        // CONFIGURAÇÃO DO SEU AIRTABLE
+        const AIRTABLE_CONFIG = {
+            BASE_ID: 'appjQY5LMgmxwxYFR',
+            TABLE_NAME: 'Pets_Transporte',
+            API_KEY: 'patHnDB7MtTpp432z.9cff9d1afa8d7dd43371a2716199ff004a5bcfa0fca1405b48a93529d2687c3b',
+            API_URL: 'https://api.airtable.com/v0'
+        };
+
+        const racasPorPet = {
+            'Cachorro': ['Shitzu', 'Poodle', 'Labrador', 'Bulldog', 'Golden', 'Vira-lata', 'Outro'],
+            'Gato': ['Persa', 'Siamês', 'Maine Coon', 'Vira-lata', 'Outro'],
+            'Outro': ['Não especificado']
+        };
+
+        let pets = [];
+
+        // Funções de conexão com Airtable
+        async function fetchFromAirtable() {
+            const url = `${AIRTABLE_CONFIG.API_URL}/${AIRTABLE_CONFIG.BASE_ID}/${AIRTABLE_CONFIG.TABLE_NAME}`;
+            
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${AIRTABLE_CONFIG.API_KEY}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erro Airtable: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                return data.records;
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+                showMessage('❌ Erro ao conectar com Airtable', 'error');
+                return [];
+            }
+        }
+
+        async function addToAirtable(petData) {
+            const url = `${AIRTABLE_CONFIG.API_URL}/${AIRTABLE_CONFIG.BASE_ID}/${AIRTABLE_CONFIG.TABLE_NAME}`;
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${AIRTABLE_CONFIG.API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        fields: petData
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erro ao adicionar: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                showMessage('✅ Pet adicionado com sucesso!', 'success');
+                return result;
+            } catch (error) {
+                console.error('Erro ao adicionar:', error);
+                showMessage('❌ Erro ao adicionar pet', 'error');
+                return null;
+            }
+        }
+
+        async function updateInAirtable(recordId, updates) {
+            const url = `${AIRTABLE_CONFIG.API_URL}/${AIRTABLE_CONFIG.BASE_ID}/${AIRTABLE_CONFIG.TABLE_NAME}/${recordId}`;
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${AIRTABLE_CONFIG.API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        fields: updates
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erro ao atualizar: ${response.status}`);
+                }
+                
+                showMessage('✅ Status atualizado!', 'success');
+                return await response.json();
+            } catch (error) {
+                console.error('Erro ao atualizar:', error);
+                showMessage('❌ Erro ao atualizar', 'error');
+                return null;
+            }
+        }
+
+        // Funções da interface
+        async function loadPetsFromAirtable() {
+            showMessage('🔄 Carregando pets...', 'loading');
+            
+            const records = await fetchFromAirtable();
+            pets = records.map(record => ({
+                id: record.id,
+                cliente: record.fields.Cliente || '',
+                pet: record.fields.Pet || '',
+                raca: record.fields.Raca || '',
+                cor: record.fields.Cor || '',
+                nomePet: record.fields.Nome_Pet || '',
+                endereco: record.fields.Endereco || '',
+                tempo: record.fields.Tempo_Percurso || '',
+                status: record.fields.Status_Transporte || 'Aguardando retirada',
+                pagamento: record.fields.Status_Pagamento || 'Pendente',
+                horaRetirada: record.fields.Hora_Retirada || '',
+                observacoes: record.fields.Observacoes_Motorista || ''
+            }));
+            
+            renderPets();
+            updateLastSync();
+        }
+
+        async function addPetToAirtable() {
+            const cliente = document.getElementById('cliente').value.trim();
+            const pet = document.getElementById('pet').value;
+            const raca = document.getElementById('raca').value;
+            const cor = document.getElementById('cor').value;
+            const nomePet = document.getElementById('nomePet').value.trim();
+            const endereco = document.getElementById('endereco').value.trim();
+            const tempo = document.getElementById('tempo').value.trim();
+            const horaRetirada = document.getElementById('horaRetirada').value;
+
+            if (!cliente || !pet || !raca || !cor || !nomePet || !endereco || !tempo) {
+                showMessage('⚠️ Preencha todos os campos!', 'warning');
+                return;
+            }
+
+            const petData = {
+                Cliente: cliente,
+                Pet: pet,
+                Raca: raca,
+                Cor: cor,
+                Nome_Pet: nomePet,
+                Endereco: endereco,
+                Tempo_Percurso: tempo,
+                Status_Transporte: 'Aguardando retirada',
+                Status_Pagamento: 'Pendente',
+                Hora_Retirada: horaRetirada ? `${new Date().toISOString().split('T')[0]}T${horaRetirada}:00.000Z` : null,
+                Observacoes_Motorista: ''
+            };
+
+            const result = await addToAirtable(petData);
+            
+            if (result) {
+                // Limpar formulário
+                document.getElementById('cliente').value = '';
+                document.getElementById('nomePet').value = '';
+                document.getElementById('endereco').value = '';
+                document.getElementById('tempo').value = '';
+                document.getElementById('raca').value = '';
+                document.getElementById('cor').value = '';
+                document.getElementById('horaRetirada').value = '14:30';
+                
+                toggleForm();
+                loadPetsFromAirtable();
+            }
+        }
+
+        async function updateStatus(recordId, field, value) {
+            const updates = {};
+            updates[field === 'status' ? 'Status_Transporte' : 'Status_Pagamento'] = value;
+            
+            await updateInAirtable(recordId, updates);
+            loadPetsFromAirtable();
+        }
+
+        async function updateObservacoes(recordId, observacoes) {
+            await updateInAirtable(recordId, {
+                Observacoes_Motorista: observacoes
+            });
+        }
+
+        function toggleForm() {
+            const form = document.getElementById('formContainer');
+            const btn = document.querySelector('.add-btn');
+            form.classList.toggle('active');
+            btn.textContent = form.classList.contains('active') ? '❌ Cancelar' : '➕ Adicionar Novo Pet';
+        }
+
+        function updateRacas() {
+            const petType = document.getElementById('pet').value;
+            const racaSelect = document.getElementById('raca');
+            racaSelect.innerHTML = '<option value="">Selecione</option>';
+            
+            if (petType && racasPorPet[petType]) {
+                racasPorPet[petType].forEach(raca => {
+                    const option = document.createElement('option');
+                    option.value = raca;
+                    option.textContent = raca;
+                    racaSelect.appendChild(option);
+                });
+            }
+        }
+
+        function renderPets() {
+            const container = document.getElementById('petsList');
+            
+            if (!pets || pets.length === 0) {
+                renderEmpty();
+                return;
+            }
+
+            container.innerHTML = pets.map(pet => `
+                <div class="pet-card">
+                    <div class="pet-card-header">
+                        <div>
+                            <h3>${pet.nomePet}</h3>
+                            <p>${pet.cliente}</p>
+                        </div>
+                        <div style="color: #6b7280; font-size: 14px;">
+                            ID: ${pet.id.substring(0, 8)}...
+                        </div>
+                    </div>
+                    
+                    <div class="pet-info">
+                        <div class="pet-info-item">
+                            <strong>Pet:</strong> ${pet.pet}
+                        </div>
+                        <div class="pet-info-item">
+                            <strong>Raça:</strong> ${pet.raca}
+                        </div>
+                        <div class="pet-info-item">
+                            <strong>Cor:</strong> ${pet.cor}
+                        </div>
+                        <div class="pet-info-item">
+                            <strong>Hora:</strong> ${pet.horaRetirada ? pet.horaRetirada.substring(11, 16) : '--:--'}
+                        </div>
+                    </div>
+                    
+                    <div class="pet-address">
+                        <p>📍 <strong>Endereço:</strong> ${pet.endereco}</p>
+                        <p>⏱️ <strong>Tempo:</strong> ${pet.tempo}</p>
+                    </div>
+                    
+                    <div class="status-buttons">
+                        <button class="status-btn ${pet.status === 'Aguardando retirada' ? 'active aguardando' : ''}" 
+                                onclick="updateStatus('${pet.id}', 'status', 'Aguardando retirada')">
+                            ${pet.status === 'Aguardando retirada' ? '✓ ' : ''}Aguardando
+                        </button>
+                        <button class="status-btn ${pet.status.includes('caminho') ? 'active caminho' : ''}" 
+                                onclick="updateStatus('${pet.id}', 'status', '${pet.status.includes('loja') ? 'A caminho da entrega' : 'A caminho da loja'}')">
+                            ${pet.status.includes('caminho') ? '✓ ' : ''}Em Transporte
+                        </button>
+                        <button class="status-btn ${pet.status === 'Entregue' ? 'active entregue' : ''}" 
+                                onclick="updateStatus('${pet.id}', 'status', 'Entregue')">
+                            ${pet.status === 'Entregue' ? '✓ ' : ''}Entregue
+                        </button>
+                        <button class="status-btn ${pet.pagamento === 'Pago' ? 'active pago' : ''}" 
+                                onclick="updateStatus('${pet.id}', 'pagamento', '${pet.pagamento === 'Pago' ? 'Pendente' : 'Pago'}')">
+                            ${pet.pagamento === 'Pago' ? '✓ ' : ''}${pet.pagamento}
+                        </button>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <label style="font-weight: 600; color: #374151; font-size: 14px;">📝 Observações do Motorista:</label>
+                        <textarea class="observacoes" 
+                                  placeholder="Digite observações..." 
+                                  onchange="updateObservacoes('${pet.id}', this.value)">${pet.observacoes || ''}</textarea>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderEmpty() {
+            const container = document.getElementById('petsList');
+            container.innerHTML = `
+                <div class="empty-state">
+                    <p>Nenhum pet encontrado.</p>
+                    <p>Adicione um pet ou verifique a conexão com o Airtable.</p>
+                </div>
+            `;
+        }
+
+        function showMessage(text, type) {
+            const status = document.getElementById('syncStatus');
+            const colors = {
+                success: '#10b981',
+                error: '#ef4444',
+                warning: '#f59e0b',
+                loading: '#3b82f6'
+            };
+            
+            status.style.background = colors[type] || '#f3f4f6';
+            status.style.color = type === 'loading' ? 'white' : '#1f2937';
+            status.firstElementChild.innerHTML = text;
+            
+            if (type !== 'loading') {
+                setTimeout(() => {
+                    status.style.background = '#fef3c7';
+                    status.style.color = '#92400e';
+                    updateLastSync();
+                }, 3000);
+            }
+        }
+
+        function updateLastSync() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('pt-BR');
+            document.getElementById('lastUpdate').textContent = timeString;
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            updateRacas();
+            loadPetsFromAirtable();
+            
+            // Atualizar automaticamente a cada 30 segundos
+            setInterval(loadPetsFromAirtable, 30000);
+        });
+    </script>
+</body>
+</html>
