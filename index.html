@@ -8,99 +8,161 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: linear-gradient(135deg, #e0f2fe 0%, #e9d5ff 100%); min-height: 100vh; padding: 20px; }
         .container { max-width: 1200px; margin: 0 auto; }
-        .header { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 30px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-        .header h1 { font-size: 32px; color: #1f2937; margin-bottom: 8px; }
-        .header p { color: #6b7280; font-size: 16px; }
-        .user-badge { background: #3b82f6; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; }
-        .user-badge.admin { background: #10b981; }
-        .sync-status { background: #fef3c7; padding: 10px 20px; border-radius: 8px; margin: 15px 0; font-size: 14px; color: #92400e; display: flex; justify-content: space-between; align-items: center; }
-        .sync-btn { background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; }
-        .add-btn { width: 100%; background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); color: white; border: none; padding: 18px; border-radius: 12px; font-size: 18px; font-weight: 600; cursor: pointer; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s; display: none; }
+        .header { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+        .header-content { flex: 1; }
+        .header h1 { font-size: 28px; color: #1f2937; margin-bottom: 5px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header p { color: #6b7280; font-size: 14px; }
+        .user-badge { background: #3b82f6; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; white-space: nowrap; }
+        .user-badge.admin { background: linear-gradient(90deg, #10b981, #059669); }
+        .sync-status { background: #fef3c7; padding: 12px 20px; border-radius: 8px; margin: 15px 0; font-size: 14px; color: #92400e; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .sync-btn { background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; }
+        .add-btn { width: 100%; background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); color: white; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s; display: none; }
         .add-btn.visible { display: block; }
         .add-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
-        .form-container { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 30px; margin-bottom: 30px; display: none; }
+        .form-container { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px; display: none; }
         .form-container.active { display: block; }
-        .form-container h2 { font-size: 24px; color: #1f2937; margin-bottom: 20px; }
-        .form-group { margin-bottom: 20px; }
+        .form-container h2 { font-size: 22px; color: #1f2937; margin-bottom: 20px; }
+        .form-group { margin-bottom: 18px; }
         .form-group label { display: block; font-weight: 600; color: #374151; margin-bottom: 8px; font-size: 14px; }
-        .form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 16px; transition: border-color 0.3s; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 15px; transition: border-color 0.3s; }
         .form-group input:focus, .form-group select:focus { outline: none; border-color: #3b82f6; }
         .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .submit-btn { width: 100%; background: #10b981; color: white; border: none; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.3s; }
-        .submit-btn:hover { background: #059669; }
-        .submit-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+        .form-row-duo { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; }
+        .submit-btn { width: 100%; background: linear-gradient(90deg, #10b981, #059669); color: white; border: none; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3); }
+        .submit-btn:disabled { background: #9ca3af; cursor: not-allowed; transform: none; }
         .pets-list { display: grid; gap: 20px; }
-        .pet-card { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 25px; border-left: 5px solid #3b82f6; }
-        .pet-card.arquivado { border-left: 5px solid #9ca3af; opacity: 0.7; background: #f9fafb; }
-        .pet-card-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px; }
-        .pet-card-header h3 { font-size: 28px; color: #1f2937; margin-bottom: 5px; }
-        .pet-card-header p { font-size: 18px; color: #6b7280; }
-        .badge-status { background: #f59e0b; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-        .badge-status.aguardando { background: #f59e0b; }
-        .badge-status.caminho { background: #3b82f6; }
-        .badge-status.entregue { background: #10b981; }
-        .badge-status.pago { background: #8b5cf6; }
-        .delete-btn { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; transition: background 0.3s; display: none; }
+        .pet-card { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 25px; border-left: 5px solid #3b82f6; transition: all 0.3s; }
+        .pet-card:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .pet-card.arquivado { border-left: 5px solid #9ca3af; opacity: 0.8; background: #f9fafb; }
+        .pet-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
+        .pet-name-section { flex: 1; min-width: 200px; }
+        .pet-name-section h3 { font-size: 26px; color: #1f2937; margin-bottom: 5px; font-weight: 700; background: linear-gradient(90deg, #1f2937, #374151); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .pet-name-section p { font-size: 16px; color: #6b7280; font-weight: 500; }
+        .pet-details-right { text-align: right; }
+        .badge-status { display: inline-block; background: #f59e0b; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-right: 8px; margin-bottom: 8px; }
+        .badge-status.aguardando { background: linear-gradient(90deg, #f59e0b, #d97706); }
+        .badge-status.caminho { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+        .badge-status.entregue { background: linear-gradient(90deg, #10b981, #047857); }
+        .badge-status.pago { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+        .badge-status.nao-pago { background: linear-gradient(90deg, #ef4444, #dc2626); }
+        .pet-time { color: #6b7280; font-size: 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
+        .delete-btn { background: linear-gradient(90deg, #ef4444, #dc2626); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.3s; display: none; }
         .delete-btn.visible { display: block; }
-        .delete-btn:hover { background: #dc2626; }
-        .pet-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; font-size: 14px; }
+        .delete-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3); }
+        .pet-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; font-size: 14px; background: #f8fafc; padding: 15px; border-radius: 8px; }
         .pet-info-item { color: #4b5563; }
-        .pet-info-item strong { color: #374151; }
-        .pet-address { margin-bottom: 15px; padding: 12px; background: #f3f4f6; border-radius: 8px; }
-        .pet-address p { color: #374151; margin-bottom: 8px; font-size: 14px; }
+        .pet-info-item strong { color: #1f2937; }
+        .pet-address { margin-bottom: 15px; padding: 15px; background: #f0f9ff; border-radius: 8px; border: 2px solid #dbeafe; }
+        .pet-address p { color: #1e40af; margin-bottom: 8px; font-size: 14px; font-weight: 500; }
+        .copy-address-btn { background: linear-gradient(90deg, #60a5fa, #3b82f6); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; margin-top: 8px; transition: all 0.3s; }
+        .copy-address-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3); }
         .status-section { padding-top: 20px; border-top: 2px solid #e5e7eb; }
-        .status-buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 15px; }
-        .status-btn { flex: 1; min-width: 140px; padding: 12px; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.3s; background: #e5e7eb; color: #374151; }
-        .status-btn.active { background: #3b82f6; color: white; }
-        .status-btn.pago-btn { background: #8b5cf6; color: white; }
-        .status-btn:hover:not(:disabled) { opacity: 0.9; }
-        .status-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .observacoes-container { margin-top: 15px; }
+        .status-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
+        .status-btn { flex: 1; min-width: 130px; padding: 12px; border: none; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.3s; background: #e5e7eb; color: #374151; text-align: center; }
+        .status-btn.active { background: linear-gradient(90deg, #3b82f6, #1d4ed8); color: white; }
+        .status-btn.pago-btn { background: linear-gradient(90deg, #8b5cf6, #7c3aed); color: white; }
+        .status-btn.nao-pago-btn { background: linear-gradient(90deg, #ef4444, #dc2626); color: white; }
+        .status-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .status-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+        .observacoes-container { margin-top: 20px; }
         .observacoes-label { font-weight: 600; color: #374151; font-size: 14px; margin-bottom: 8px; display: block; }
-        .observacoes { width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-family: inherit; font-size: 14px; margin-bottom: 10px; }
+        .observacoes { width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-family: inherit; font-size: 14px; margin-bottom: 15px; min-height: 80px; resize: vertical; }
         .observacoes-admin { border-color: #10b981; background: #f0fdf4; }
         .observacoes-motorista { border-color: #3b82f6; background: #eff6ff; }
-        .empty-state { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 60px 30px; text-align: center; color: #6b7280; }
-        .empty-state p:first-child { font-size: 20px; margin-bottom: 10px; }
+        .observacoes-readonly { background: #f9fafb; color: #6b7280; }
+        .empty-state { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 50px 25px; text-align: center; color: #6b7280; }
+        .empty-state p:first-child { font-size: 18px; margin-bottom: 10px; font-weight: 600; }
         .empty-state p:last-child { font-size: 14px; }
+        .mobile-warning { display: none; background: #fef3c7; padding: 10px; border-radius: 8px; margin: 10px 0; text-align: center; font-size: 13px; color: #92400e; }
+        
         @media (max-width: 768px) {
-            .form-row, .status-buttons { grid-template-columns: 1fr; flex-direction: column; }
-            .status-btn { min-width: 100%; }
             .header { flex-direction: column; text-align: center; gap: 15px; }
+            .header-content { text-align: center; }
+            .form-row, .form-row-duo, .status-buttons { grid-template-columns: 1fr; }
+            .status-btn { min-width: 100%; }
+            .pet-card-header { flex-direction: column; }
+            .pet-name-section, .pet-details-right { text-align: center; width: 100%; }
+            .pet-details-right { margin-top: 10px; }
+            .mobile-warning { display: block; }
+            .observacoes { min-height: 100px; }
+        }
+        
+        @media (max-width: 480px) {
+            body { padding: 15px; }
+            .header, .pet-card, .form-container { padding: 20px; }
+            .header h1 { font-size: 24px; }
+            .pet-name-section h3 { font-size: 22px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div>
-                <h1>Pet Bosque</h1>
-                <p id="userRole">Sistema transporte</p>
+            <div class="header-content">
+                <h1>🐾 Pet Shop Transport</h1>
+                <p id="userRole">Sistema de transporte de pets</p>
             </div>
             <div class="user-badge" id="userBadge">Motorista</div>
         </div>
+        
+        <div class="mobile-warning">📱 Use modo paisagem para melhor visualização</div>
         
         <div class="sync-status" id="syncStatus">
             <span>✅ Conectado | Última atualização: <span id="lastUpdate">--:--:--</span></span>
             <button class="sync-btn" onclick="carregarPets()">Atualizar</button>
         </div>
         
-        <button class="add-btn" id="addBtn" onclick="mostrarFormulario()">➕ Adicionar Pet</button>
+        <button class="add-btn" id="addBtn" onclick="mostrarFormulario()">➕ Adicionar Novo Pet</button>
         
         <div class="form-container" id="formContainer">
             <h2>📝 Novo Transporte</h2>
-            <div class="form-group"><label>Cliente</label><input type="text" id="cliente" placeholder="Ex: Bil Silva"></div>
-            <div class="form-row">
-                <div class="form-group"><label>Pet</label><select id="pet" onchange="atualizarRacas()"><option>Cachorro</option><option>Gato</option><option>Outro</option></select></div>
-                <div class="form-group"><label>Raça</label><select id="raca"></select></div>
-                <div class="form-group"><label>Cor</label><select id="cor"><option>Marrom</option><option>Branco</option><option>Preto</option><option>Caramelo</option><option>Cinza</option><option>Malhado</option><option>Outra</option></select></div>
+            
+            <div class="form-row-duo">
+                <div class="form-group">
+                    <label>Cliente e Pet</label>
+                    <input type="text" id="clientePet" placeholder="Ex: Bil Silva - Nick (Shitzu)">
+                </div>
+                <div class="form-group">
+                    <label>Tipo</label>
+                    <select id="tipo">
+                        <option>Cachorro</option>
+                        <option>Gato</option>
+                        <option>Outro</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group"><label>Nome do Pet</label><input type="text" id="nomePet" placeholder="Ex: Nick"></div>
-            <div class="form-group"><label>Endereço</label><input type="text" id="endereco" placeholder="Ex: Av. Nossa Sr da Saúde 403"></div>
+            
             <div class="form-row">
-                <div class="form-group"><label>Tempo do Percurso</label><input type="text" id="tempo" placeholder="Ex: 12 minutos"></div>
-                <div class="form-group"><label>Hora Retirada</label><input type="time" id="horaRetirada" value="14:30"></div>
+                <div class="form-group">
+                    <label>Cor</label>
+                    <select id="cor">
+                        <option>Marrom</option>
+                        <option>Branco</option>
+                        <option>Preto</option>
+                        <option>Caramelo</option>
+                        <option>Cinza</option>
+                        <option>Malhado</option>
+                        <option>Outra</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Tempo do Percurso</label>
+                    <input type="text" id="tempo" placeholder="Ex: 12 minutos">
+                </div>
+                
+                <div class="form-group">
+                    <label>Hora Retirada</label>
+                    <input type="time" id="horaRetirada" value="14:30">
+                </div>
             </div>
+            
+            <div class="form-group">
+                <label>Endereço Completo</label>
+                <input type="text" id="endereco" placeholder="Ex: Av. Nossa Senhora da Saúde 403, Jardim das Flores">
+            </div>
+            
             <button class="submit-btn" onclick="adicionarPet()">Adicionar Pet</button>
         </div>
         
@@ -138,26 +200,6 @@
                 userBadge.classList.remove('admin');
                 userRole.textContent = 'Sistema de transporte - Modo Motorista';
             }
-            
-            // Inicializar raças
-            atualizarRacas();
-        }
-
-        function atualizarRacas() {
-            const racas = {
-                'Cachorro': ['Shitzu', 'Poodle', 'Labrador', 'Bulldog', 'Golden', 'Vira-lata', 'Outro'],
-                'Gato': ['Persa', 'Siamês', 'Maine Coon', 'Vira-lata', 'Outro'],
-                'Outro': ['Não especificado']
-            };
-            const pet = document.getElementById('pet').value;
-            const select = document.getElementById('raca');
-            select.innerHTML = '';
-            racas[pet].forEach(raca => {
-                const option = document.createElement('option');
-                option.value = raca;
-                option.textContent = raca;
-                select.appendChild(option);
-            });
         }
 
         function mostrarFormulario() {
@@ -207,26 +249,41 @@
         async function adicionarPet() {
             if (!isAdmin) return;
             
+            const inputClientePet = document.getElementById('clientePet').value.trim();
+            if (!inputClientePet) {
+                alert('Digite o cliente e nome do pet!');
+                return;
+            }
+            
+            // Separar cliente e pet (formato: "Cliente - Pet (Raça)")
+            const partes = inputClientePet.split('-');
+            const cliente = partes[0]?.trim() || '';
+            const resto = partes[1]?.trim() || '';
+            const petMatch = resto.match(/(.+?)(?:\((.+)\))?$/);
+            const nomePet = petMatch ? petMatch[1].trim() : resto;
+            const raca = petMatch && petMatch[2] ? petMatch[2].trim() : 'Não especificado';
+
             const pet = {
                 id: Date.now(),
-                cliente: document.getElementById('cliente').value.trim(),
-                pet: document.getElementById('pet').value,
-                raca: document.getElementById('raca').value,
+                cliente: cliente,
+                nomePet: nomePet,
+                raca: raca,
+                tipo: document.getElementById('tipo').value,
                 cor: document.getElementById('cor').value,
-                nomePet: document.getElementById('nomePet').value.trim(),
                 endereco: document.getElementById('endereco').value.trim(),
                 tempo: document.getElementById('tempo').value.trim(),
                 horaRetirada: document.getElementById('horaRetirada').value || '14:30',
                 status: 'Aguardando retirada',
                 pagamento: 'Pendente',
-                observacoesAdmin: '',       // Observação do ADMIN
-                observacoesMotorista: '',   // Observação do MOTORISTA
-                dataCriacao: new Date().toISOString()
+                observacoesAdmin: '',
+                observacoesMotorista: '',
+                dataCriacao: new Date().toISOString(),
+                arquivado: false
             };
 
             // Validar
-            if (!pet.cliente || !pet.raca || !pet.nomePet || !pet.endereco) {
-                alert('Preencha todos os campos!');
+            if (!pet.cliente || !pet.nomePet || !pet.endereco) {
+                alert('Preencha todos os campos obrigatórios!');
                 return;
             }
 
@@ -234,13 +291,16 @@
             await salvarPets();
             
             // Limpar formulário
-            ['cliente', 'nomePet', 'endereco', 'tempo'].forEach(id => {
-                document.getElementById(id).value = '';
-            });
+            document.getElementById('clientePet').value = '';
+            document.getElementById('endereco').value = '';
+            document.getElementById('tempo').value = '';
             document.getElementById('horaRetirada').value = '14:30';
             
             mostrarFormulario();
             mostrarPets();
+            
+            // Feedback
+            mostrarMensagem('✅ Pet adicionado com sucesso!', 'success');
         }
 
         async function atualizarPetStatus(petId, campo, valor) {
@@ -252,13 +312,16 @@
             
             pet[campo] = valor;
             
-            // Se marcou como pago, arquivar
-            if (campo === 'pagamento' && valor === 'Pago') {
+            // Se marcou como pago ou não pago, arquivar
+            if (campo === 'pagamento' && (valor === 'Pago' || valor === 'Não pago')) {
                 pet.arquivado = true;
             }
             
             await salvarPets();
             mostrarPets();
+            
+            // Feedback
+            mostrarMensagem('✅ Status atualizado!', 'success');
         }
 
         async function atualizarObservacoes(petId, tipo, texto) {
@@ -273,14 +336,26 @@
             }
             
             await salvarPets();
+            
+            // Feedback
+            mostrarMensagem('✅ Observação salva!', 'success');
         }
 
         async function removerPet(petId) {
-            if (!isAdmin || !confirm('Remover este pet?')) return;
+            if (!isAdmin || !confirm('Tem certeza que deseja remover este pet?')) return;
             
             pets = pets.filter(p => p.id !== petId);
             await salvarPets();
             mostrarPets();
+            
+            // Feedback
+            mostrarMensagem('✅ Pet removido!', 'success');
+        }
+
+        function copiarEndereco(endereco) {
+            navigator.clipboard.writeText(endereco)
+                .then(() => mostrarMensagem('✅ Endereço copiado!', 'success'))
+                .catch(() => alert('Não foi possível copiar o endereço'));
         }
 
         // ========== RENDERIZAR PETS ==========
@@ -288,7 +363,7 @@
             const container = document.getElementById('petsList');
             
             // Filtrar para motorista
-            let petsVisiveis = isAdmin ? pets : pets.filter(p => !p.arquivado && p.pagamento !== 'Pago');
+            let petsVisiveis = isAdmin ? pets : pets.filter(p => !p.arquivado);
             
             if (petsVisiveis.length === 0) {
                 container.innerHTML = `
@@ -303,61 +378,86 @@
             // Ordenar por hora
             petsVisiveis.sort((a, b) => (a.horaRetirada || '').localeCompare(b.horaRetirada || ''));
 
-            container.innerHTML = petsVisiveis.map(pet => `
-                <div class="pet-card ${pet.arquivado ? 'arquivado' : ''}">
+            container.innerHTML = petsVisiveis.map(pet => {
+                const isArquivado = pet.arquivado;
+                
+                return `
+                <div class="pet-card ${isArquivado ? 'arquivado' : ''}">
                     <div class="pet-card-header">
-                        <div>
+                        <div class="pet-name-section">
                             <h3>${pet.nomePet}</h3>
-                            <p>${pet.cliente}</p>
-                            <span class="badge-status ${pet.status.replace(/ /g, '-').toLowerCase()}">
-                                ${pet.status}
-                            </span>
-                            ${pet.pagamento === 'Pago' ? '<span class="badge-status pago">Pago</span>' : ''}
-                        </div>
-                        <div>
-                            <div style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">
-                                ⏰ ${pet.horaRetirada || '--:--'}
+                            <p>${pet.cliente} | ${pet.tipo} ${pet.raca ? `(${pet.raca})` : ''}</p>
+                            <div>
+                                <span class="badge-status ${pet.status.replace(/ /g, '-').toLowerCase()}">
+                                    ${pet.status}
+                                </span>
+                                <span class="badge-status ${pet.pagamento === 'Pago' ? 'pago' : 'nao-pago'}">
+                                    ${pet.pagamento}
+                                </span>
                             </div>
-                            ${isAdmin ? `<button class="delete-btn visible" onclick="removerPet(${pet.id})">🗑️ Remover</button>` : ''}
+                        </div>
+                        <div class="pet-details-right">
+                            <div class="pet-time">
+                                <span>⏰ ${pet.horaRetirada || '--:--'}</span>
+                            </div>
+                            ${isAdmin ? `
+                                <button class="delete-btn visible" onclick="removerPet(${pet.id})">
+                                    🗑️ Remover
+                                </button>
+                            ` : ''}
                         </div>
                     </div>
                     
                     <div class="pet-info">
-                        <div class="pet-info-item"><strong>Pet:</strong> ${pet.pet}</div>
-                        <div class="pet-info-item"><strong>Raça:</strong> ${pet.raca}</div>
-                        <div class="pet-info-item"><strong>Cor:</strong> ${pet.cor}</div>
-                        <div class="pet-info-item"><strong>Tempo:</strong> ${pet.tempo}</div>
+                        <div class="pet-info-item">
+                            <strong>Cor:</strong> ${pet.cor}
+                        </div>
+                        <div class="pet-info-item">
+                            <strong>Tempo:</strong> ${pet.tempo}
+                        </div>
+                        <div class="pet-info-item">
+                            <strong>Tipo:</strong> ${pet.tipo}
+                        </div>
                     </div>
                     
                     <div class="pet-address">
                         <p>📍 <strong>Endereço:</strong> ${pet.endereco}</p>
+                        <button class="copy-address-btn" onclick="copiarEndereco('${pet.endereco.replace(/'/g, "\\'")}')">
+                            📋 Copiar Endereço
+                        </button>
                     </div>
                     
                     <div class="status-section">
-                        <!-- BOTÕES DE STATUS (SÓ MOTORISTA VÊ/ USA) -->
                         ${!isAdmin ? `
+                            <!-- BOTÕES DE STATUS (SÓ MOTORISTA) -->
                             <div class="status-buttons">
                                 ${['Aguardando retirada', 'A caminho da loja', 'A caminho da entrega', 'Entregue'].map(status => `
                                     <button class="status-btn ${pet.status === status ? 'active' : ''}" 
                                             onclick="atualizarPetStatus(${pet.id}, 'status', '${status}')"
-                                            ${pet.arquivado ? 'disabled' : ''}>
+                                            ${isArquivado ? 'disabled' : ''}>
                                         ${status}
                                     </button>
                                 `).join('')}
                             </div>
                             
-                            <div style="margin-top: 15px;">
-                                <button class="status-btn ${pet.pagamento === 'Pago' ? 'pago-btn' : ''}" 
-                                        onclick="atualizarPetStatus(${pet.id}, 'pagamento', '${pet.pagamento === 'Pago' ? 'Pendente' : 'Pago'}')"
-                                        ${pet.arquivado ? 'disabled' : ''}>
-                                    ${pet.pagamento === 'Pago' ? '✓ Pago' : 'Marcar como Pago'}
+                            <div class="status-buttons" style="margin-top: 10px;">
+                                <button class="status-btn ${pet.pagamento === 'Pago' ? 'pago-btn active' : 'pago-btn'}" 
+                                        onclick="atualizarPetStatus(${pet.id}, 'pagamento', 'Pago')"
+                                        ${isArquivado ? 'disabled' : ''}>
+                                    ✓ Pago
+                                </button>
+                                <button class="status-btn ${pet.pagamento === 'Não pago' ? 'nao-pago-btn active' : 'nao-pago-btn'}" 
+                                        onclick="atualizarPetStatus(${pet.id}, 'pagamento', 'Não pago')"
+                                        ${isArquivado ? 'disabled' : ''}>
+                                    ✗ Não Pago
                                 </button>
                             </div>
                         ` : `
                             <!-- ADMIN só vê o status atual -->
-                            <div style="margin-bottom: 15px;">
+                            <div style="margin-bottom: 15px; padding: 12px; background: #f3f4f6; border-radius: 8px;">
                                 <strong>Status atual:</strong> ${pet.status}
-                                ${pet.pagamento === 'Pago' ? ' | <strong>Pagamento:</strong> Pago' : ''}
+                                <br>
+                                <strong>Pagamento:</strong> ${pet.pagamento}
                             </div>
                         `}
                         
@@ -369,10 +469,11 @@
                                     <span class="observacoes-label">📝 Minhas Observações (Admin):</span>
                                     <textarea class="observacoes observacoes-admin" 
                                               onchange="atualizarObservacoes(${pet.id}, 'admin', this.value)"
+                                              onblur="atualizarObservacoes(${pet.id}, 'admin', this.value)"
                                               placeholder="Digite observações administrativas...">${pet.observacoesAdmin || ''}</textarea>
                                     
                                     <span class="observacoes-label">📝 Observações do Motorista:</span>
-                                    <textarea class="observacoes observacoes-motorista" 
+                                    <textarea class="observacoes observacoes-motorista observacoes-readonly" 
                                               readonly
                                               placeholder="Observações do motorista aparecerão aqui...">${pet.observacoesMotorista || ''}</textarea>
                                 </div>
@@ -380,26 +481,59 @@
                                 <!-- MOTORISTA vê e edita SUA observação -->
                                 <div>
                                     <span class="observacoes-label">📝 Observações do Admin:</span>
-                                    <textarea class="observacoes observacoes-admin" 
+                                    <textarea class="observacoes observacoes-admin observacoes-readonly" 
                                               readonly
                                               placeholder="Observações do admin aparecerão aqui...">${pet.observacoesAdmin || ''}</textarea>
                                     
                                     <span class="observacoes-label">📝 Minhas Observações (Motorista):</span>
                                     <textarea class="observacoes observacoes-motorista" 
                                               onchange="atualizarObservacoes(${pet.id}, 'motorista', this.value)"
+                                              onblur="atualizarObservacoes(${pet.id}, 'motorista', this.value)"
                                               placeholder="Digite suas observações...">${pet.observacoesMotorista || ''}</textarea>
                                 </div>
                             `}
                         </div>
                     </div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
             
             atualizarHora();
         }
 
+        function mostrarMensagem(texto, tipo) {
+            const status = document.getElementById('syncStatus');
+            const cores = {
+                success: '#d1fae5',
+                error: '#fee2e2',
+                warning: '#fef3c7'
+            };
+            
+            const corTexto = {
+                success: '#065f46',
+                error: '#991b1b',
+                warning: '#92400e'
+            };
+            
+            status.style.background = cores[tipo] || '#f3f4f6';
+            status.style.color = corTexto[tipo] || '#1f2937';
+            status.firstElementChild.innerHTML = texto;
+            
+            setTimeout(() => {
+                status.style.background = '#fef3c7';
+                status.style.color = '#92400e';
+                atualizarHora();
+            }, 3000);
+        }
+
         function atualizarHora() {
-            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('pt-BR');
+            const agora = new Date();
+            const horaFormatada = agora.toLocaleTimeString('pt-BR', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('lastUpdate').textContent = horaFormatada;
         }
 
         // ========== INICIAR ==========
@@ -407,10 +541,16 @@
             configurarInterface();
             carregarPets();
             
-            // Atualizar automaticamente
+            // Atualizar automaticamente a cada 30 segundos
             setInterval(carregarPets, 30000);
+            
+            // Atualizar quando a página ganha foco
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    carregarPets();
+                }
+            });
         });
     </script>
 </body>
 </html>
-
