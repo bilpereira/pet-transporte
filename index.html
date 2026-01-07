@@ -193,6 +193,12 @@
             border-left: 5px solid #3b82f6;
         }
         
+        .pet-card.arquivado {
+            border-left: 5px solid #9ca3af;
+            opacity: 0.7;
+            background: #f9fafb;
+        }
+        
         .pet-card-header {
             display: flex;
             justify-content: space-between;
@@ -209,6 +215,31 @@
         .pet-card-header p {
             font-size: 18px;
             color: #6b7280;
+        }
+        
+        .badge-status {
+            background: #f59e0b;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .badge-status.aguardando {
+            background: #f59e0b;
+        }
+        
+        .badge-status.caminho {
+            background: #3b82f6;
+        }
+        
+        .badge-status.entregue {
+            background: #10b981;
+        }
+        
+        .badge-status.pago {
+            background: #8b5cf6;
         }
         
         .delete-btn {
@@ -260,17 +291,21 @@
             font-size: 14px;
         }
         
-        .status-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
+        .status-section {
             padding-top: 20px;
             border-top: 2px solid #e5e7eb;
         }
         
+        .status-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
         .status-btn {
             flex: 1;
-            min-width: 120px;
+            min-width: 140px;
             padding: 12px;
             border: none;
             border-radius: 8px;
@@ -287,7 +322,7 @@
             color: white;
         }
         
-        .status-btn.active.coletado {
+        .status-btn.active.caminho {
             background: #3b82f6;
             color: white;
         }
@@ -373,14 +408,14 @@
     <div class="container">
         <div class="header">
             <div>
-                <h1>🐾 Pet Bosque</h1>
-                <p id="userRole">Transporte pets</p>
+                <h1>🐾 Pet Shop Transport</h1>
+                <p id="userRole">Sistema de transporte de pets</p>
             </div>
             <div class="user-badge" id="userBadge">Motorista</div>
         </div>
         
         <div class="sync-status" id="syncStatus">
-            <span>🔄 Sincronizado com nuvem | Última atualização: <span id="lastUpdate">--:--:--</span></span>
+            <span>🔄 Sincronizado | Última atualização: <span id="lastUpdate">--:--:--</span></span>
             <button class="sync-btn" onclick="loadPets()">Atualizar Agora</button>
         </div>
         
@@ -484,13 +519,11 @@
             const userRole = document.getElementById('userRole');
             
             if (isAdmin) {
-                // MODO ADMIN
                 addBtn.classList.add('visible');
                 userBadge.textContent = 'Administrador';
                 userBadge.classList.add('admin');
                 userRole.textContent = 'Sistema de transporte - Modo Administrador';
             } else {
-                // MODO MOTORISTA
                 addBtn.classList.remove('visible');
                 userBadge.textContent = 'Motorista';
                 userBadge.classList.remove('admin');
@@ -508,15 +541,12 @@
                     }
                 });
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 
                 const data = await response.json();
                 return data.record.pets || [];
             } catch (error) {
                 console.error('Erro ao buscar dados:', error);
-                // Fallback para localStorage
                 const localData = localStorage.getItem('pets_backup');
                 return localData ? JSON.parse(localData) : [];
             }
@@ -533,16 +563,12 @@
                     body: JSON.stringify({ pets: petsArray })
                 });
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 
-                // Backup local
                 localStorage.setItem('pets_backup', JSON.stringify(petsArray));
                 return true;
             } catch (error) {
                 console.error('Erro ao salvar:', error);
-                // Backup local apenas
                 localStorage.setItem('pets_backup', JSON.stringify(petsArray));
                 return false;
             }
@@ -603,23 +629,19 @@
                     endereco,
                     tempo,
                     horaRetirada: horaRetirada || '14:30',
-                    status: 'aguardando',
-                    coletado: false,
-                    entregue: false,
-                    pago: false,
+                    status: 'Aguardando retirada',
+                    pagamento: 'Pendente',
                     observacoes: '',
-                    dataCriacao: new Date().toISOString()
+                    dataCriacao: new Date().toISOString(),
+                    arquivado: false
                 };
 
-                // Carregar existentes
                 const existingPets = await fetchFromJSONBin();
                 const updatedPets = [...existingPets, newPet];
                 
-                // Salvar
                 const saved = await saveToJSONBin(updatedPets);
                 
                 if (saved) {
-                    // Limpar formulário
                     document.getElementById('cliente').value = '';
                     document.getElementById('nomePet').value = '';
                     document.getElementById('endereco').value = '';
@@ -631,7 +653,6 @@
                     toggleForm();
                     showMessage('✅ Pet adicionado com sucesso!', 'success');
                     
-                    // Atualizar lista
                     pets = updatedPets;
                     renderPets();
                 }
@@ -645,20 +666,31 @@
             }
         }
 
-        async function updateStatus(petId, field, value) {
+        async function updateStatus(petId, tipo, novoValor) {
             if (isLoading) return;
             
             const petIndex = pets.findIndex(p => p.id === petId);
             if (petIndex === -1) return;
             
-            const originalValue = pets[petIndex][field];
-            pets[petIndex][field] = value;
+            const pet = pets[petIndex];
             
-            // Atualizar status geral
-            if (field === 'coletado' && value === true) {
-                pets[petIndex].status = 'coletado';
-            } else if (field === 'entregue' && value === true) {
-                pets[petIndex].status = 'entregue';
+            if (tipo === 'status') {
+                pet.status = novoValor;
+                
+                // Se marcou como entregue, pergunta sobre pagamento
+                if (novoValor === 'Entregue' && !pet.pagamento === 'Pago') {
+                    if (confirm('Marcar como Pago também?')) {
+                        pet.pagamento = 'Pago';
+                        pet.arquivado = true;
+                    }
+                }
+            } else if (tipo === 'pagamento') {
+                pet.pagamento = novoValor;
+                
+                // Se marcou como Pago, arquiva automaticamente
+                if (novoValor === 'Pago') {
+                    pet.arquivado = true;
+                }
             }
             
             // Renderizar imediatamente
@@ -668,9 +700,6 @@
                 await saveToJSONBin(pets);
                 showMessage('✅ Status atualizado!', 'success');
             } catch (error) {
-                // Reverter
-                pets[petIndex][field] = originalValue;
-                renderPets();
                 showMessage('⚠️ Alteração salva localmente', 'warning');
             }
         }
@@ -732,28 +761,52 @@
         function renderPets() {
             const container = document.getElementById('petsList');
             
-            if (!pets || pets.length === 0) {
+            // Filtrar pets conforme o modo
+            let petsParaExibir = [...pets];
+            
+            if (!isAdmin) {
+                // Motorista só vê pets NÃO arquivados e NÃO pagos
+                petsParaExibir = pets.filter(p => !p.arquivado && p.pagamento !== 'Pago');
+            }
+            
+            if (petsParaExibir.length === 0) {
                 renderEmpty();
                 return;
             }
 
             // Ordenar por hora
-            const petsOrdenados = [...pets].sort((a, b) => {
+            const petsOrdenados = petsParaExibir.sort((a, b) => {
                 return (a.horaRetirada || '').localeCompare(b.horaRetirada || '');
             });
 
-            container.innerHTML = petsOrdenados.map(pet => `
-                <div class="pet-card">
+            container.innerHTML = petsOrdenados.map(pet => {
+                const isArquivado = pet.arquivado || pet.pagamento === 'Pago';
+                const mostrarParaMotorista = !isArquivado;
+                
+                // Se for motorista e pet está arquivado, não mostrar
+                if (!isAdmin && !mostrarParaMotorista) return '';
+                
+                return `
+                <div class="pet-card ${isArquivado ? 'arquivado' : ''}">
                     <div class="pet-card-header">
                         <div>
                             <h3>${pet.nomePet}</h3>
                             <p>${pet.cliente}</p>
+                            <span class="badge-status ${pet.status.toLowerCase().replace(/ /g, '-')}">
+                                ${pet.status}
+                            </span>
+                            ${pet.pagamento === 'Pago' ? '<span class="badge-status pago" style="margin-left: 8px;">Pago</span>' : ''}
                         </div>
-                        <button class="delete-btn ${isAdmin ? 'visible' : ''}" 
-                                onclick="deletePet(${pet.id})"
-                                ${!isAdmin ? 'style="display:none"' : ''}>
-                            🗑️ Remover
-                        </button>
+                        <div>
+                            <div style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">
+                                ⏰ ${pet.horaRetirada || '--:--'}
+                            </div>
+                            <button class="delete-btn ${isAdmin ? 'visible' : ''}" 
+                                    onclick="deletePet(${pet.id})"
+                                    ${!isAdmin ? 'style="display:none"' : ''}>
+                                🗑️ Remover
+                            </button>
+                        </div>
                     </div>
                     
                     <div class="pet-info">
@@ -767,51 +820,66 @@
                             <strong>Cor:</strong> ${pet.cor}
                         </div>
                         <div class="pet-info-item">
-                            <strong>Hora:</strong> ${pet.horaRetirada || '--:--'}
+                            <strong>Tempo:</strong> ${pet.tempo}
                         </div>
                     </div>
                     
                     <div class="pet-address">
                         <p>📍 <strong>Endereço:</strong> ${pet.endereco}</p>
-                        <p>⏱️ <strong>Tempo:</strong> ${pet.tempo}</p>
                     </div>
                     
-                    <div class="status-buttons">
-                        <button class="status-btn ${pet.status === 'aguardando' ? 'active aguardando' : ''} 
-                                               ${pet.coletado ? 'active coletado' : ''}" 
-                                onclick="updateStatus(${pet.id}, 'coletado', ${!pet.coletado})"
-                                ${isLoading ? 'disabled' : ''}>
-                            ${pet.coletado ? '✓ ' : ''}${pet.status === 'aguardando' ? 'Aguardando' : 'Coletado'}
-                        </button>
-                        <button class="status-btn ${pet.entregue ? 'active entregue' : ''}" 
-                                onclick="updateStatus(${pet.id}, 'entregue', ${!pet.entregue})"
-                                ${isLoading ? 'disabled' : ''}>
-                            ${pet.entregue ? '✓ ' : ''}Entregue
-                        </button>
-                        <button class="status-btn ${pet.pago ? 'active pago' : ''}" 
-                                onclick="updateStatus(${pet.id}, 'pago', ${!pet.pago})"
-                                ${isLoading ? 'disabled' : ''}>
-                            ${pet.pago ? '✓ ' : ''}Pago
-                        </button>
-                    </div>
-                    
-                    <div style="margin-top: 15px;">
-                        <label style="font-weight: 600; color: #374151; font-size: 14px;">📝 Observações:</label>
-                        <textarea class="observacoes" 
-                                  placeholder="Digite observações..." 
-                                  onchange="updateObservacoes(${pet.id}, this.value)"
-                                  ${isLoading ? 'disabled' : ''}>${pet.observacoes || ''}</textarea>
+                    <div class="status-section">
+                        <div class="status-buttons">
+                            <button class="status-btn ${pet.status === 'Aguardando retirada' ? 'active aguardando' : ''}" 
+                                    onclick="updateStatus(${pet.id}, 'status', 'Aguardando retirada')"
+                                    ${isLoading || isArquivado ? 'disabled' : ''}>
+                                Aguardando retirada
+                            </button>
+                            <button class="status-btn ${pet.status === 'A caminho da loja' ? 'active caminho' : ''}" 
+                                    onclick="updateStatus(${pet.id}, 'status', 'A caminho da loja')"
+                                    ${isLoading || isArquivado ? 'disabled' : ''}>
+                                A caminho da loja
+                            </button>
+                            <button class="status-btn ${pet.status === 'A caminho da entrega' ? 'active caminho' : ''}" 
+                                    onclick="updateStatus(${pet.id}, 'status', 'A caminho da entrega')"
+                                    ${isLoading || isArquivado ? 'disabled' : ''}>
+                                A caminho da entrega
+                            </button>
+                            <button class="status-btn ${pet.status === 'Entregue' ? 'active entregue' : ''}" 
+                                    onclick="updateStatus(${pet.id}, 'status', 'Entregue')"
+                                    ${isLoading || isArquivado ? 'disabled' : ''}>
+                                Entregue
+                            </button>
+                        </div>
+                        
+                        <div style="margin-top: 15px;">
+                            <button class="status-btn ${pet.pagamento === 'Pago' ? 'active pago' : ''}" 
+                                    onclick="updateStatus(${pet.id}, 'pagamento', '${pet.pagamento === 'Pago' ? 'Pendente' : 'Pago'}')"
+                                    ${isLoading ? 'disabled' : ''}
+                                    style="background: ${pet.pagamento === 'Pago' ? '#8b5cf6' : '#e5e7eb'}; color: ${pet.pagamento === 'Pago' ? 'white' : '#374151'}">
+                                ${pet.pagamento === 'Pago' ? '✓ Pago' : 'Marcar como Pago'}
+                            </button>
+                        </div>
+                        
+                        <div style="margin-top: 15px;">
+                            <label style="font-weight: 600; color: #374151; font-size: 14px;">📝 Observações:</label>
+                            <textarea class="observacoes" 
+                                      placeholder="Digite observações..." 
+                                      onchange="updateObservacoes(${pet.id}, this.value)"
+                                      ${isLoading ? 'disabled' : ''}>${pet.observacoes || ''}</textarea>
+                        </div>
                     </div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function renderEmpty() {
             const container = document.getElementById('petsList');
             container.innerHTML = `
                 <div class="empty-state">
-                    <p>📭 Nenhum pet cadastrado</p>
-                    <p>${isAdmin ? 'Adicione o primeiro pet!' : 'Aguardando pets para transporte'}</p>
+                    <p>${isAdmin ? '📋 Nenhum pet cadastrado' : '📭 Nenhum pet para transporte'}</p>
+                    <p>${isAdmin ? 'Adicione o primeiro pet!' : 'Todos os pets foram finalizados ou aguardam aprovação'}</p>
                 </div>
             `;
         }
@@ -846,7 +914,7 @@
             updateRacas();
             loadPets();
             
-            // Auto-refresh
+            // Auto-refresh a cada 30 segundos
             setInterval(loadPets, 30000);
         });
     </script>
