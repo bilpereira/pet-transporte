@@ -678,7 +678,7 @@
                 pet.status = novoValor;
                 
                 // Se marcou como entregue, pergunta sobre pagamento
-                if (novoValor === 'Entregue' && !pet.pagamento === 'Pago') {
+                if (novoValor === 'Entregue' && pet.pagamento !== 'Pago') {
                     if (confirm('Marcar como Pago também?')) {
                         pet.pagamento = 'Pago';
                         pet.arquivado = true;
@@ -787,7 +787,7 @@
                 if (!isAdmin && !mostrarParaMotorista) return '';
                 
                 return `
-                <div class="pet-card ${isArquivado ? 'arquivado' : ''}">
+                <div class="pet-card ${isArquivado ? 'arquivado' : ''}" data-pet-id="${pet.id}">
                     <div class="pet-card-header">
                         <div>
                             <h3>${pet.nomePet}</h3>
@@ -864,8 +864,9 @@
                         <div style="margin-top: 15px;">
                             <label style="font-weight: 600; color: #374151; font-size: 14px;">📝 Observações:</label>
                             <textarea class="observacoes" 
-                                      placeholder="Digite observações..." 
                                       onchange="updateObservacoes(${pet.id}, this.value)"
+                                      onblur="updateObservacoes(${pet.id}, this.value)"
+                                      placeholder="Digite observações..." 
                                       ${isLoading ? 'disabled' : ''}>${pet.observacoes || ''}</textarea>
                         </div>
                     </div>
