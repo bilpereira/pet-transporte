@@ -5,402 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🐾 Pet Shop Transport</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #e0f2fe 0%, #e9d5ff 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .header {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 30px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .header h1 {
-            font-size: 32px;
-            color: #1f2937;
-            margin-bottom: 8px;
-        }
-        
-        .header p {
-            color: #6b7280;
-            font-size: 16px;
-        }
-        
-        .user-badge {
-            background: #3b82f6;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-        
-        .user-badge.admin {
-            background: #10b981;
-        }
-        
-        .sync-status {
-            background: #fef3c7;
-            padding: 10px 20px;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-size: 14px;
-            color: #92400e;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .sync-btn {
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        
-        .add-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-            color: white;
-            border: none;
-            padding: 18px;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-            display: none;
-        }
-        
-        .add-btn.visible {
-            display: block;
-        }
-        
-        .add-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
-        
-        .form-container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 30px;
-            margin-bottom: 30px;
-            display: none;
-        }
-        
-        .form-container.active {
-            display: block;
-        }
-        
-        .form-container h2 {
-            font-size: 24px;
-            color: #1f2937;
-            margin-bottom: 20px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            color: #374151;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #3b82f6;
-        }
-        
-        .form-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        
-        .submit-btn {
-            width: 100%;
-            background: #10b981;
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        
-        .submit-btn:hover {
-            background: #059669;
-        }
-        
-        .submit-btn:disabled {
-            background: #9ca3af;
-            cursor: not-allowed;
-        }
-        
-        .pets-list {
-            display: grid;
-            gap: 20px;
-        }
-        
-        .pet-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 25px;
-            border-left: 5px solid #3b82f6;
-        }
-        
-        .pet-card.arquivado {
-            border-left: 5px solid #9ca3af;
-            opacity: 0.7;
-            background: #f9fafb;
-        }
-        
-        .pet-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 20px;
-        }
-        
-        .pet-card-header h3 {
-            font-size: 28px;
-            color: #1f2937;
-            margin-bottom: 5px;
-        }
-        
-        .pet-card-header p {
-            font-size: 18px;
-            color: #6b7280;
-        }
-        
-        .badge-status {
-            background: #f59e0b;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .badge-status.aguardando {
-            background: #f59e0b;
-        }
-        
-        .badge-status.caminho {
-            background: #3b82f6;
-        }
-        
-        .badge-status.entregue {
-            background: #10b981;
-        }
-        
-        .badge-status.pago {
-            background: #8b5cf6;
-        }
-        
-        .delete-btn {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s;
-            display: none;
-        }
-        
-        .delete-btn.visible {
-            display: block;
-        }
-        
-        .delete-btn:hover {
-            background: #dc2626;
-        }
-        
-        .pet-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        
-        .pet-info-item {
-            color: #4b5563;
-        }
-        
-        .pet-info-item strong {
-            color: #374151;
-        }
-        
-        .pet-address {
-            margin-bottom: 15px;
-            padding: 12px;
-            background: #f3f4f6;
-            border-radius: 8px;
-        }
-        
-        .pet-address p {
-            color: #374151;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        
-        .status-section {
-            padding-top: 20px;
-            border-top: 2px solid #e5e7eb;
-        }
-        
-        .status-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-        
-        .status-btn {
-            flex: 1;
-            min-width: 140px;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: #e5e7eb;
-            color: #374151;
-        }
-        
-        .status-btn.active.aguardando {
-            background: #f59e0b;
-            color: white;
-        }
-        
-        .status-btn.active.caminho {
-            background: #3b82f6;
-            color: white;
-        }
-        
-        .status-btn.active.entregue {
-            background: #10b981;
-            color: white;
-        }
-        
-        .status-btn.active.pago {
-            background: #8b5cf6;
-            color: white;
-        }
-        
-        .status-btn:hover:not(:disabled) {
-            background: #d1d5db;
-        }
-        
-        .status-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        .status-btn.active:hover:not(:disabled) {
-            opacity: 0.9;
-        }
-        
-        .observacoes {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #d1d5db;
-            border-radius: 8px;
-            margin-top: 10px;
-            font-family: inherit;
-            font-size: 14px;
-        }
-        
-        .empty-state {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 60px 30px;
-            text-align: center;
-            color: #6b7280;
-        }
-        
-        .empty-state p:first-child {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-        
-        .empty-state p:last-child {
-            font-size: 14px;
-        }
-        
-        .loading {
-            opacity: 0.7;
-            pointer-events: none;
-        }
-        
+        /* MANTENHA TODO O CSS ANTERIOR IGUAL */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: linear-gradient(135deg, #e0f2fe 0%, #e9d5ff 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 30px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 32px; color: #1f2937; margin-bottom: 8px; }
+        .header p { color: #6b7280; font-size: 16px; }
+        .user-badge { background: #3b82f6; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; }
+        .user-badge.admin { background: #10b981; }
+        .sync-status { background: #fef3c7; padding: 10px 20px; border-radius: 8px; margin: 15px 0; font-size: 14px; color: #92400e; display: flex; justify-content: space-between; align-items: center; }
+        .sync-btn { background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+        .add-btn { width: 100%; background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); color: white; border: none; padding: 18px; border-radius: 12px; font-size: 18px; font-weight: 600; cursor: pointer; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s; display: none; }
+        .add-btn.visible { display: block; }
+        .add-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        .form-container { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 30px; margin-bottom: 30px; display: none; }
+        .form-container.active { display: block; }
+        .form-container h2 { font-size: 24px; color: #1f2937; margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; color: #374151; margin-bottom: 8px; font-size: 14px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 16px; transition: border-color 0.3s; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #3b82f6; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .submit-btn { width: 100%; background: #10b981; color: white; border: none; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.3s; }
+        .submit-btn:hover { background: #059669; }
+        .submit-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+        .pets-list { display: grid; gap: 20px; }
+        .pet-card { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 25px; border-left: 5px solid #3b82f6; }
+        .pet-card.arquivado { border-left: 5px solid #9ca3af; opacity: 0.7; background: #f9fafb; }
+        .pet-card-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px; }
+        .pet-card-header h3 { font-size: 28px; color: #1f2937; margin-bottom: 5px; }
+        .pet-card-header p { font-size: 18px; color: #6b7280; }
+        .badge-status { background: #f59e0b; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .badge-status.aguardando { background: #f59e0b; }
+        .badge-status.caminho { background: #3b82f6; }
+        .badge-status.entregue { background: #10b981; }
+        .badge-status.pago { background: #8b5cf6; }
+        .delete-btn { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; transition: background 0.3s; display: none; }
+        .delete-btn.visible { display: block; }
+        .delete-btn:hover { background: #dc2626; }
+        .pet-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; font-size: 14px; }
+        .pet-info-item { color: #4b5563; }
+        .pet-info-item strong { color: #374151; }
+        .pet-address { margin-bottom: 15px; padding: 12px; background: #f3f4f6; border-radius: 8px; }
+        .pet-address p { color: #374151; margin-bottom: 8px; font-size: 14px; }
+        .status-section { padding-top: 20px; border-top: 2px solid #e5e7eb; }
+        .status-buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 15px; }
+        .status-btn { flex: 1; min-width: 140px; padding: 12px; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.3s; background: #e5e7eb; color: #374151; }
+        .status-btn.active { background: #3b82f6; color: white; }
+        .status-btn.pago-btn { background: #8b5cf6; color: white; }
+        .status-btn:hover:not(:disabled) { opacity: 0.9; }
+        .status-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .observacoes { width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; margin-top: 10px; font-family: inherit; font-size: 14px; }
+        .empty-state { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 60px 30px; text-align: center; color: #6b7280; }
+        .empty-state p:first-child { font-size: 20px; margin-bottom: 10px; }
+        .empty-state p:last-child { font-size: 14px; }
         @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            
-            .status-buttons {
-                flex-direction: column;
-            }
-            
-            .status-btn {
-                min-width: 100%;
-            }
-            
-            .header {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
-            }
+            .form-row, .status-buttons { grid-template-columns: 1fr; flex-direction: column; }
+            .status-btn { min-width: 100%; }
+            .header { flex-direction: column; text-align: center; gap: 15px; }
         }
     </style>
 </head>
@@ -415,413 +78,233 @@
         </div>
         
         <div class="sync-status" id="syncStatus">
-            <span>🔄 Sincronizado | Última atualização: <span id="lastUpdate">--:--:--</span></span>
-            <button class="sync-btn" onclick="loadPets()">Atualizar Agora</button>
+            <span>✅ Conectado | Última atualização: <span id="lastUpdate">--:--:--</span></span>
+            <button class="sync-btn" onclick="carregarPets()">Atualizar</button>
         </div>
         
-        <button class="add-btn" id="addBtn" onclick="toggleForm()">➕ Adicionar Novo Pet</button>
+        <button class="add-btn" id="addBtn" onclick="mostrarFormulario()">➕ Adicionar Pet</button>
         
         <div class="form-container" id="formContainer">
             <h2>📝 Novo Transporte</h2>
-            
-            <div class="form-group">
-                <label>Cliente</label>
-                <input type="text" id="cliente" placeholder="Ex: Bil Silva">
-            </div>
-            
+            <div class="form-group"><label>Cliente</label><input type="text" id="cliente" placeholder="Ex: Bil Silva"></div>
             <div class="form-row">
-                <div class="form-group">
-                    <label>Pet</label>
-                    <select id="pet" onchange="updateRacas()">
-                        <option value="">Selecione</option>
-                        <option>Cachorro</option>
-                        <option>Gato</option>
-                        <option>Outro</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>Raça</label>
-                    <select id="raca">
-                        <option value="">Selecione primeiro o tipo</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>Cor</label>
-                    <select id="cor">
-                        <option value="">Selecione</option>
-                        <option>Marrom</option>
-                        <option>Branco</option>
-                        <option>Preto</option>
-                        <option>Caramelo</option>
-                        <option>Cinza</option>
-                        <option>Malhado</option>
-                        <option>Outra</option>
-                    </select>
-                </div>
+                <div class="form-group"><label>Pet</label><select id="pet" onchange="atualizarRacas()"><option>Cachorro</option><option>Gato</option><option>Outro</option></select></div>
+                <div class="form-group"><label>Raça</label><select id="raca"></select></div>
+                <div class="form-group"><label>Cor</label><select id="cor"><option>Marrom</option><option>Branco</option><option>Preto</option><option>Caramelo</option><option>Cinza</option><option>Malhado</option><option>Outra</option></select></div>
             </div>
-            
-            <div class="form-group">
-                <label>Nome do Pet</label>
-                <input type="text" id="nomePet" placeholder="Ex: Nick">
-            </div>
-            
-            <div class="form-group">
-                <label>Endereço</label>
-                <input type="text" id="endereco" placeholder="Ex: Avenida Nossa Sr da Saúde 403">
-            </div>
-            
+            <div class="form-group"><label>Nome do Pet</label><input type="text" id="nomePet" placeholder="Ex: Nick"></div>
+            <div class="form-group"><label>Endereço</label><input type="text" id="endereco" placeholder="Ex: Av. Nossa Sr da Saúde 403"></div>
             <div class="form-row">
-                <div class="form-group">
-                    <label>Tempo do Percurso</label>
-                    <input type="text" id="tempo" placeholder="Ex: 12 minutos">
-                </div>
-                
-                <div class="form-group">
-                    <label>Hora Retirada</label>
-                    <input type="time" id="horaRetirada" value="14:30">
-                </div>
+                <div class="form-group"><label>Tempo do Percurso</label><input type="text" id="tempo" placeholder="Ex: 12 minutos"></div>
+                <div class="form-group"><label>Hora Retirada</label><input type="time" id="horaRetirada" value="14:30"></div>
             </div>
-            
-            <button class="submit-btn" id="submitBtn" onclick="addPet()">Adicionar Pet</button>
+            <button class="submit-btn" onclick="adicionarPet()">Adicionar Pet</button>
         </div>
         
         <div class="pets-list" id="petsList"></div>
     </div>
 
     <script>
-        // ========== CONFIGURAÇÃO ==========
+        // ========== CONFIGURAÇÃO SIMPLES ==========
         const JSONBIN_CONFIG = {
             BIN_ID: '695de16743b1c97be91e7eeb',
-            API_KEY: '$2a$10$Wmft46BmqMcXpiI3zbasQ.4xVnNwAtOSxia383nb1GxXxojFbX.Nm', // SUBSTITUA PELA SUA CHAVE DO JSONBIN
+            API_KEY: '$2a$10$SUA_CHAVE_AQUI', // COLE SUA CHAVE AQUI
             API_URL: 'https://api.jsonbin.io/v3/b'
         };
 
-        // ========== DETECTAR MODO ==========
+        // Detectar modo
         const urlParams = new URLSearchParams(window.location.search);
-        const modo = urlParams.get('modo') || 'motorista';
-        const isAdmin = modo === 'admin';
-
-        const racasPorPet = {
-            'Cachorro': ['Shitzu', 'Poodle', 'Labrador', 'Bulldog', 'Golden', 'Vira-lata', 'Outro'],
-            'Gato': ['Persa', 'Siamês', 'Maine Coon', 'Vira-lata', 'Outro'],
-            'Outro': ['Não especificado']
-        };
+        const isAdmin = urlParams.get('modo') === 'admin';
 
         let pets = [];
-        let isLoading = false;
 
-        // ========== CONFIGURAR INTERFACE ==========
+        // ========== FUNÇÕES BÁSICAS ==========
         function configurarInterface() {
-            const addBtn = document.getElementById('addBtn');
-            const userBadge = document.getElementById('userBadge');
-            const userRole = document.getElementById('userRole');
+            document.getElementById('addBtn').classList.toggle('visible', isAdmin);
+            document.getElementById('userBadge').textContent = isAdmin ? 'Administrador' : 'Motorista';
+            document.getElementById('userBadge').classList.toggle('admin', isAdmin);
+            document.getElementById('userRole').textContent = isAdmin ? 
+                'Sistema de transporte - Modo Administrador' : 
+                'Sistema de transporte - Modo Motorista';
             
-            if (isAdmin) {
-                addBtn.classList.add('visible');
-                userBadge.textContent = 'Administrador';
-                userBadge.classList.add('admin');
-                userRole.textContent = 'Sistema de transporte - Modo Administrador';
-            } else {
-                addBtn.classList.remove('visible');
-                userBadge.textContent = 'Motorista';
-                userBadge.classList.remove('admin');
-                userRole.textContent = 'Sistema de transporte - Modo Motorista';
-            }
+            // Inicializar raças
+            atualizarRacas();
+        }
+
+        function atualizarRacas() {
+            const racas = {
+                'Cachorro': ['Shitzu', 'Poodle', 'Labrador', 'Bulldog', 'Golden', 'Vira-lata', 'Outro'],
+                'Gato': ['Persa', 'Siamês', 'Maine Coon', 'Vira-lata', 'Outro'],
+                'Outro': ['Não especificado']
+            };
+            const pet = document.getElementById('pet').value;
+            const select = document.getElementById('raca');
+            select.innerHTML = '';
+            racas[pet].forEach(raca => {
+                const option = document.createElement('option');
+                option.value = raca;
+                option.textContent = raca;
+                select.appendChild(option);
+            });
+        }
+
+        function mostrarFormulario() {
+            if (!isAdmin) return;
+            const form = document.getElementById('formContainer');
+            const btn = document.getElementById('addBtn');
+            form.classList.toggle('active');
+            btn.textContent = form.classList.contains('active') ? '❌ Cancelar' : '➕ Adicionar Pet';
         }
 
         // ========== FUNÇÕES JSONBIN ==========
-        async function fetchFromJSONBin() {
+        async function carregarPets() {
             try {
                 const response = await fetch(`${JSONBIN_CONFIG.API_URL}/${JSONBIN_CONFIG.BIN_ID}/latest`, {
-                    headers: {
-                        'X-Master-Key': JSONBIN_CONFIG.API_KEY,
-                        'Content-Type': 'application/json'
-                    }
+                    headers: { 'X-Master-Key': JSONBIN_CONFIG.API_KEY }
                 });
-                
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                
                 const data = await response.json();
-                return data.record.pets || [];
+                pets = data.record?.pets || [];
+                mostrarPets();
+                atualizarHora();
             } catch (error) {
-                console.error('Erro ao buscar dados:', error);
-                const localData = localStorage.getItem('pets_backup');
-                return localData ? JSON.parse(localData) : [];
+                console.log('Usando dados locais');
+                const local = localStorage.getItem('meusPets');
+                pets = local ? JSON.parse(local) : [];
+                mostrarPets();
             }
         }
 
-        async function saveToJSONBin(petsArray) {
+        async function salvarPets() {
+            const dadosParaSalvar = { pets };
             try {
-                const response = await fetch(`${JSONBIN_CONFIG.API_URL}/${JSONBIN_CONFIG.BIN_ID}`, {
+                await fetch(`${JSONBIN_CONFIG.API_URL}/${JSONBIN_CONFIG.BIN_ID}`, {
                     method: 'PUT',
                     headers: {
                         'X-Master-Key': JSONBIN_CONFIG.API_KEY,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ pets: petsArray })
+                    body: JSON.stringify(dadosParaSalvar)
                 });
-                
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                
-                localStorage.setItem('pets_backup', JSON.stringify(petsArray));
-                return true;
+                localStorage.setItem('meusPets', JSON.stringify(pets));
             } catch (error) {
-                console.error('Erro ao salvar:', error);
-                localStorage.setItem('pets_backup', JSON.stringify(petsArray));
-                return false;
+                localStorage.setItem('meusPets', JSON.stringify(pets));
             }
         }
 
-        // ========== FUNÇÕES PRINCIPAIS ==========
-        async function loadPets() {
-            if (isLoading) return;
-            
-            isLoading = true;
-            showMessage('🔄 Carregando pets...', 'loading');
-            
-            try {
-                pets = await fetchFromJSONBin();
-                renderPets();
-                updateLastSync();
-                showMessage(`✅ ${pets.length} pets carregados`, 'success');
-            } catch (error) {
-                console.error('Erro:', error);
-                showMessage('⚠️ Usando dados locais', 'warning');
-            } finally {
-                isLoading = false;
-            }
-        }
-
-        async function addPet() {
+        // ========== CRUD PETS ==========
+        async function adicionarPet() {
             if (!isAdmin) return;
             
-            const cliente = document.getElementById('cliente').value.trim();
-            const pet = document.getElementById('pet').value;
-            const raca = document.getElementById('raca').value;
-            const cor = document.getElementById('cor').value;
-            const nomePet = document.getElementById('nomePet').value.trim();
-            const endereco = document.getElementById('endereco').value.trim();
-            const tempo = document.getElementById('tempo').value.trim();
-            const horaRetirada = document.getElementById('horaRetirada').value;
+            const pet = {
+                id: Date.now(),
+                cliente: document.getElementById('cliente').value.trim(),
+                pet: document.getElementById('pet').value,
+                raca: document.getElementById('raca').value,
+                cor: document.getElementById('cor').value,
+                nomePet: document.getElementById('nomePet').value.trim(),
+                endereco: document.getElementById('endereco').value.trim(),
+                tempo: document.getElementById('tempo').value.trim(),
+                horaRetirada: document.getElementById('horaRetirada').value || '14:30',
+                status: 'Aguardando retirada',
+                pagamento: 'Pendente',
+                observacoes: '',
+                dataCriacao: new Date().toISOString()
+            };
 
-            if (!cliente || !pet || !raca || !cor || !nomePet || !endereco || !tempo) {
-                showMessage('⚠️ Preencha todos os campos!', 'warning');
+            // Validar
+            if (!pet.cliente || !pet.raca || !pet.nomePet || !pet.endereco) {
+                alert('Preencha todos os campos!');
                 return;
             }
 
-            if (isLoading) return;
-            isLoading = true;
+            pets.push(pet);
+            await salvarPets();
             
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.textContent = 'Adicionando...';
-            submitBtn.disabled = true;
-
-            try {
-                const newPet = {
-                    id: Date.now(),
-                    cliente,
-                    pet,
-                    raca,
-                    cor,
-                    nomePet,
-                    endereco,
-                    tempo,
-                    horaRetirada: horaRetirada || '14:30',
-                    status: 'Aguardando retirada',
-                    pagamento: 'Pendente',
-                    observacoes: '',
-                    dataCriacao: new Date().toISOString(),
-                    arquivado: false
-                };
-
-                const existingPets = await fetchFromJSONBin();
-                const updatedPets = [...existingPets, newPet];
-                
-                const saved = await saveToJSONBin(updatedPets);
-                
-                if (saved) {
-                    document.getElementById('cliente').value = '';
-                    document.getElementById('nomePet').value = '';
-                    document.getElementById('endereco').value = '';
-                    document.getElementById('tempo').value = '';
-                    document.getElementById('raca').value = '';
-                    document.getElementById('cor').value = '';
-                    document.getElementById('horaRetirada').value = '14:30';
-                    
-                    toggleForm();
-                    showMessage('✅ Pet adicionado com sucesso!', 'success');
-                    
-                    pets = updatedPets;
-                    renderPets();
-                }
-            } catch (error) {
-                console.error('Erro:', error);
-                showMessage('❌ Erro ao adicionar', 'error');
-            } finally {
-                isLoading = false;
-                submitBtn.textContent = 'Adicionar Pet';
-                submitBtn.disabled = false;
-            }
+            // Limpar formulário
+            ['cliente', 'nomePet', 'endereco', 'tempo'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('horaRetirada').value = '14:30';
+            
+            mostrarFormulario();
+            mostrarPets();
         }
 
-        async function updateStatus(petId, tipo, novoValor) {
-            if (isLoading) return;
+        async function atualizarPetStatus(petId, campo, valor) {
+            const pet = pets.find(p => p.id === petId);
+            if (!pet) return;
             
-            const petIndex = pets.findIndex(p => p.id === petId);
-            if (petIndex === -1) return;
+            pet[campo] = valor;
             
-            const pet = pets[petIndex];
-            
-            if (tipo === 'status') {
-                pet.status = novoValor;
-                
-                // Se marcou como entregue, pergunta sobre pagamento
-                if (novoValor === 'Entregue' && pet.pagamento !== 'Pago') {
-                    if (confirm('Marcar como Pago também?')) {
-                        pet.pagamento = 'Pago';
-                        pet.arquivado = true;
-                    }
-                }
-            } else if (tipo === 'pagamento') {
-                pet.pagamento = novoValor;
-                
-                // Se marcou como Pago, arquiva automaticamente
-                if (novoValor === 'Pago') {
-                    pet.arquivado = true;
-                }
+            // Se marcou como pago, arquivar
+            if (campo === 'pagamento' && valor === 'Pago') {
+                pet.arquivado = true;
             }
             
-            // Renderizar imediatamente
-            renderPets();
-            
-            try {
-                await saveToJSONBin(pets);
-                showMessage('✅ Status atualizado!', 'success');
-            } catch (error) {
-                showMessage('⚠️ Alteração salva localmente', 'warning');
-            }
+            await salvarPets();
+            mostrarPets();
         }
 
-        async function updateObservacoes(petId, observacoes) {
-            const petIndex = pets.findIndex(p => p.id === petId);
-            if (petIndex === -1) return;
+        async function atualizarObservacoes(petId, texto) {
+            const pet = pets.find(p => p.id === petId);
+            if (!pet) return;
             
-            pets[petIndex].observacoes = observacoes;
-            
-            try {
-                await saveToJSONBin(pets);
-                showMessage('✅ Observação salva!', 'success');
-            } catch (error) {
-                showMessage('⚠️ Observação salva localmente', 'warning');
-            }
+            pet.observacoes = texto;
+            await salvarPets();
         }
 
-        async function deletePet(petId) {
-            if (!isAdmin) return;
-            if (!confirm('Tem certeza que deseja remover este pet?')) return;
+        async function removerPet(petId) {
+            if (!isAdmin || !confirm('Remover este pet?')) return;
             
-            const updatedPets = pets.filter(p => p.id !== petId);
-            
-            try {
-                await saveToJSONBin(updatedPets);
-                pets = updatedPets;
-                renderPets();
-                showMessage('✅ Pet removido!', 'success');
-            } catch (error) {
-                showMessage('❌ Erro ao remover', 'error');
-            }
+            pets = pets.filter(p => p.id !== petId);
+            await salvarPets();
+            mostrarPets();
         }
 
-        function toggleForm() {
-            if (!isAdmin) return;
-            
-            const form = document.getElementById('formContainer');
-            const btn = document.getElementById('addBtn');
-            form.classList.toggle('active');
-            btn.textContent = form.classList.contains('active') ? '❌ Cancelar' : '➕ Adicionar Novo Pet';
-        }
-
-        function updateRacas() {
-            const petType = document.getElementById('pet').value;
-            const racaSelect = document.getElementById('raca');
-            racaSelect.innerHTML = '<option value="">Selecione</option>';
-            
-            if (petType && racasPorPet[petType]) {
-                racasPorPet[petType].forEach(raca => {
-                    const option = document.createElement('option');
-                    option.value = raca;
-                    option.textContent = raca;
-                    racaSelect.appendChild(option);
-                });
-            }
-        }
-
-        function renderPets() {
+        // ========== RENDERIZAR PETS ==========
+        function mostrarPets() {
             const container = document.getElementById('petsList');
             
-            // Filtrar pets conforme o modo
-            let petsParaExibir = [...pets];
+            // Filtrar para motorista
+            let petsVisiveis = isAdmin ? pets : pets.filter(p => !p.arquivado && p.pagamento !== 'Pago');
             
-            if (!isAdmin) {
-                // Motorista só vê pets NÃO arquivados e NÃO pagos
-                petsParaExibir = pets.filter(p => !p.arquivado && p.pagamento !== 'Pago');
-            }
-            
-            if (petsParaExibir.length === 0) {
-                renderEmpty();
+            if (petsVisiveis.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <p>${isAdmin ? '📋 Nenhum pet cadastrado' : '📭 Nenhum pet para transporte'}</p>
+                        <p>${isAdmin ? 'Adicione o primeiro pet!' : 'Aguardando novos pets'}</p>
+                    </div>
+                `;
                 return;
             }
 
             // Ordenar por hora
-            const petsOrdenados = petsParaExibir.sort((a, b) => {
-                return (a.horaRetirada || '').localeCompare(b.horaRetirada || '');
-            });
+            petsVisiveis.sort((a, b) => (a.horaRetirada || '').localeCompare(b.horaRetirada || ''));
 
-            container.innerHTML = petsOrdenados.map(pet => {
-                const isArquivado = pet.arquivado || pet.pagamento === 'Pago';
-                const mostrarParaMotorista = !isArquivado;
-                
-                // Se for motorista e pet está arquivado, não mostrar
-                if (!isAdmin && !mostrarParaMotorista) return '';
-                
-                return `
-                <div class="pet-card ${isArquivado ? 'arquivado' : ''}" data-pet-id="${pet.id}">
+            container.innerHTML = petsVisiveis.map(pet => `
+                <div class="pet-card ${pet.arquivado ? 'arquivado' : ''}">
                     <div class="pet-card-header">
                         <div>
                             <h3>${pet.nomePet}</h3>
                             <p>${pet.cliente}</p>
-                            <span class="badge-status ${pet.status.toLowerCase().replace(/ /g, '-')}">
+                            <span class="badge-status ${pet.status.replace(/ /g, '-').toLowerCase()}">
                                 ${pet.status}
                             </span>
-                            ${pet.pagamento === 'Pago' ? '<span class="badge-status pago" style="margin-left: 8px;">Pago</span>' : ''}
+                            ${pet.pagamento === 'Pago' ? '<span class="badge-status pago">Pago</span>' : ''}
                         </div>
                         <div>
                             <div style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">
                                 ⏰ ${pet.horaRetirada || '--:--'}
                             </div>
-                            <button class="delete-btn ${isAdmin ? 'visible' : ''}" 
-                                    onclick="deletePet(${pet.id})"
-                                    ${!isAdmin ? 'style="display:none"' : ''}>
-                                🗑️ Remover
-                            </button>
+                            ${isAdmin ? `<button class="delete-btn visible" onclick="removerPet(${pet.id})">🗑️ Remover</button>` : ''}
                         </div>
                     </div>
                     
                     <div class="pet-info">
-                        <div class="pet-info-item">
-                            <strong>Pet:</strong> ${pet.pet}
-                        </div>
-                        <div class="pet-info-item">
-                            <strong>Raça:</strong> ${pet.raca}
-                        </div>
-                        <div class="pet-info-item">
-                            <strong>Cor:</strong> ${pet.cor}
-                        </div>
-                        <div class="pet-info-item">
-                            <strong>Tempo:</strong> ${pet.tempo}
-                        </div>
+                        <div class="pet-info-item"><strong>Pet:</strong> ${pet.pet}</div>
+                        <div class="pet-info-item"><strong>Raça:</strong> ${pet.raca}</div>
+                        <div class="pet-info-item"><strong>Cor:</strong> ${pet.cor}</div>
+                        <div class="pet-info-item"><strong>Tempo:</strong> ${pet.tempo}</div>
                     </div>
                     
                     <div class="pet-address">
@@ -830,33 +313,18 @@
                     
                     <div class="status-section">
                         <div class="status-buttons">
-                            <button class="status-btn ${pet.status === 'Aguardando retirada' ? 'active aguardando' : ''}" 
-                                    onclick="updateStatus(${pet.id}, 'status', 'Aguardando retirada')"
-                                    ${isLoading || isArquivado ? 'disabled' : ''}>
-                                Aguardando retirada
-                            </button>
-                            <button class="status-btn ${pet.status === 'A caminho da loja' ? 'active caminho' : ''}" 
-                                    onclick="updateStatus(${pet.id}, 'status', 'A caminho da loja')"
-                                    ${isLoading || isArquivado ? 'disabled' : ''}>
-                                A caminho da loja
-                            </button>
-                            <button class="status-btn ${pet.status === 'A caminho da entrega' ? 'active caminho' : ''}" 
-                                    onclick="updateStatus(${pet.id}, 'status', 'A caminho da entrega')"
-                                    ${isLoading || isArquivado ? 'disabled' : ''}>
-                                A caminho da entrega
-                            </button>
-                            <button class="status-btn ${pet.status === 'Entregue' ? 'active entregue' : ''}" 
-                                    onclick="updateStatus(${pet.id}, 'status', 'Entregue')"
-                                    ${isLoading || isArquivado ? 'disabled' : ''}>
-                                Entregue
-                            </button>
+                            ${['Aguardando retirada', 'A caminho da loja', 'A caminho da entrega', 'Entregue'].map(status => `
+                                <button class="status-btn ${pet.status === status ? 'active' : ''}" 
+                                        onclick="atualizarPetStatus(${pet.id}, 'status', '${status}')"
+                                        ${pet.arquivado ? 'disabled' : ''}>
+                                    ${status}
+                                </button>
+                            `).join('')}
                         </div>
                         
                         <div style="margin-top: 15px;">
-                            <button class="status-btn ${pet.pagamento === 'Pago' ? 'active pago' : ''}" 
-                                    onclick="updateStatus(${pet.id}, 'pagamento', '${pet.pagamento === 'Pago' ? 'Pendente' : 'Pago'}')"
-                                    ${isLoading ? 'disabled' : ''}
-                                    style="background: ${pet.pagamento === 'Pago' ? '#8b5cf6' : '#e5e7eb'}; color: ${pet.pagamento === 'Pago' ? 'white' : '#374151'}">
+                            <button class="status-btn ${pet.pagamento === 'Pago' ? 'pago-btn' : ''}" 
+                                    onclick="atualizarPetStatus(${pet.id}, 'pagamento', '${pet.pagamento === 'Pago' ? 'Pendente' : 'Pago'}')">
                                 ${pet.pagamento === 'Pago' ? '✓ Pago' : 'Marcar como Pago'}
                             </button>
                         </div>
@@ -864,59 +332,27 @@
                         <div style="margin-top: 15px;">
                             <label style="font-weight: 600; color: #374151; font-size: 14px;">📝 Observações:</label>
                             <textarea class="observacoes" 
-                                      onchange="updateObservacoes(${pet.id}, this.value)"
-                                      onblur="updateObservacoes(${pet.id}, this.value)"
-                                      placeholder="Digite observações..." 
-                                      ${isLoading ? 'disabled' : ''}>${pet.observacoes || ''}</textarea>
+                                      onchange="atualizarObservacoes(${pet.id}, this.value)"
+                                      placeholder="Digite observações...">${pet.observacoes || ''}</textarea>
                         </div>
                     </div>
                 </div>
-                `;
-            }).join('');
-        }
-
-        function renderEmpty() {
-            const container = document.getElementById('petsList');
-            container.innerHTML = `
-                <div class="empty-state">
-                    <p>${isAdmin ? '📋 Nenhum pet cadastrado' : '📭 Nenhum pet para transporte'}</p>
-                    <p>${isAdmin ? 'Adicione o primeiro pet!' : 'Todos os pets foram finalizados ou aguardam aprovação'}</p>
-                </div>
-            `;
-        }
-
-        function showMessage(text, type) {
-            const status = document.getElementById('syncStatus');
-            const colors = {
-                success: '#d1fae5',
-                error: '#fee2e2',
-                warning: '#fef3c7',
-                loading: '#dbeafe'
-            };
+            `).join('');
             
-            status.style.background = colors[type] || '#f3f4f6';
-            status.firstElementChild.innerHTML = text;
-            
-            if (type !== 'loading') {
-                setTimeout(() => {
-                    status.style.background = '#fef3c7';
-                    updateLastSync();
-                }, 3000);
-            }
+            atualizarHora();
         }
 
-        function updateLastSync() {
+        function atualizarHora() {
             document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('pt-BR');
         }
 
-        // ========== INICIALIZAÇÃO ==========
+        // ========== INICIAR ==========
         document.addEventListener('DOMContentLoaded', () => {
             configurarInterface();
-            updateRacas();
-            loadPets();
+            carregarPets();
             
-            // Auto-refresh a cada 30 segundos
-            setInterval(loadPets, 30000);
+            // Atualizar automaticamente
+            setInterval(carregarPets, 30000);
         });
     </script>
 </body>
