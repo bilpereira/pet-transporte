@@ -5,13 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🐾 Pet Shop Transport</title>
     <style>
+        /* ============ VARIÁVEIS CSS ============ */
         :root {
             --primary: #3b82f6;
             --primary-dark: #1d4ed8;
             --secondary: #8b5cf6;
             --success: #10b981;
+            --success-dark: #047857;
             --warning: #f59e0b;
+            --warning-dark: #d97706;
             --danger: #ef4444;
+            --danger-dark: #dc2626;
+            --info: #06b6d4;
             --gray-50: #f9fafb;
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
@@ -21,18 +26,22 @@
             --gray-900: #111827;
             
             --primary-gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            --success-gradient: linear-gradient(135deg, var(--success) 0%, #059669 100%);
-            --warning-gradient: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
-            --danger-gradient: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
+            --success-gradient: linear-gradient(135deg, var(--success) 0%, var(--success-dark) 100%);
+            --warning-gradient: linear-gradient(135deg, var(--warning) 0%, var(--warning-dark) 100%);
+            --danger-gradient: linear-gradient(135deg, var(--danger) 0%, var(--danger-dark) 100%);
             
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
-            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+            --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 6px 20px rgba(0, 0, 0, 0.14);
+            --shadow-xl: 0 10px 30px rgba(0, 0, 0, 0.18);
             
-            --glass-bg: rgba(255, 255, 255, 0.95);
+            --glass-bg: rgba(255, 255, 255, 0.96);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
+        /* ============ RESET & BASE ============ */
         * { 
             margin: 0; 
             padding: 0; 
@@ -40,31 +49,31 @@
         }
         
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; 
-            background: linear-gradient(135deg, #f0f9ff 0%, #fdf4ff 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; 
+            background: linear-gradient(135deg, #e0f2fe 0%, #fae8ff 50%, #fef3c7 100%);
+            background-attachment: fixed;
             min-height: 100vh;
             padding: 15px;
-            font-size: 14px;
-            line-height: 1.4;
+            background-size: 200% 200%;
         }
         
         .container { 
-            max-width: 1200px; 
+            max-width: 1300px; 
             margin: 0 auto; 
         }
         
-        /* HEADER COMPACTO */
+        /* ============ HEADER OTIMIZADO ============ */
         .header { 
             background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
+            backdrop-filter: blur(15px);
+            border-radius: 18px;
             box-shadow: var(--shadow-md);
-            padding: 20px;
+            padding: 20px 25px;
             margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--glass-border);
             animation: slideInDown 0.4s ease-out;
         }
         
@@ -73,79 +82,81 @@
         }
         
         .header h1 { 
-            font-size: 24px; 
+            font-size: 30px; 
             color: transparent;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             background-clip: text;
-            margin-bottom: 4px;
+            margin-bottom: 5px;
             font-weight: 700;
         }
         
         .header p { 
             color: var(--gray-600); 
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 500;
         }
         
         .user-badge { 
             background: var(--primary-gradient);
             color: white; 
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px; 
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 14px; 
             font-weight: 600;
+            white-space: nowrap;
             box-shadow: var(--shadow-sm);
-            border: 2px solid rgba(255, 255, 255, 0.2);
         }
         
         .user-badge.admin { 
             background: var(--success-gradient);
         }
         
-        /* STATUS BAR */
+        /* ============ STATUS & SYNC ============ */
         .sync-status { 
             background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            padding: 12px 20px;
-            border-radius: 12px;
+            padding: 15px 20px;
+            border-radius: 14px;
             margin: 15px 0;
-            font-size: 13px;
+            font-size: 14px;
             color: #92400e;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
             box-shadow: var(--shadow-sm);
             border: 1px solid #fbbf24;
-            animation: fadeIn 0.4s ease-out;
+            animation: fadeIn 0.5s ease-out;
         }
         
         .sync-btn { 
             background: var(--primary-gradient);
             color: white; 
             border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
+            padding: 10px 22px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             transition: var(--transition);
             box-shadow: var(--shadow-sm);
         }
         
         .sync-btn:hover { 
-            transform: translateY(-2px);
+            transform: translateY(-2px); 
             box-shadow: var(--shadow-md);
         }
         
-        /* BOTÃO ADICIONAR */
+        /* ============ BOTÕES ============ */
         .add-btn { 
             width: 100%;
             background: var(--primary-gradient);
             color: white;
             border: none;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 16px;
+            padding: 18px;
+            border-radius: 14px;
+            font-size: 17px;
             font-weight: 600;
             cursor: pointer;
             margin-bottom: 20px;
@@ -155,56 +166,64 @@
         }
         
         .add-btn:hover { 
-            transform: translateY(-2px); 
+            transform: translateY(-3px); 
             box-shadow: var(--shadow-lg);
         }
         
         .add-btn.visible { 
             display: block; 
+            animation: slideInUp 0.4s ease-out;
         }
         
-        /* FORMULÁRIO COMPACTO */
+        /* ============ FORMULÁRIO ============ */
         .form-container { 
             background: var(--glass-bg);
-            border-radius: 16px;
+            backdrop-filter: blur(15px);
+            border-radius: 18px;
             box-shadow: var(--shadow-lg);
-            padding: 20px;
+            padding: 25px;
             margin-bottom: 20px;
             display: none;
-            border: 1px solid rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--glass-border);
+            animation: fadeIn 0.4s ease-out;
         }
         
         .form-container.active { 
             display: block; 
+            animation: slideInUp 0.4s ease-out;
         }
         
         .form-container h2 { 
-            font-size: 18px; 
+            font-size: 24px; 
             color: var(--gray-900); 
-            margin-bottom: 15px;
-            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
         .form-group { 
-            margin-bottom: 15px; 
+            margin-bottom: 18px; 
         }
         
         .form-group label { 
             display: block; 
             font-weight: 600; 
             color: var(--gray-700); 
-            margin-bottom: 6px; 
-            font-size: 13px;
+            margin-bottom: 8px; 
+            font-size: 14px;
         }
         
         .form-group input, 
         .form-group select { 
             width: 100%; 
-            padding: 12px; 
-            border: 1.5px solid var(--gray-200); 
-            border-radius: 8px; 
-            font-size: 14px; 
+            padding: 14px; 
+            border: 2px solid var(--gray-200); 
+            border-radius: 10px; 
+            font-size: 15px; 
             transition: var(--transition);
+            background: white;
+            font-family: inherit;
         }
         
         .form-group input:focus, 
@@ -225,9 +244,9 @@
             background: var(--success-gradient);
             color: white; 
             border: none; 
-            padding: 14px; 
-            border-radius: 8px; 
-            font-size: 15px; 
+            padding: 16px; 
+            border-radius: 10px; 
+            font-size: 16px; 
             font-weight: 600; 
             cursor: pointer; 
             transition: var(--transition);
@@ -239,46 +258,56 @@
             box-shadow: var(--shadow-md);
         }
         
-        /* LISTA DE PETS - MAIS COMPACTA */
+        .submit-btn:disabled { 
+            background: var(--gray-300); 
+            cursor: not-allowed; 
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* ============ LISTA DE PETS ============ */
         .pets-list { 
             display: grid; 
-            gap: 15px; 
+            gap: 18px; 
         }
         
         .pet-card { 
             background: var(--glass-bg);
-            border-radius: 16px;
+            backdrop-filter: blur(15px);
+            border-radius: 18px;
             box-shadow: var(--shadow-md);
-            padding: 20px;
-            border-left: 5px solid var(--primary);
+            padding: 22px;
+            border-left: 6px solid var(--primary);
             transition: var(--transition);
-            animation: slideInUp 0.4s ease-out forwards;
+            border: 1px solid var(--glass-border);
+            animation: slideInUp 0.5s ease-out forwards;
             opacity: 0;
-            transform: translateY(10px);
+            transform: translateY(15px);
         }
         
-        .pet-card:nth-child(1) { animation-delay: 0.05s; }
-        .pet-card:nth-child(2) { animation-delay: 0.1s; }
-        .pet-card:nth-child(3) { animation-delay: 0.15s; }
-        .pet-card:nth-child(4) { animation-delay: 0.2s; }
+        .pet-card:nth-child(1) { animation-delay: 0.1s; }
+        .pet-card:nth-child(2) { animation-delay: 0.2s; }
+        .pet-card:nth-child(3) { animation-delay: 0.3s; }
         
         .pet-card:hover { 
-            transform: translateY(-3px); 
+            transform: translateY(-4px) translateY(15px); 
             box-shadow: var(--shadow-lg);
         }
         
         .pet-card.arquivado { 
-            border-left: 5px solid var(--gray-300); 
-            opacity: 0.7;
+            border-left: 6px solid var(--gray-300); 
+            opacity: 0.8;
+            background: linear-gradient(135deg, var(--glass-bg) 0%, #f1f5f9 100%);
         }
         
+        /* ============ HEADER DO CARD ============ */
         .pet-card-header { 
             display: flex; 
             justify-content: space-between; 
             align-items: flex-start; 
-            margin-bottom: 15px; 
+            margin-bottom: 18px; 
             flex-wrap: wrap; 
-            gap: 10px; 
+            gap: 12px; 
         }
         
         .pet-name-section { 
@@ -287,14 +316,14 @@
         }
         
         .pet-name-section h3 { 
-            font-size: 18px; 
+            font-size: 26px; 
             color: var(--gray-900);
-            margin-bottom: 4px; 
+            margin-bottom: 5px; 
             font-weight: 700;
         }
         
         .pet-name-section p { 
-            font-size: 14px; 
+            font-size: 16px; 
             color: var(--gray-600); 
             font-weight: 500; 
         }
@@ -302,15 +331,15 @@
         .badge-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            margin-top: 8px;
+            gap: 8px;
+            margin-top: 10px;
         }
         
         .badge-status { 
             display: inline-block; 
-            padding: 4px 10px; 
-            border-radius: 12px; 
-            font-size: 11px; 
+            padding: 6px 14px; 
+            border-radius: 40px; 
+            font-size: 13px; 
             font-weight: 600; 
             box-shadow: var(--shadow-sm);
         }
@@ -321,7 +350,7 @@
         }
         
         .badge-status.caminho { 
-            background: linear-gradient(90deg, var(--primary), #60a5fa);
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
             color: white;
         }
         
@@ -331,7 +360,7 @@
         }
         
         .badge-status.pago { 
-            background: linear-gradient(90deg, var(--secondary), #a78bfa);
+            background: linear-gradient(90deg, #8b5cf6, #a78bfa);
             color: white;
         }
         
@@ -346,8 +375,12 @@
         
         .pet-time { 
             color: var(--gray-600); 
-            font-size: 13px; 
-            margin-bottom: 6px; 
+            font-size: 14px; 
+            margin-bottom: 8px; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px;
+            justify-content: flex-end;
         }
         
         .pet-time strong { 
@@ -357,43 +390,48 @@
         .hora-entregue { 
             color: var(--success); 
             font-weight: 600; 
-            font-size: 12px; 
-            margin-top: 2px;
+            font-size: 14px; 
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            justify-content: flex-end;
         }
         
-        /* BOTÃO DELETAR COMPACTO */
+        /* ============ BOTÕES DE AÇÃO ============ */
         .delete-btn { 
             background: var(--danger-gradient);
             color: white; 
             border: none; 
-            padding: 6px 12px; 
-            border-radius: 6px; 
+            padding: 8px 18px; 
+            border-radius: 10px; 
             cursor: pointer; 
-            font-size: 12px; 
+            font-size: 14px; 
             font-weight: 600; 
             transition: var(--transition);
             display: none;
-            margin-top: 8px;
+            box-shadow: var(--shadow-sm);
         }
         
         .delete-btn:hover { 
             transform: translateY(-2px); 
+            box-shadow: var(--shadow-md);
         }
         
         .delete-btn.visible { 
-            display: inline-block; 
+            display: block; 
         }
         
-        /* INFORMAÇÕES DO PET - COMPACTO */
+        /* ============ INFORMAÇÕES DO PET ============ */
         .pet-info { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
-            gap: 10px; 
-            margin-bottom: 15px; 
-            font-size: 13px; 
-            background: var(--gray-50);
-            padding: 12px; 
-            border-radius: 8px;
+            gap: 15px; 
+            margin-bottom: 18px; 
+            font-size: 15px; 
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 18px; 
+            border-radius: 14px;
             border: 1px solid var(--gray-200);
         }
         
@@ -403,60 +441,64 @@
         
         .pet-info-item strong { 
             color: var(--gray-900); 
+            font-weight: 600;
         }
         
         .pet-address { 
-            margin-bottom: 15px; 
-            padding: 12px; 
-            background: #f0f9ff;
-            border-radius: 8px; 
-            border: 1px solid #bfdbfe;
+            margin-bottom: 18px; 
+            padding: 18px; 
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 14px; 
+            border: 2px solid #bfdbfe;
         }
         
         .pet-address p { 
             color: var(--primary-dark); 
-            margin-bottom: 8px; 
-            font-size: 13px; 
+            margin-bottom: 10px; 
+            font-size: 15px; 
             font-weight: 600; 
+            line-height: 1.5;
         }
         
         .copy-address-btn { 
             background: linear-gradient(90deg, #60a5fa, var(--primary));
             color: white; 
             border: none; 
-            padding: 6px 12px; 
-            border-radius: 6px; 
+            padding: 10px 20px; 
+            border-radius: 10px; 
             cursor: pointer; 
-            font-size: 12px; 
+            font-size: 14px; 
             font-weight: 600; 
             transition: var(--transition);
+            box-shadow: var(--shadow-sm);
         }
         
         .copy-address-btn:hover { 
             transform: translateY(-2px); 
+            box-shadow: var(--shadow-md);
         }
         
-        /* SEÇÃO DE STATUS COMPACTA */
+        /* ============ SEÇÃO DE STATUS ============ */
         .status-section { 
-            padding-top: 15px; 
+            padding-top: 20px; 
             border-top: 1px solid var(--gray-200); 
         }
         
         .status-buttons { 
             display: flex; 
             flex-wrap: wrap; 
-            gap: 8px; 
-            margin-bottom: 12px; 
+            gap: 10px; 
+            margin-bottom: 15px; 
         }
         
         .status-btn { 
             flex: 1; 
-            min-width: 120px; 
-            padding: 10px; 
+            min-width: 140px; 
+            padding: 14px; 
             border: none; 
-            border-radius: 8px; 
+            border-radius: 10px; 
             font-weight: 600; 
-            font-size: 12px; 
+            font-size: 14px; 
             cursor: pointer; 
             transition: var(--transition);
             background: var(--gray-100); 
@@ -471,7 +513,7 @@
         }
         
         .status-btn.pago-btn { 
-            background: linear-gradient(90deg, var(--secondary), #a78bfa);
+            background: linear-gradient(90deg, #8b5cf6, #a78bfa);
             color: white; 
         }
         
@@ -487,36 +529,40 @@
         
         .status-btn:hover:not(:disabled) { 
             transform: translateY(-2px); 
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--shadow-md);
         }
         
-        /* ============ OBSERVAÇÕES MINIMALISTAS ============ */
+        .status-btn:disabled { 
+            opacity: 0.5; 
+            cursor: not-allowed; 
+            transform: none !important;
+        }
+        
+        /* ============ OBSERVAÇÕES OTIMIZADAS ============ */
         .observacoes-container { 
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid var(--gray-200);
+            margin-top: 15px; 
         }
         
         .observacoes-label { 
             font-weight: 600; 
-            color: var(--gray-700); 
-            font-size: 12px; 
-            margin-bottom: 6px; 
+            color: var(--gray-900); 
+            font-size: 14px; 
+            margin-bottom: 8px; 
             display: block;
         }
         
         .observacoes { 
             width: 100%; 
-            padding: 10px; 
-            border: 1.5px solid var(--gray-200); 
-            border-radius: 8px; 
+            padding: 14px; 
+            border: 2px solid var(--gray-200); 
+            border-radius: 10px; 
             font-family: inherit; 
-            font-size: 13px; 
-            margin-bottom: 10px; 
-            min-height: 60px; 
+            font-size: 14px; 
+            margin-bottom: 12px; 
+            min-height: 70px; /* REDUZIDO */
+            max-height: 100px; /* LIMITE ADICIONADO */
             resize: vertical; 
             transition: var(--transition);
-            line-height: 1.4;
         }
         
         .observacoes:focus {
@@ -530,9 +576,17 @@
             background: #f0fdf4; 
         }
         
+        .observacoes-admin:focus {
+            border-color: var(--success-dark);
+        }
+        
         .observacoes-motorista { 
             border-color: var(--primary); 
             background: #eff6ff; 
+        }
+        
+        .observacoes-motorista:focus {
+            border-color: var(--primary-dark);
         }
         
         .observacoes-readonly { 
@@ -541,29 +595,31 @@
             cursor: not-allowed;
         }
         
-        /* ESTADO VAZIO */
+        /* ============ ESTADO VAZIO ============ */
         .empty-state { 
             background: var(--glass-bg);
-            border-radius: 16px;
+            backdrop-filter: blur(15px);
+            border-radius: 18px;
             box-shadow: var(--shadow-md);
-            padding: 40px 20px;
+            padding: 50px 25px;
             text-align: center;
             color: var(--gray-600);
-            border: 1px solid rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--glass-border);
+            animation: fadeIn 0.5s ease-out;
         }
         
         .empty-state p:first-child { 
-            font-size: 16px; 
-            margin-bottom: 8px; 
-            font-weight: 700;
-            color: var(--gray-900);
+            font-size: 22px; 
+            margin-bottom: 12px; 
+            font-weight: 600;
+            color: var(--gray-700);
         }
         
         .empty-state p:last-child { 
-            font-size: 14px; 
+            font-size: 16px; 
         }
         
-        /* ANIMAÇÕES */
+        /* ============ ANIMAÇÕES ============ */
         @keyframes slideInDown {
             from {
                 opacity: 0;
@@ -578,7 +634,7 @@
         @keyframes slideInUp {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -587,16 +643,35 @@
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
         
-        /* RESPONSIVO */
+        /* ============ RESPONSIVO ============ */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 12px;
+            }
+            
+            .header h1 {
+                font-size: 26px;
+            }
+            
+            .pet-name-section h3 {
+                font-size: 22px;
+            }
+        }
+        
         @media (max-width: 768px) {
             .header { 
                 flex-direction: column; 
                 text-align: center; 
-                gap: 10px; 
+                gap: 12px; 
+                padding: 18px;
             }
             
             .header-content { 
@@ -614,6 +689,7 @@
             
             .pet-card-header { 
                 flex-direction: column; 
+                text-align: center;
             }
             
             .pet-name-section, 
@@ -623,11 +699,18 @@
             }
             
             .pet-details-right { 
-                margin-top: 10px; 
+                margin-top: 12px; 
+            }
+            
+            .pet-info {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                padding: 15px;
             }
             
             .observacoes { 
-                min-height: 80px; 
+                min-height: 80px;
+                max-height: 120px;
             }
         }
         
@@ -639,31 +722,45 @@
             .header, 
             .pet-card, 
             .form-container { 
-                padding: 15px; 
+                padding: 18px; 
             }
             
             .header h1 { 
-                font-size: 20px; 
+                font-size: 22px; 
             }
             
             .pet-name-section h3 { 
-                font-size: 16px; 
+                font-size: 20px; 
             }
             
-            .pet-info {
-                grid-template-columns: 1fr;
+            .pet-card {
+                padding: 18px 15px;
+            }
+            
+            .form-container {
+                padding: 20px 15px;
+            }
+            
+            .status-btn {
+                padding: 12px;
+                font-size: 13px;
             }
             
             .observacoes {
+                padding: 12px;
                 min-height: 70px;
-                font-size: 12px;
-                padding: 8px;
+                font-size: 13px;
+            }
+            
+            .pet-info-item {
+                font-size: 14px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Cabeçalho -->
         <div class="header">
             <div class="header-content">
                 <h1>🐾 Pet Shop Transport</h1>
@@ -672,13 +769,16 @@
             <div class="user-badge" id="userBadge">Motorista</div>
         </div>
         
+        <!-- Status de Sincronização -->
         <div class="sync-status" id="syncStatus">
             <span>✅ Conectado | Última atualização: <span id="lastUpdate">--:--:--</span></span>
             <button class="sync-btn" onclick="carregarPets()">Atualizar</button>
         </div>
         
-        <button class="add-btn" id="addBtn" onclick="mostrarFormulario()">➕ Adicionar Pet</button>
+        <!-- Botão Adicionar (só admin) -->
+        <button class="add-btn" id="addBtn" onclick="mostrarFormulario()">➕ Adicionar Novo Pet</button>
         
+        <!-- Formulário (só admin) -->
         <div class="form-container" id="formContainer">
             <h2>📝 Novo Transporte</h2>
             
@@ -702,7 +802,7 @@
                         <option>Poodle</option>
                         <option>Labrador</option>
                         <option>Bulldog</option>
-                        <option>Golden</option>
+                        <option>Golden Retriever</option>
                         <option>Vira-lata</option>
                         <option>Persa</option>
                         <option>Siamês</option>
@@ -740,27 +840,31 @@
             
             <div class="form-group">
                 <label>Endereço Completo</label>
-                <input type="text" id="endereco" placeholder="Ex: Av. Nossa Senhora da Saúde 403">
+                <input type="text" id="endereco" placeholder="Ex: Av. Nossa Senhora da Saúde 403, Jardim das Flores">
             </div>
             
             <button class="submit-btn" onclick="adicionarPet()">Adicionar Pet</button>
         </div>
         
+        <!-- Lista de Pets -->
         <div class="pets-list" id="petsList"></div>
     </div>
 
     <script>
+        // ========== CONFIGURAÇÃO ==========
         const JSONBIN_CONFIG = {
             BIN_ID: '695de16743b1c97be91e7eeb',
             API_KEY: '$2a$10$Wmft46BmqMcXpiI3zbasQ.4xVnNwAtOSxia383nb1GxXxojFbX.Nm',
             API_URL: 'https://api.jsonbin.io/v3/b'
         };
 
+        // Detectar modo
         const urlParams = new URLSearchParams(window.location.search);
         const isAdmin = urlParams.get('modo') === 'admin';
 
         let pets = [];
 
+        // ========== FUNÇÕES BÁSICAS ==========
         function configurarInterface() {
             const addBtn = document.getElementById('addBtn');
             const userBadge = document.getElementById('userBadge');
@@ -770,12 +874,12 @@
                 addBtn.classList.add('visible');
                 userBadge.textContent = 'Administrador';
                 userBadge.classList.add('admin');
-                userRole.textContent = 'Sistema - Modo Administrador';
+                userRole.textContent = 'Sistema de transporte - Modo Administrador';
             } else {
                 addBtn.classList.remove('visible');
                 userBadge.textContent = 'Motorista';
                 userBadge.classList.remove('admin');
-                userRole.textContent = 'Sistema - Modo Motorista';
+                userRole.textContent = 'Sistema de transporte - Modo Motorista';
             }
         }
 
@@ -787,6 +891,7 @@
             btn.textContent = form.classList.contains('active') ? '❌ Cancelar' : '➕ Adicionar Pet';
         }
 
+        // ========== FUNÇÕES JSONBIN ==========
         async function carregarPets() {
             try {
                 const response = await fetch(`${JSONBIN_CONFIG.API_URL}/${JSONBIN_CONFIG.BIN_ID}/latest`, {
@@ -797,6 +902,7 @@
                 mostrarPets();
                 atualizarHora();
             } catch (error) {
+                console.log('Usando dados locais');
                 const local = localStorage.getItem('meusPets');
                 pets = local ? JSON.parse(local) : [];
                 mostrarPets();
@@ -820,6 +926,7 @@
             }
         }
 
+        // ========== CRUD PETS ==========
         async function adicionarPet() {
             if (!isAdmin) return;
             
@@ -841,14 +948,16 @@
                 arquivado: false
             };
 
+            // Validar
             if (!pet.cliente || !pet.nomePet || !pet.raca || !pet.cor || !pet.endereco) {
-                mostrarMensagem('⚠️ Preencha todos os campos!', 'warning');
+                alert('Preencha todos os campos obrigatórios!');
                 return;
             }
 
             pets.push(pet);
             await salvarPets();
             
+            // Limpar formulário
             document.getElementById('cliente').value = '';
             document.getElementById('nomePet').value = '';
             document.getElementById('raca').value = '';
@@ -860,7 +969,8 @@
             mostrarFormulario();
             mostrarPets();
             
-            mostrarMensagem('✅ Pet adicionado!', 'success');
+            // Feedback
+            mostrarMensagem('✅ Pet adicionado com sucesso!', 'success');
         }
 
         async function atualizarPetStatus(petId, campo, valor) {
@@ -872,6 +982,7 @@
             const valorAnterior = pet[campo];
             pet[campo] = valor;
             
+            // Se marcou como ENTREGUE, registrar a hora
             if (campo === 'status' && valor === 'Entregue' && valorAnterior !== 'Entregue') {
                 const agora = new Date();
                 pet.horaEntregue = agora.toLocaleTimeString('pt-BR', { 
@@ -880,6 +991,7 @@
                 });
             }
             
+            // Se marcou como pago ou não pago, arquivar
             if (campo === 'pagamento' && (valor === 'Pago' || valor === 'Não pago')) {
                 pet.arquivado = true;
             }
@@ -887,6 +999,7 @@
             await salvarPets();
             mostrarPets();
             
+            // Feedback
             mostrarMensagem('✅ Status atualizado!', 'success');
         }
 
@@ -905,7 +1018,7 @@
         }
 
         async function removerPet(petId) {
-            if (!isAdmin || !confirm('Remover este pet?')) return;
+            if (!isAdmin || !confirm('Tem certeza que deseja remover este pet?')) return;
             
             pets = pets.filter(p => p.id !== petId);
             await salvarPets();
@@ -916,10 +1029,11 @@
 
         function copiarEndereco(endereco) {
             navigator.clipboard.writeText(endereco)
-                .then(() => mostrarMensagem('📍 Endereço copiado!', 'success'))
-                .catch(() => mostrarMensagem('❌ Erro ao copiar', 'error'));
+                .then(() => mostrarMensagem('✅ Endereço copiado!', 'success'))
+                .catch(() => alert('Não foi possível copiar o endereço'));
         }
 
+        // ========== RENDERIZAR PETS ==========
         function mostrarPets() {
             const container = document.getElementById('petsList');
             
@@ -935,13 +1049,15 @@
                 return;
             }
 
+            // Ordenar por hora de retirada
             petsVisiveis.sort((a, b) => (a.horaRetirada || '').localeCompare(b.horaRetirada || ''));
 
             container.innerHTML = petsVisiveis.map((pet, index) => {
                 const isArquivado = pet.arquivado;
                 
                 return `
-                <div class="pet-card ${isArquivado ? 'arquivado' : ''}" style="animation-delay: ${index * 0.05}s">
+                <div class="pet-card ${isArquivado ? 'arquivado' : ''}" style="animation-delay: ${index * 0.1}s">
+                    
                     <div class="pet-card-header">
                         <div class="pet-name-section">
                             <h3>${pet.nomePet}</h3>
@@ -957,9 +1073,10 @@
                                 </div>
                             ` : ''}
                         </div>
+                        
                         <div class="pet-details-right">
                             <div class="pet-time">
-                                <strong>Retirada:</strong> ${pet.horaRetirada || '--:--'}
+                                <span>⏰ <strong>Retirada:</strong> ${pet.horaRetirada || '--:--'}</span>
                             </div>
                             ${pet.horaEntregue ? `
                                 <div class="hora-entregue">
@@ -987,7 +1104,7 @@
                     </div>
                     
                     <div class="pet-address">
-                        <p>📍 ${pet.endereco}</p>
+                        <p>📍 <strong>Endereço:</strong> ${pet.endereco}</p>
                         ${!isAdmin ? `
                             <button class="copy-address-btn" onclick="copiarEndereco('${pet.endereco.replace(/'/g, "\\'")}')">
                                 📋 Copiar Endereço
@@ -1007,7 +1124,7 @@
                                 `).join('')}
                             </div>
                             
-                            <div class="status-buttons">
+                            <div class="status-buttons" style="margin-top: 12px;">
                                 <button class="status-btn sutil ${pet.pagamento === 'Pago' ? 'active' : ''}" 
                                         onclick="atualizarPetStatus(${pet.id}, 'pagamento', 'Pago')"
                                         ${isArquivado ? 'disabled' : ''}>
@@ -1024,24 +1141,28 @@
                         <div class="observacoes-container">
                             ${isAdmin ? `
                                 <div>
-                                    <span class="observacoes-label">📝 Minhas Observações:</span>
+                                    <span class="observacoes-label">📝 Minhas Observações (Admin):</span>
                                     <textarea class="observacoes observacoes-admin" 
                                               onchange="atualizarObservacoes(${pet.id}, 'admin', this.value)"
-                                              placeholder="Observações administrativas...">${pet.observacoesAdmin || ''}</textarea>
+                                              onblur="atualizarObservacoes(${pet.id}, 'admin', this.value)"
+                                              placeholder="Digite observações administrativas...">${pet.observacoesAdmin || ''}</textarea>
                                     
-                                    <span class="observacoes-label">📝 Observações Motorista:</span>
-                                    <textarea class="observacoes observacoes-readonly" 
-                                              readonly>${pet.observacoesMotorista || ''}</textarea>
+                                    <span class="observacoes-label">📝 Observações do Motorista:</span>
+                                    <textarea class="observacoes observacoes-motorista observacoes-readonly" 
+                                              readonly
+                                              placeholder="Observações do motorista aparecerão aqui...">${pet.observacoesMotorista || ''}</textarea>
                                 </div>
                             ` : `
                                 <div>
-                                    <span class="observacoes-label">📝 Observações Admin:</span>
-                                    <textarea class="observacoes observacoes-readonly" 
-                                              readonly>${pet.observacoesAdmin || ''}</textarea>
+                                    <span class="observacoes-label">📝 Observações do Admin:</span>
+                                    <textarea class="observacoes observacoes-admin observacoes-readonly" 
+                                              readonly
+                                              placeholder="Observações do admin aparecerão aqui...">${pet.observacoesAdmin || ''}</textarea>
                                     
-                                    <span class="observacoes-label">📝 Minhas Observações:</span>
+                                    <span class="observacoes-label">📝 Minhas Observações (Motorista):</span>
                                     <textarea class="observacoes observacoes-motorista" 
                                               onchange="atualizarObservacoes(${pet.id}, 'motorista', this.value)"
+                                              onblur="atualizarObservacoes(${pet.id}, 'motorista', this.value)"
                                               placeholder="Digite suas observações...">${pet.observacoesMotorista || ''}</textarea>
                                 </div>
                             `}
@@ -1068,35 +1189,36 @@
                 warning: '#92400e'
             };
             
-            status.style.background = cores[tipo];
-            status.style.color = corTexto[tipo];
-            status.style.borderColor = corTexto[tipo];
-            status.firstElementChild.innerHTML = `<strong>${texto}</strong>`;
+            status.style.background = cores[tipo] || '#f3f4f6';
+            status.style.color = corTexto[tipo] || '#1f2937';
+            status.firstElementChild.innerHTML = texto;
             
             setTimeout(() => {
-                status.style.background = 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)';
+                status.style.background = '#fef3c7';
                 status.style.color = '#92400e';
-                status.style.borderColor = '#fbbf24';
                 atualizarHora();
-            }, 2000);
+            }, 3000);
         }
 
         function atualizarHora() {
             const agora = new Date();
             const horaFormatada = agora.toLocaleTimeString('pt-BR', { 
                 hour: '2-digit', 
-                minute: '2-digit'
+                minute: '2-digit',
+                second: '2-digit'
             });
             document.getElementById('lastUpdate').textContent = horaFormatada;
         }
 
-        // INICIAR
+        // ========== INICIAR ==========
         document.addEventListener('DOMContentLoaded', () => {
             configurarInterface();
             carregarPets();
             
+            // Atualizar automaticamente a cada 30 segundos
             setInterval(carregarPets, 30000);
             
+            // Atualizar quando a página ganha foco
             document.addEventListener('visibilitychange', () => {
                 if (document.visibilityState === 'visible') {
                     carregarPets();
