@@ -16,7 +16,6 @@
             --warning-dark: #d97706;
             --danger: #ef4444;
             --danger-dark: #dc2626;
-            --info: #06b6d4;
             --gray-50: #f9fafb;
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
@@ -30,15 +29,15 @@
             --warning-gradient: linear-gradient(135deg, var(--warning) 0%, var(--warning-dark) 100%);
             --danger-gradient: linear-gradient(135deg, var(--danger) 0%, var(--danger-dark) 100%);
             
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
-            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
-            --shadow-xl: 0 12px 48px rgba(0, 0, 0, 0.2);
+            --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 6px 20px rgba(0, 0, 0, 0.16);
+            --shadow-xl: 0 10px 32px rgba(0, 0, 0, 0.2);
             
-            --glass-bg: rgba(255, 255, 255, 0.92);
-            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --glass-border: rgba(255, 255, 255, 0.25);
             
-            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         /* ============ RESET & BASE ============ */
@@ -53,7 +52,7 @@
             background: linear-gradient(135deg, #e0f2fe 0%, #fae8ff 50%, #fef3c7 100%);
             background-attachment: fixed;
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px;
             animation: gradientBG 15s ease infinite;
             background-size: 200% 200%;
         }
@@ -74,17 +73,17 @@
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-radius: 24px;
+            border-radius: 20px;
             box-shadow: var(--shadow-lg);
-            padding: 30px;
-            margin-bottom: 30px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border: 1px solid var(--glass-border);
             position: relative;
             overflow: hidden;
-            animation: slideInDown 0.6s ease-out;
+            animation: slideInDown 0.5s ease-out;
         }
         
         .header::before {
@@ -115,16 +114,15 @@
         }
         
         .header h1 { 
-            font-size: 36px; 
+            font-size: 28px; 
             color: transparent;
             background: linear-gradient(90deg, var(--primary), var(--secondary), #ec4899);
             background-size: 200% auto;
             -webkit-background-clip: text;
             background-clip: text;
             animation: textShine 3s ease-in-out infinite alternate;
-            margin-bottom: 8px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
+            margin-bottom: 5px;
+            font-weight: 700;
         }
         
         @keyframes textShine {
@@ -133,24 +131,24 @@
         
         .header p { 
             color: var(--gray-600); 
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500;
         }
         
         .user-badge { 
             background: var(--primary-gradient);
             color: white; 
-            padding: 12px 28px;
+            padding: 8px 20px;
             border-radius: 50px;
-            font-size: 16px; 
-            font-weight: 700;
+            font-size: 14px; 
+            font-weight: 600;
             white-space: nowrap;
             box-shadow: var(--shadow-md);
             position: relative;
             z-index: 1;
             overflow: hidden;
             transition: var(--transition);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
         .user-badge::before {
@@ -175,39 +173,39 @@
         /* ============ STATUS & SYNC ============ */
         .sync-status { 
             background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            padding: 20px 30px;
-            border-radius: 18px;
-            margin: 25px 0;
-            font-size: 16px;
+            padding: 12px 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            font-size: 14px;
             color: #92400e;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 10px;
             box-shadow: var(--shadow-md);
             border: 2px solid #fbbf24;
-            animation: fadeIn 0.8s ease-out 0.2s backwards;
+            animation: fadeIn 0.6s ease-out 0.2s backwards;
         }
         
         .sync-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
         }
         
         .connection-dots {
             display: flex;
-            gap: 6px;
+            gap: 5px;
         }
         
         .dot {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: #10b981;
             animation: dotPulse 1.4s infinite;
-            box-shadow: 0 0 10px #10b981;
+            box-shadow: 0 0 8px #10b981;
         }
         
         .dot:nth-child(2) { animation-delay: 0.2s; }
@@ -217,12 +215,12 @@
             0%, 100% { 
                 opacity: 0.3; 
                 transform: scale(0.8); 
-                box-shadow: 0 0 5px #10b981;
+                box-shadow: 0 0 4px #10b981;
             }
             50% { 
                 opacity: 1; 
                 transform: scale(1); 
-                box-shadow: 0 0 15px #10b981;
+                box-shadow: 0 0 12px #10b981;
             }
         }
         
@@ -230,16 +228,16 @@
             background: var(--primary-gradient);
             color: white; 
             border: none;
-            padding: 12px 28px;
-            border-radius: 12px;
+            padding: 8px 20px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: 700;
+            font-size: 14px;
+            font-weight: 600;
             transition: var(--transition);
             box-shadow: var(--shadow-md);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             position: relative;
             overflow: hidden;
         }
@@ -250,16 +248,12 @@
         }
         
         .sync-btn:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
         }
         
         .sync-btn:hover::after {
             transform: rotate(180deg);
-        }
-        
-        .sync-btn:active {
-            transform: translateY(-1px);
         }
         
         /* ============ BOTÕES ============ */
@@ -268,12 +262,12 @@
             background: var(--primary-gradient);
             color: white;
             border: none;
-            padding: 22px;
-            border-radius: 18px;
-            font-size: 20px;
-            font-weight: 700;
+            padding: 16px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 600;
             cursor: pointer;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             box-shadow: var(--shadow-lg);
             transition: var(--transition);
             display: none;
@@ -284,7 +278,7 @@
         
         @keyframes pulse {
             0%, 100% { box-shadow: var(--shadow-lg); }
-            50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(59, 130, 246, 0.5); }
         }
         
         .add-btn::before {
@@ -303,13 +297,13 @@
         }
         
         .add-btn:hover { 
-            transform: translateY(-4px); 
+            transform: translateY(-3px); 
             box-shadow: var(--shadow-xl);
         }
         
         .add-btn.visible { 
             display: block; 
-            animation: slideInUp 0.6s ease-out;
+            animation: slideInUp 0.5s ease-out;
         }
         
         /* ============ FORMULÁRIO ============ */
@@ -317,51 +311,51 @@
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-radius: 24px;
+            border-radius: 20px;
             box-shadow: var(--shadow-xl);
-            padding: 35px;
-            margin-bottom: 30px;
+            padding: 25px;
+            margin-bottom: 20px;
             display: none;
             border: 1px solid var(--glass-border);
-            animation: fadeIn 0.5s ease-out;
+            animation: fadeIn 0.4s ease-out;
         }
         
         .form-container.active { 
             display: block; 
-            animation: slideInUp 0.5s ease-out;
+            animation: slideInUp 0.4s ease-out;
         }
         
         .form-container h2 { 
-            font-size: 28px; 
+            font-size: 22px; 
             color: var(--gray-900); 
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         
         .form-group { 
-            margin-bottom: 25px; 
+            margin-bottom: 15px; 
         }
         
         .form-group label { 
             display: block; 
             font-weight: 600; 
             color: var(--gray-700); 
-            margin-bottom: 12px; 
-            font-size: 16px;
+            margin-bottom: 8px; 
+            font-size: 14px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         
         .form-group input, 
         .form-group select { 
             width: 100%; 
-            padding: 18px; 
+            padding: 12px; 
             border: 2px solid var(--gray-200); 
-            border-radius: 14px; 
-            font-size: 16px; 
+            border-radius: 12px; 
+            font-size: 14px; 
             transition: var(--transition);
             background: white;
             font-family: inherit;
@@ -371,14 +365,13 @@
         .form-group select:focus { 
             outline: none; 
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-            transform: translateY(-2px);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         
         .form-row { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-            gap: 25px; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 15px; 
         }
         
         .submit-btn { 
@@ -386,10 +379,10 @@
             background: var(--success-gradient);
             color: white; 
             border: none; 
-            padding: 20px; 
-            border-radius: 14px; 
-            font-size: 18px; 
-            font-weight: 700; 
+            padding: 14px; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            font-weight: 600; 
             cursor: pointer; 
             transition: var(--transition);
             box-shadow: var(--shadow-md);
@@ -398,7 +391,7 @@
         }
         
         .submit-btn:hover { 
-            transform: translateY(-3px); 
+            transform: translateY(-2px); 
             box-shadow: var(--shadow-lg);
         }
         
@@ -412,22 +405,22 @@
         /* ============ LISTA DE PETS ============ */
         .pets-list { 
             display: grid; 
-            gap: 30px; 
+            gap: 20px; 
         }
         
         .pet-card { 
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-radius: 24px;
+            border-radius: 20px;
             box-shadow: var(--shadow-lg);
-            padding: 30px;
-            border-left: 8px solid var(--primary);
+            padding: 20px;
+            border-left: 6px solid var(--primary);
             transition: var(--transition);
             border: 1px solid var(--glass-border);
             opacity: 0;
-            transform: translateY(20px);
-            animation: slideInUp 0.6s ease-out forwards;
+            transform: translateY(15px);
+            animation: slideInUp 0.5s ease-out forwards;
             position: relative;
             overflow: hidden;
         }
@@ -438,7 +431,7 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
+            height: 3px;
             background: var(--primary-gradient);
             opacity: 0;
             transition: opacity 0.3s;
@@ -452,16 +445,15 @@
         .pet-card:nth-child(2) { animation-delay: 0.2s; }
         .pet-card:nth-child(3) { animation-delay: 0.3s; }
         .pet-card:nth-child(4) { animation-delay: 0.4s; }
-        .pet-card:nth-child(5) { animation-delay: 0.5s; }
         
         .pet-card:hover { 
-            transform: translateY(-8px) scale(1.01); 
+            transform: translateY(-5px); 
             box-shadow: var(--shadow-xl);
         }
         
         .pet-card.arquivado { 
-            border-left: 8px solid var(--gray-300); 
-            opacity: 0.7;
+            border-left: 6px solid var(--gray-300); 
+            opacity: 0.8;
             background: linear-gradient(135deg, var(--glass-bg) 0%, #f1f5f9 100%);
         }
         
@@ -470,13 +462,13 @@
         }
         
         .pet-card.priority-high {
-            border-left: 8px solid var(--danger);
+            border-left: 6px solid var(--danger);
             animation: priorityPulse 2s infinite;
         }
         
         @keyframes priorityPulse {
             0%, 100% { box-shadow: var(--shadow-lg); }
-            50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.3); }
         }
         
         /* ============ HEADER DO CARD ============ */
@@ -484,46 +476,45 @@
             display: flex; 
             justify-content: space-between; 
             align-items: flex-start; 
-            margin-bottom: 25px; 
+            margin-bottom: 15px; 
             flex-wrap: wrap; 
-            gap: 20px; 
+            gap: 15px; 
         }
         
         .pet-name-section { 
             flex: 1; 
-            min-width: 250px; 
+            min-width: 200px; 
         }
         
         .pet-name-section h3 { 
-            font-size: 32px; 
+            font-size: 24px; 
             color: transparent;
             background: linear-gradient(90deg, var(--gray-900), var(--gray-700));
             -webkit-background-clip: text;
             background-clip: text;
-            margin-bottom: 8px; 
-            font-weight: 800;
-            letter-spacing: -0.5px;
+            margin-bottom: 5px; 
+            font-weight: 700;
         }
         
         .pet-name-section p { 
-            font-size: 18px; 
+            font-size: 16px; 
             color: var(--gray-600); 
-            font-weight: 600; 
+            font-weight: 500; 
         }
         
         .badge-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 8px;
+            margin-top: 8px;
         }
         
         .badge-status { 
             display: inline-block; 
-            padding: 10px 20px; 
-            border-radius: 50px; 
-            font-size: 14px; 
-            font-weight: 700; 
+            padding: 6px 12px; 
+            border-radius: 20px; 
+            font-size: 12px; 
+            font-weight: 600; 
             box-shadow: var(--shadow-sm);
             transition: var(--transition);
             position: relative;
@@ -572,11 +563,11 @@
         
         .pet-time { 
             color: var(--gray-600); 
-            font-size: 16px; 
-            margin-bottom: 12px; 
+            font-size: 14px; 
+            margin-bottom: 8px; 
             display: flex; 
             align-items: center; 
-            gap: 8px;
+            gap: 5px;
             justify-content: flex-end;
         }
         
@@ -586,14 +577,14 @@
         
         .hora-entregue { 
             color: var(--success); 
-            font-weight: 700; 
-            font-size: 15px; 
-            margin-top: 5px;
+            font-weight: 600; 
+            font-size: 13px; 
+            margin-top: 3px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
             justify-content: flex-end;
-            animation: fadeIn 0.5s ease-out;
+            animation: fadeIn 0.4s ease-out;
         }
         
         /* ============ BOTÕES DE AÇÃO ============ */
@@ -601,18 +592,18 @@
             background: var(--danger-gradient);
             color: white; 
             border: none; 
-            padding: 12px 24px; 
-            border-radius: 12px; 
+            padding: 8px 16px; 
+            border-radius: 10px; 
             cursor: pointer; 
-            font-size: 15px; 
-            font-weight: 700; 
+            font-size: 13px; 
+            font-weight: 600; 
             transition: var(--transition);
             display: none;
             box-shadow: var(--shadow-md);
         }
         
         .delete-btn:hover { 
-            transform: translateY(-3px); 
+            transform: translateY(-2px); 
             box-shadow: var(--shadow-lg);
         }
         
@@ -623,13 +614,13 @@
         /* ============ INFORMAÇÕES DO PET ============ */
         .pet-info { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
-            gap: 20px; 
-            margin-bottom: 25px; 
-            font-size: 16px; 
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+            gap: 12px; 
+            margin-bottom: 15px; 
+            font-size: 14px; 
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            padding: 25px; 
-            border-radius: 18px;
+            padding: 15px; 
+            border-radius: 12px;
             border: 1px solid var(--gray-200);
         }
         
@@ -639,69 +630,68 @@
         
         .pet-info-item strong { 
             color: var(--gray-900); 
-            font-weight: 700;
+            font-weight: 600;
         }
         
         .pet-address { 
-            margin-bottom: 25px; 
-            padding: 25px; 
+            margin-bottom: 15px; 
+            padding: 15px; 
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            border-radius: 18px; 
+            border-radius: 12px; 
             border: 2px solid #bfdbfe;
             position: relative;
         }
         
         .pet-address p { 
             color: var(--primary-dark); 
-            margin-bottom: 12px; 
-            font-size: 16px; 
+            margin-bottom: 8px; 
+            font-size: 14px; 
             font-weight: 600; 
-            line-height: 1.6;
+            line-height: 1.5;
         }
         
         .copy-address-btn { 
             background: linear-gradient(90deg, #60a5fa, var(--primary));
             color: white; 
             border: none; 
-            padding: 14px 24px; 
-            border-radius: 12px; 
+            padding: 8px 16px; 
+            border-radius: 10px; 
             cursor: pointer; 
-            font-size: 15px; 
-            font-weight: 700; 
+            font-size: 13px; 
+            font-weight: 600; 
             transition: var(--transition);
             box-shadow: var(--shadow-md);
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
         }
         
         .copy-address-btn:hover { 
-            transform: translateY(-3px); 
+            transform: translateY(-2px); 
             box-shadow: var(--shadow-lg);
-            gap: 15px;
         }
         
         /* ============ SEÇÃO DE STATUS ============ */
         .status-section { 
-            padding-top: 25px; 
+            padding-top: 15px; 
             border-top: 2px solid var(--gray-200); 
         }
         
         .status-buttons { 
             display: flex; 
             flex-wrap: wrap; 
-            gap: 15px; 
-            margin-bottom: 20px; 
+            gap: 10px; 
+            margin-bottom: 15px; 
         }
         
         .status-btn { 
             flex: 1; 
-            min-width: 160px; 
-            padding: 18px; 
+            min-width: 140px; 
+            padding: 12px; 
             border: none; 
-            border-radius: 14px; 
-            font-weight: 700; 
-            font-size: 15px; 
+            border-radius: 10px; 
+            font-weight: 600; 
+            font-size: 13px; 
             cursor: pointer; 
             transition: var(--transition);
             background: var(--gray-100); 
@@ -719,7 +709,7 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.6s;
+            transition: left 0.5s;
         }
         
         .status-btn:hover::before {
@@ -748,7 +738,7 @@
         }
         
         .status-btn:hover:not(:disabled) { 
-            transform: translateY(-4px); 
+            transform: translateY(-2px); 
             box-shadow: var(--shadow-lg);
         }
         
@@ -758,39 +748,39 @@
             transform: none !important;
         }
         
-        /* ============ OBSERVAÇÕES ============ */
+        /* ============ OBSERVAÇÕES OTIMIZADAS ============ */
         .observacoes-container { 
-            margin-top: 25px; 
+            margin-top: 15px; 
         }
         
         .observacoes-label { 
-            font-weight: 700; 
+            font-weight: 600; 
             color: var(--gray-900); 
-            font-size: 16px; 
-            margin-bottom: 12px; 
+            font-size: 13px; 
+            margin-bottom: 6px; 
             display: block;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
         }
         
         .observacoes { 
             width: 100%; 
-            padding: 20px; 
+            padding: 10px; 
             border: 2px solid var(--gray-200); 
-            border-radius: 14px; 
+            border-radius: 10px; 
             font-family: inherit; 
-            font-size: 16px; 
-            margin-bottom: 20px; 
-            min-height: 120px; 
+            font-size: 13px; 
+            margin-bottom: 12px; 
+            min-height: 80px; 
             resize: vertical; 
             transition: var(--transition);
+            line-height: 1.4;
         }
         
         .observacoes:focus {
             outline: none;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-sm);
         }
         
         .observacoes-admin { 
@@ -800,7 +790,7 @@
         
         .observacoes-admin:focus {
             border-color: var(--success-dark);
-            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
         }
         
         .observacoes-motorista { 
@@ -810,7 +800,7 @@
         
         .observacoes-motorista:focus {
             border-color: var(--primary-dark);
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         
         .observacoes-readonly { 
@@ -824,33 +814,33 @@
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-radius: 24px;
+            border-radius: 20px;
             box-shadow: var(--shadow-lg);
-            padding: 80px 40px;
+            padding: 50px 30px;
             text-align: center;
             color: var(--gray-600);
             border: 1px solid var(--glass-border);
-            animation: fadeIn 0.6s ease-out;
+            animation: fadeIn 0.5s ease-out;
         }
         
         .empty-state p:first-child { 
-            font-size: 28px; 
-            margin-bottom: 20px; 
-            font-weight: 700;
+            font-size: 22px; 
+            margin-bottom: 15px; 
+            font-weight: 600;
             background: linear-gradient(90deg, var(--gray-700), var(--gray-600));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         
         .empty-state p:last-child { 
-            font-size: 18px; 
+            font-size: 16px; 
         }
         
         /* ============ ANIMAÇÕES ============ */
         @keyframes slideInDown {
             from {
                 opacity: 0;
-                transform: translateY(-30px);
+                transform: translateY(-20px);
             }
             to {
                 opacity: 1;
@@ -861,7 +851,7 @@
         @keyframes slideInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -879,32 +869,17 @@
         }
         
         /* ============ RESPONSIVO ============ */
-        .mobile-warning { 
-            display: none; 
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            padding: 18px; 
-            border-radius: 14px; 
-            margin: 20px 0; 
-            text-align: center; 
-            font-size: 15px; 
-            color: #92400e;
-            font-weight: 600;
-            box-shadow: var(--shadow-md);
-            border: 2px solid #fbbf24;
-            animation: fadeIn 0.6s ease-out;
-        }
-        
         @media (max-width: 1024px) {
             .container {
-                padding: 15px;
+                padding: 10px;
             }
             
             .header h1 {
-                font-size: 32px;
+                font-size: 24px;
             }
             
             .pet-name-section h3 {
-                font-size: 28px;
+                font-size: 22px;
             }
         }
         
@@ -912,8 +887,8 @@
             .header { 
                 flex-direction: column; 
                 text-align: center; 
-                gap: 20px; 
-                padding: 25px;
+                gap: 15px; 
+                padding: 15px;
             }
             
             .header-content { 
@@ -941,15 +916,11 @@
             }
             
             .pet-details-right { 
-                margin-top: 15px; 
-            }
-            
-            .mobile-warning { 
-                display: block; 
+                margin-top: 10px; 
             }
             
             .observacoes { 
-                min-height: 150px; 
+                min-height: 70px; 
             }
             
             .pet-info {
@@ -959,66 +930,46 @@
         
         @media (max-width: 480px) {
             body { 
-                padding: 15px; 
+                padding: 10px; 
             }
             
             .header, 
             .pet-card, 
             .form-container { 
-                padding: 20px; 
+                padding: 15px; 
             }
             
             .header h1 { 
-                font-size: 28px; 
+                font-size: 22px; 
             }
             
             .pet-name-section h3 { 
-                font-size: 24px; 
+                font-size: 20px; 
             }
             
             .pet-card {
-                padding: 25px 20px;
+                padding: 15px;
             }
             
             .form-container {
-                padding: 25px 20px;
+                padding: 20px 15px;
             }
             
             .status-btn {
-                padding: 16px;
+                padding: 10px;
             }
-        }
-        
-        /* ============ UTILITÁRIOS ============ */
-        .sparkle {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 10px white;
-            animation: sparkle 1.5s infinite;
-        }
-        
-        @keyframes sparkle {
-            0%, 100% { opacity: 0; transform: scale(0); }
-            50% { opacity: 1; transform: scale(1); }
-        }
-        
-        .floating {
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            
+            .observacoes {
+                min-height: 60px;
+                font-size: 12px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Cabeçalho Premium -->
-        <div class="header floating">
+        <div class="header">
             <div class="header-content">
                 <h1>🐾 Pet Shop Transport</h1>
                 <p id="userRole">Sistema premium de transporte de pets</p>
@@ -1026,13 +977,10 @@
             <div class="user-badge" id="userBadge">Motorista</div>
         </div>
         
-        <!-- Aviso Mobile -->
-        <div class="mobile-warning">📱 Para melhor experiência, use no modo paisagem</div>
-        
         <!-- Status de Sincronização -->
         <div class="sync-status">
             <div class="sync-info">
-                <span>✅ Sincronizado | Última atualização: <span id="lastUpdate">--:--:--</span></span>
+                <span>✅ Conectado | Última: <span id="lastUpdate">--:--:--</span></span>
                 <div class="connection-dots">
                     <div class="dot"></div>
                     <div class="dot"></div>
@@ -1040,13 +988,13 @@
                 </div>
             </div>
             <button class="sync-btn" onclick="carregarPets()">
-                <span>Atualizar Agora</span>
+                <span>Atualizar</span>
             </button>
         </div>
         
         <!-- Botão Adicionar (só admin) -->
         <button class="add-btn" id="addBtn" onclick="mostrarFormulario()">
-            <span>✨ Adicionar Novo Pet</span>
+            <span>➕ Adicionar Pet</span>
         </button>
         
         <!-- Formulário (só admin) -->
@@ -1097,7 +1045,7 @@
                 </div>
                 
                 <div class="form-group">
-                    <label>⏱️ Tempo do Percurso</label>
+                    <label>⏱️ Tempo</label>
                     <input type="text" id="tempo" placeholder="Ex: 12 minutos">
                 </div>
             </div>
@@ -1110,12 +1058,12 @@
             </div>
             
             <div class="form-group">
-                <label>📍 Endereço Completo</label>
-                <input type="text" id="endereco" placeholder="Ex: Av. Nossa Senhora da Saúde 403, Jardim das Flores">
+                <label>📍 Endereço</label>
+                <input type="text" id="endereco" placeholder="Av. Nossa Senhora da Saúde 403">
             </div>
             
             <button class="submit-btn" onclick="adicionarPet()">
-                <span>✨ Adicionar Pet ao Sistema</span>
+                <span>✨ Adicionar Pet</span>
             </button>
         </div>
         
@@ -1127,7 +1075,7 @@
         // ========== CONFIGURAÇÃO ==========
         const JSONBIN_CONFIG = {
             BIN_ID: '695de16743b1c97be91e7eeb',
-            API_KEY: '$2a$10$SUA_CHAVE_AQUI',
+            API_KEY: '$2a$10$Wmft46BmqMcXpiI3zbasQ.4xVnNwAtOSxia383nb1GxXxojFbX.Nm',
             API_URL: 'https://api.jsonbin.io/v3/b'
         };
 
@@ -1147,12 +1095,12 @@
                 addBtn.classList.add('visible');
                 userBadge.textContent = 'Administrador';
                 userBadge.classList.add('admin');
-                userRole.textContent = 'Sistema premium - Modo Administrador';
+                userRole.textContent = 'Sistema de transporte - Modo Administrador';
             } else {
                 addBtn.classList.remove('visible');
                 userBadge.textContent = 'Motorista';
                 userBadge.classList.remove('admin');
-                userRole.textContent = 'Sistema premium - Modo Motorista';
+                userRole.textContent = 'Sistema de transporte - Modo Motorista';
             }
         }
 
@@ -1161,7 +1109,7 @@
             const form = document.getElementById('formContainer');
             const btn = document.getElementById('addBtn');
             form.classList.toggle('active');
-            btn.textContent = form.classList.contains('active') ? '❌ Cancelar' : '✨ Adicionar Pet';
+            btn.textContent = form.classList.contains('active') ? '❌ Cancelar' : '➕ Adicionar Pet';
         }
 
         // ========== FUNÇÕES JSONBIN ==========
@@ -1223,7 +1171,7 @@
 
             // Validar
             if (!pet.cliente || !pet.nomePet || !pet.raca || !pet.cor || !pet.endereco) {
-                mostrarMensagem('⚠️ Preencha todos os campos obrigatórios!', 'warning');
+                mostrarMensagem('⚠️ Preencha todos os campos!', 'warning');
                 return;
             }
 
@@ -1243,7 +1191,7 @@
             mostrarPets();
             
             // Feedback
-            mostrarMensagem('✅ Pet adicionado com sucesso!', 'success');
+            mostrarMensagem('✅ Pet adicionado!', 'success');
         }
 
         async function atualizarPetStatus(petId, campo, valor) {
@@ -1255,7 +1203,6 @@
             const valorAnterior = pet[campo];
             pet[campo] = valor;
             
-            // Se marcou como ENTREGUE, registrar a hora
             if (campo === 'status' && valor === 'Entregue' && valorAnterior !== 'Entregue') {
                 const agora = new Date();
                 pet.horaEntregue = agora.toLocaleTimeString('pt-BR', { 
@@ -1264,7 +1211,6 @@
                 });
             }
             
-            // Se marcou como pago ou não pago, arquivar
             if (campo === 'pagamento' && (valor === 'Pago' || valor === 'Não pago')) {
                 pet.arquivado = true;
             }
@@ -1272,7 +1218,6 @@
             await salvarPets();
             mostrarPets();
             
-            // Feedback
             mostrarMensagem('✅ Status atualizado!', 'success');
         }
 
@@ -1291,7 +1236,7 @@
         }
 
         async function removerPet(petId) {
-            if (!isAdmin || !confirm('Tem certeza que deseja remover este pet?')) return;
+            if (!isAdmin || !confirm('Remover este pet?')) return;
             
             pets = pets.filter(p => p.id !== petId);
             await salvarPets();
@@ -1303,7 +1248,7 @@
         function copiarEndereco(endereco) {
             navigator.clipboard.writeText(endereco)
                 .then(() => mostrarMensagem('📍 Endereço copiado!', 'success'))
-                .catch(() => mostrarMensagem('❌ Não foi possível copiar o endereço', 'error'));
+                .catch(() => mostrarMensagem('❌ Erro ao copiar', 'error'));
         }
 
         // ========== RENDERIZAR PETS ==========
@@ -1314,27 +1259,21 @@
             
             if (petsVisiveis.length === 0) {
                 container.innerHTML = `
-                    <div class="empty-state floating">
-                        <p>${isAdmin ? '📋 Nenhum pet cadastrado' : '📭 Nenhum pet para transporte'}</p>
-                        <p>${isAdmin ? 'Adicione o primeiro pet!' : 'Aguardando novos pets'}</p>
+                    <div class="empty-state">
+                        <p>${isAdmin ? '📋 Nenhum pet' : '📭 Nenhum pet para transporte'}</p>
+                        <p>${isAdmin ? 'Adicione um pet!' : 'Aguardando novos pets'}</p>
                     </div>
                 `;
                 return;
             }
 
-            // Ordenar por hora de retirada
             petsVisiveis.sort((a, b) => (a.horaRetirada || '').localeCompare(b.horaRetirada || ''));
 
             container.innerHTML = petsVisiveis.map((pet, index) => {
                 const isArquivado = pet.arquivado;
-                const horaPet = pet.horaRetirada ? parseInt(pet.horaRetirada.split(':')[0]) * 60 + parseInt(pet.horaRetirada.split(':')[1]) : 0;
-                const agora = new Date();
-                const horaAtual = agora.getHours() * 60 + agora.getMinutes();
-                const horaProxima = horaPet > horaAtual && horaPet - horaAtual < 60;
                 
                 return `
-                <div class="pet-card ${isArquivado ? 'arquivado' : ''} ${horaProxima ? 'priority-high' : ''}" 
-                     style="animation-delay: ${index * 0.1}s">
+                <div class="pet-card ${isArquivado ? 'arquivado' : ''}" style="animation-delay: ${index * 0.08}s">
                     
                     <div class="pet-card-header">
                         <div class="pet-name-section">
@@ -1402,7 +1341,7 @@
                                 `).join('')}
                             </div>
                             
-                            <div class="status-buttons" style="margin-top: 15px;">
+                            <div class="status-buttons" style="margin-top: 8px;">
                                 <button class="status-btn sutil ${pet.pagamento === 'Pago' ? 'active' : ''}" 
                                         onclick="atualizarPetStatus(${pet.id}, 'pagamento', 'Pago')"
                                         ${isArquivado ? 'disabled' : ''}>
@@ -1428,16 +1367,16 @@
                                     <span class="observacoes-label">📝 Observações do Motorista:</span>
                                     <textarea class="observacoes observacoes-motorista observacoes-readonly" 
                                               readonly
-                                              placeholder="Observações do motorista aparecerão aqui...">${pet.observacoesMotorista || ''}</textarea>
+                                              placeholder="Observações do motorista...">${pet.observacoesMotorista || ''}</textarea>
                                 </div>
                             ` : `
                                 <div>
                                     <span class="observacoes-label">📝 Observações do Admin:</span>
                                     <textarea class="observacoes observacoes-admin observacoes-readonly" 
                                               readonly
-                                              placeholder="Observações do admin aparecerão aqui...">${pet.observacoesAdmin || ''}</textarea>
+                                              placeholder="Observações do admin...">${pet.observacoesAdmin || ''}</textarea>
                                     
-                                    <span class="observacoes-label">📝 Minhas Observações (Motorista):</span>
+                                    <span class="observacoes-label">📝 Minhas Observações:</span>
                                     <textarea class="observacoes observacoes-motorista" 
                                               onchange="atualizarObservacoes(${pet.id}, 'motorista', this.value)"
                                               onblur="atualizarObservacoes(${pet.id}, 'motorista', this.value)"
@@ -1461,27 +1400,13 @@
                 warning: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)'
             };
             
-            const corTexto = {
-                success: '#065f46',
-                error: '#991b1b',
-                warning: '#92400e'
-            };
-            
-            const borda = {
-                success: '#10b981',
-                error: '#ef4444',
-                warning: '#f59e0b'
-            };
-            
             status.style.background = cores[tipo] || '#f3f4f6';
-            status.style.color = corTexto[tipo] || '#1f2937';
-            status.style.borderColor = borda[tipo] || '#fbbf24';
+            status.style.color = tipo === 'success' ? '#065f46' : tipo === 'error' ? '#991b1b' : '#92400e';
             status.firstElementChild.innerHTML = `<strong>${texto}</strong>`;
             
             setTimeout(() => {
                 status.style.background = 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)';
                 status.style.color = '#92400e';
-                status.style.borderColor = '#fbbf24';
                 atualizarHora();
             }, 3000);
         }
@@ -1490,8 +1415,7 @@
             const agora = new Date();
             const horaFormatada = agora.toLocaleTimeString('pt-BR', { 
                 hour: '2-digit', 
-                minute: '2-digit',
-                second: '2-digit'
+                minute: '2-digit'
             });
             document.getElementById('lastUpdate').textContent = horaFormatada;
         }
@@ -1501,17 +1425,8 @@
             configurarInterface();
             carregarPets();
             
-            // Efeitos iniciais
-            setTimeout(() => {
-                document.querySelectorAll('.pet-card').forEach(card => {
-                    card.style.opacity = '1';
-                });
-            }, 500);
-            
-            // Atualizar automaticamente a cada 30 segundos
             setInterval(carregarPets, 30000);
             
-            // Atualizar quando a página ganha foco
             document.addEventListener('visibilitychange', () => {
                 if (document.visibilityState === 'visible') {
                     carregarPets();
