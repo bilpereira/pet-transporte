@@ -486,7 +486,7 @@
             animation: slideInUp 0.5s ease-out;
         }
         
-        /* ============ FORMULÁRIO ============ */
+        /* ============ FORMULÁRIO COM VALOR PIX ============ */
         .form-container { 
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -598,11 +598,15 @@
             border-left: 6px solid var(--primary);
             transition: var(--transition);
             border: 1px solid var(--glass-border);
-            opacity: 0;
-            transform: translateY(15px);
+            opacity: 1;
+            transform: translateY(0);
             animation: slideInUp 0.5s ease-out forwards;
             position: relative;
             overflow: hidden;
+        }
+        
+        .pet-card.smooth-move {
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .pet-card::before {
@@ -1449,15 +1453,15 @@
         <div class="modal-pix">
             <h3>💰 Pagamento PIX</h3>
             <div class="qrcode-container">
-                <img src="https://imgur.com/paZK1Tx" 
+                <img src="https://i.imgur.com/paZK1Tx.png" 
                      alt="QR Code PIX" 
                      class="qrcode-img"
-                     onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020126580014BR.GOV.BCB.PIX013634508807000151520400005303986540550.005802BR5913PETSHOPBOSQUE6009SAO PAULO62070503***6304E2CA'">
+                     onerror="this.onerror=null; this.src='https://imgur.com/paZK1Tx'">
             </div>
             <div class="pix-info">
                 <p>🔢 <strong>Chave:</strong> 34.508.807/0001-51</p>
                 <p>👤 <strong>Beneficiário:</strong> PET SHOP BOSQUE DA SAUDE</p>
-                <p>💵 <strong>Valor Sugerido:</strong> R$ <span id="suggestedValue">50,00</span></p>
+                <p>💵 <strong>Valor:</strong> R$ <span id="pixValor">50,00</span></p>
                 <p>📱 <strong>Status:</strong> <span id="pixStatus">Aguardando pagamento</span></p>
             </div>
             <div class="modal-buttons">
@@ -1532,7 +1536,7 @@
             <span>➕ Adicionar Pet</span>
         </button>
         
-        <!-- Formulário (só admin) -->
+        <!-- Formulário com campo VALOR PIX -->
         <div class="form-container" id="formContainer">
             <h2>📝 Novo Transporte</h2>
             
@@ -1590,6 +1594,10 @@
                     <label>🕐 Hora Retirada</label>
                     <input type="time" id="horaRetirada" value="14:30">
                 </div>
+                <div class="form-group">
+                    <label>💰 Valor PIX (R$)</label>
+                    <input type="number" id="valorPix" step="0.01" min="0" placeholder="50.00" value="50.00">
+                </div>
             </div>
             
             <div class="form-group">
@@ -1620,13 +1628,14 @@
 
         let pets = [];
         let editingPetId = null;
+        let isReordering = false;
 
         // ========== PIX CONFIG ==========
         const PIX_CONFIG = {
             chave: '34.508.807/0001-51',
             beneficiario: 'PET SHOP BOSQUE DA SAUDE',
-            qrcodeUrl: 'https://imgur.com/paZK1Tx',
-            valorSugerido: 50.00
+            qrcodeUrl: 'https://i.imgur.com/paZK1Tx.png',
+            qrcodeBackup: 'https://imgur.com/paZK1Tx'
         };
 
         // ========== FUNÇÕES BÁSICAS ==========
@@ -1652,13 +1661,87 @@
             if (!isAdmin) return;
             const form = document.getElementById('formContainer');
             const btn = document.getElementById('addBtn');
-            form.classList.toggle('active');
-            btn.textContent = form.classList.contains('active') ? '❌ Cancelar' : '➕ Adicionar Pet';
+            const submitBtn = form.querySelector('.submit-btn');
             
-            // Se estiver editando, cancela edição
-            if (form.classList.contains('active') && editingPetId) {
+            if (form.classList.contains('active')) {
+                // Fechar formulário
+                form.classList.remove('active');
+                btn.textContent = '➕ Adicionar Pet';
+                submitBtn.textContent = '✨ Adicionar Pet';
+                submitBtn.onclick = adicionarPet;
                 cancelarEdicao();
+                
+                // Rolar para o topo
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                // Abrir formulário no topo
+                form.classList.add('active');
+                btn.textContent = '❌ Cancelar';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
+        }
+
+        // ========== SISTEMA DE ORDENAÇÃO CORRIGIDO ==========
+        function aplicarOrdenacaoDinamica() {
+            if (isReordering) return;
+            isReordering = true;
+            
+            // Criar cópia para ordenação
+            const petsOrdenados = [...pets];
+            
+            // 1. Pets EM TRANSPORTE (no topo)
+            const emTransporte = petsOrdenados.filter(p => 
+                !p.arquivado && (
+                    p.status === 'A caminho da loja' || 
+                    p.status === 'A caminho da entrega'
+                )
+            );
+            
+            // 2. Pets AGUARDANDO (no meio)
+            const aguardando = petsOrdenados.filter(p => 
+                !p.arquivado && p.status === 'Aguardando retirada'
+            );
+            
+            // 3. Pets ENTREGUES (no final - só admin vê os arquivados)
+            const entregues = petsOrdenados.filter(p => 
+                p.status === 'Entregue' || p.arquivado
+            );
+            
+            // Ordenar cada grupo
+            emTransporte.sort((a, b) => (a.horaRetirada || '').localeCompare(b.horaRetirada || ''));
+            aguardando.sort((a, b) => (a.horaRetirada || '').localeCompare(b.horaRetirada || ''));
+            entregues.sort((a, b) => (b.horaEntregue || '').localeCompare(a.horaEntregue || ''));
+            
+            // Juntar tudo
+            pets = [...emTransporte, ...aguardando, ...entregues];
+            isReordering = false;
+            
+            return pets;
+        }
+
+        // ========== ANIMAÇÃO DE REORDENAÇÃO ==========
+        async function reordenarComAnimacao() {
+            const container = document.getElementById('petsList');
+            const cards = container.querySelectorAll('.pet-card');
+            
+            // Adicionar classe de animação suave
+            cards.forEach(card => {
+                card.classList.add('smooth-move');
+            });
+            
+            // Pequeno delay para animação
+            await new Promise(resolve => setTimeout(resolve, 50));
+            
+            // Reaplicar ordenação
+            aplicarOrdenacaoDinamica();
+            mostrarPets();
+            
+            // Remover classe após animação
+            setTimeout(() => {
+                cards.forEach(card => {
+                    card.classList.remove('smooth-move');
+                });
+            }, 600);
         }
 
         // ========== FUNÇÕES JSONBIN ==========
@@ -1704,33 +1787,6 @@
             }
         }
 
-        // ========== SISTEMA DE ORDENAÇÃO DINÂMICA ==========
-        function aplicarOrdenacaoDinamica() {
-            // Separar pets por status
-            const aguardando = pets.filter(p => 
-                !p.arquivado && p.status === 'Aguardando retirada'
-            );
-            
-            const emTransporte = pets.filter(p => 
-                !p.arquivado && (
-                    p.status === 'A caminho da loja' || 
-                    p.status === 'A caminho da entrega'
-                )
-            );
-            
-            const entregues = pets.filter(p => 
-                p.status === 'Entregue' || p.arquivado
-            );
-            
-            // Ordenar cada grupo por horário
-            aguardando.sort((a, b) => (a.horaRetirada || '').localeCompare(b.horaRetirada || ''));
-            emTransporte.sort((a, b) => (a.horaRetirada || '').localeCompare(b.horaRetirada || ''));
-            entregues.sort((a, b) => (a.horaEntregue || '').localeCompare(b.horaEntregue || ''));
-            
-            // Juntar tudo: em transporte primeiro, depois aguardando, depois entregues
-            pets = [...emTransporte, ...aguardando, ...entregues];
-        }
-
         // ========== PRÓXIMA RETIRADA ==========
         function mostrarProximaRetirada() {
             const highlight = document.getElementById('nextPickupHighlight');
@@ -1745,8 +1801,9 @@
             );
             
             if (proximoPet && !isAdmin) {
-                const horaPet = parseInt(proximoPet.horaRetirada.split(':')[0]) * 60 + 
-                               parseInt(proximoPet.horaRetirada.split(':')[1]);
+                const horaPet = proximoPet.horaRetirada ? 
+                    parseInt(proximoPet.horaRetirada.split(':')[0]) * 60 + 
+                    parseInt(proximoPet.horaRetirada.split(':')[1]) : 0;
                 
                 // Mostrar se estiver dentro de 2 horas
                 if (horaPet - horaAtual <= 120) {
@@ -1846,21 +1903,26 @@
                             ${pet.horaEntregue || '--:--'}
                         </span>
                     </div>
+                    ${pet.valorPix ? `
+                        <div style="margin-top: 8px; font-size: 12px; color: var(--gray-700);">
+                            💰 Valor: R$ ${parseFloat(pet.valorPix).toFixed(2).replace('.', ',')}
+                        </div>
+                    ` : ''}
                 </div>
             `).join('');
         }
 
-        // ========== SISTEMA PIX ==========
+        // ========== SISTEMA PIX CORRIGIDO ==========
         function mostrarModalPix(petId) {
             const modal = document.getElementById('pixModal');
-            const suggestedValue = document.getElementById('suggestedValue');
+            const pixValor = document.getElementById('pixValor');
             
-            // Encontrar o pet para sugerir valor baseado no serviço
+            // Encontrar o pet para mostrar valor específico
             const pet = pets.find(p => p.id === petId);
-            if (pet) {
-                // Lógica para calcular valor sugerido (pode ser personalizada)
-                const valorSugerido = PIX_CONFIG.valorSugerido;
-                suggestedValue.textContent = valorSugerido.toFixed(2).replace('.', ',');
+            if (pet && pet.valorPix) {
+                pixValor.textContent = parseFloat(pet.valorPix).toFixed(2).replace('.', ',');
+            } else {
+                pixValor.textContent = '50,00';
             }
             
             modal.classList.add('active');
@@ -1926,7 +1988,7 @@
             }
         }
 
-        // ========== SISTEMA DE EDIÇÃO (ADMIN) ==========
+        // ========== SISTEMA DE EDIÇÃO CORRIGIDO ==========
         function habilitarEdicao(petId) {
             if (!isAdmin) return;
             
@@ -1943,17 +2005,23 @@
             document.getElementById('endereco').value = pet.endereco;
             document.getElementById('tempo').value = pet.tempo;
             document.getElementById('horaRetirada').value = pet.horaRetirada;
+            document.getElementById('valorPix').value = pet.valorPix || '50.00';
             
-            // Mostrar formulário
+            // Mostrar formulário NO TOPO
             const form = document.getElementById('formContainer');
             const btn = document.getElementById('addBtn');
-            form.classList.add('active');
-            btn.textContent = '❌ Cancelar';
-            
-            // Alterar botão do formulário
             const submitBtn = form.querySelector('.submit-btn');
-            submitBtn.textContent = '💾 Salvar Alterações';
-            submitBtn.onclick = () => salvarEdicao(petId);
+            
+            // Rolar para o topo primeiro
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Depois de rolar, mostrar formulário
+            setTimeout(() => {
+                form.classList.add('active');
+                btn.textContent = '❌ Cancelar';
+                submitBtn.textContent = '💾 Salvar Alterações';
+                submitBtn.onclick = () => salvarEdicao(petId);
+            }, 300);
         }
 
         function salvarEdicao(petId) {
@@ -1970,8 +2038,10 @@
             pet.endereco = document.getElementById('endereco').value.trim();
             pet.tempo = document.getElementById('tempo').value.trim();
             pet.horaRetirada = document.getElementById('horaRetirada').value;
+            pet.valorPix = parseFloat(document.getElementById('valorPix').value) || 50.00;
             
             salvarPets();
+            aplicarOrdenacaoDinamica();
             mostrarPets();
             cancelarEdicao();
             
@@ -1989,6 +2059,7 @@
             document.getElementById('endereco').value = '';
             document.getElementById('tempo').value = '';
             document.getElementById('horaRetirada').value = '14:30';
+            document.getElementById('valorPix').value = '50.00';
             
             // Restaurar botão do formulário
             const submitBtn = document.querySelector('.submit-btn');
@@ -2004,7 +2075,7 @@
             }
         }
 
-        // ========== CRUD PETS ==========
+        // ========== CRUD PETS COM VALOR PIX ==========
         async function adicionarPet() {
             if (!isAdmin && !editingPetId) return;
             
@@ -2017,6 +2088,7 @@
                 endereco: document.getElementById('endereco').value.trim(),
                 tempo: document.getElementById('tempo').value.trim(),
                 horaRetirada: document.getElementById('horaRetirada').value || '14:30',
+                valorPix: parseFloat(document.getElementById('valorPix').value) || 50.00,
                 status: 'Aguardando retirada',
                 pagamento: 'Pendente',
                 observacoesAdmin: '',
@@ -2057,26 +2129,14 @@
             }
             
             await salvarPets();
-            
-            // Limpar formulário
-            document.getElementById('cliente').value = '';
-            document.getElementById('nomePet').value = '';
-            document.getElementById('raca').value = '';
-            document.getElementById('cor').value = '';
-            document.getElementById('endereco').value = '';
-            document.getElementById('tempo').value = '';
-            document.getElementById('horaRetirada').value = '14:30';
-            
-            if (editingPetId) {
-                cancelarEdicao();
-            } else {
-                mostrarFormulario();
-            }
-            
             aplicarOrdenacaoDinamica();
             mostrarPets();
             atualizarEstatisticas();
             mostrarProximaRetirada();
+            atualizarHistoricoEntregas();
+            
+            // Limpar formulário
+            cancelarEdicao();
             
             // Feedback
             mostrarMensagem(editingPetId ? '✅ Pet atualizado!' : '✅ Pet adicionado!', 'success');
@@ -2110,15 +2170,16 @@
                 pet.arquivado = true;
             }
             
-            // Reordenar dinamicamente
+            // Reordenar dinamicamente COM ANIMAÇÃO
             if (campo === 'status' && (valor === 'A caminho da loja' || valor === 'A caminho da entrega')) {
                 // Pet sobe para o topo quando motorista inicia transporte
+                await reordenarComAnimacao();
+            } else {
                 aplicarOrdenacaoDinamica();
+                await salvarPets();
+                mostrarPets();
             }
             
-            await salvarPets();
-            aplicarOrdenacaoDinamica();
-            mostrarPets();
             atualizarEstatisticas();
             mostrarProximaRetirada();
             atualizarHistoricoEntregas();
@@ -2185,8 +2246,7 @@
                 const isEmTransporte = pet.status === 'A caminho da loja' || pet.status === 'A caminho da entrega';
                 
                 return `
-                <div class="pet-card ${isArquivado ? 'arquivado' : ''} ${isEmTransporte ? 'priority-high' : ''}" 
-                     style="animation-delay: ${index * 0.08}s">
+                <div class="pet-card ${isArquivado ? 'arquivado' : ''} ${isEmTransporte ? 'priority-high' : ''}">
                     
                     <div class="pet-card-header">
                         <div class="pet-name-section">
@@ -2241,6 +2301,11 @@
                         <div class="pet-info-item">
                             <strong>⏱️ Tempo:</strong> ${pet.tempo}
                         </div>
+                        ${pet.valorPix ? `
+                            <div class="pet-info-item">
+                                <strong>💰 Valor:</strong> R$ ${parseFloat(pet.valorPix).toFixed(2).replace('.', ',')}
+                            </div>
+                        ` : ''}
                     </div>
                     
                     <div class="pet-address">
