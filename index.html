@@ -22,6 +22,7 @@
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
             --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
             --gray-600: #4b5563;
             --gray-700: #374151;
             --gray-900: #111827;
@@ -643,6 +644,33 @@
         
         .pet-card.arquivado:hover {
             opacity: 0.9;
+        }
+        
+        /* ============ ESTILO PARA ADMIN VER ARQUIVADOS ============ */
+        .pet-card.admin-arquivado {
+            border-left: 6px solid var(--gray-400);
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            opacity: 0.9;
+            position: relative;
+        }
+        
+        .pet-card.admin-arquivado:hover {
+            opacity: 1;
+            transform: translateY(-3px);
+        }
+        
+        .pet-card.admin-arquivado::after {
+            content: '📁 Arquivado';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--gray-200);
+            color: var(--gray-700);
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            z-index: 2;
         }
         
         .pet-card.priority-high {
@@ -1569,7 +1597,7 @@
         <div class="delivered-list" id="deliveredList">
             <!-- Itens serão preenchidos via JavaScript -->
         </div>
-    </div>
+</div>
     
     <!-- BOTÃO FLUTUANTE HISTÓRICO -->
     <button class="history-btn" onclick="toggleDeliveredSidebar()">
@@ -1727,58 +1755,6 @@
             qrcodeBackup: 'https://imgur.com/paZK1Tx'
         };
 
-        // ========== NOVAS FUNÇÕES PARA BOTÕES PAGAMENTO (HOVER+CLICK) ==========
-        function mostrarBotoesPagamento(petId) {
-            const botoesDiv = document.getElementById(`botoes-pagamento-${petId}`);
-            if (botoesDiv) {
-                botoesDiv.style.opacity = '1';
-                botoesDiv.style.transform = 'translateY(0)';
-                botoesDiv.style.pointerEvents = 'auto';
-            }
-        }
-
-        function esconderBotoesPagamento(petId) {
-            const botoesDiv = document.getElementById(`botoes-pagamento-${petId}`);
-            const pet = pets.find(p => p.id === petId);
-            
-            if (botoesDiv && (!pet || !pet.pagamentoCollapsed)) {
-                botoesDiv.style.opacity = '0';
-                botoesDiv.style.transform = 'translateY(-10px)';
-                botoesDiv.style.pointerEvents = 'none';
-            }
-        }
-
-        function alternarEstadoPagamento(petId) {
-            const pet = pets.find(p => p.id === petId);
-            if (!pet) return;
-            
-            pet.pagamentoCollapsed = !pet.pagamentoCollapsed;
-            salvarPets();
-            
-            const botoesDiv = document.getElementById(`botoes-pagamento-${petId}`);
-            if (botoesDiv) {
-                if (pet.pagamentoCollapsed) {
-                    // Manter visível quando aberto via click
-                    botoesDiv.style.opacity = '1';
-                    botoesDiv.style.transform = 'translateY(0)';
-                    botoesDiv.style.pointerEvents = 'auto';
-                } else {
-                    // Esconder quando fechado
-                    botoesDiv.style.opacity = '0';
-                    botoesDiv.style.transform = 'translateY(-10px)';
-                    botoesDiv.style.pointerEvents = 'none';
-                }
-            }
-        }
-
-        function marcarPago(petId) {
-            atualizarPetStatus(petId, 'pagamento', 'Pago');
-        }
-
-        function marcarNaoPago(petId) {
-            atualizarPetStatus(petId, 'pagamento', 'Não pago');
-        }
-
         // ========== FUNÇÕES BÁSICAS ==========
         function configurarInterface() {
             const addBtn = document.getElementById('addBtn');
@@ -1819,56 +1795,107 @@
             }
         }
 
-        // ========== CORREÇÃO 1: ORDENAÇÃO PERSISTENTE ==========
+        // ========== NOVAS FUNÇÕES PARA BOTÕES PAGAMENTO (HOVER+CLICK) ==========
+        function mostrarBotoesPagamento(petId) {
+            const botoesDiv = document.getElementById(`botoes-pagamento-${petId}`);
+            if (botoesDiv) {
+                botoesDiv.style.opacity = '1';
+                botoesDiv.style.transform = 'translateY(0)';
+                botoesDiv.style.pointerEvents = 'auto';
+            }
+        }
+
+        function esconderBotoesPagamento(petId) {
+            const botoesDiv = document.getElementById(`botoes-pagamento-${petId}`);
+            const pet = pets.find(p => p.id === petId);
+            
+            if (botoesDiv && (!pet || !pet.pagamentoCollapsed)) {
+                botoesDiv.style.opacity = '0';
+                botoesDiv.style.transform = 'translateY(-10px)';
+                botoesDiv.style.pointerEvents = 'none';
+            }
+        }
+
+        function alternarEstadoPagamento(petId) {
+            const pet = pets.find(p => p.id === petId);
+            if (!pet) return;
+            
+            pet.pagamentoCollapsed = !pet.pagamentoCollapsed;
+            salvarPets();
+            
+            const botoesDiv = document.getElementById(`botoes-pagamento-${petId}`);
+            if (botoesDiv) {
+                if (pet.pagamentoCollapsed) {
+                    botoesDiv.style.opacity = '1';
+                    botoesDiv.style.transform = 'translateY(0)';
+                    botoesDiv.style.pointerEvents = 'auto';
+                } else {
+                    botoesDiv.style.opacity = '0';
+                    botoesDiv.style.transform = 'translateY(-10px)';
+                    botoesDiv.style.pointerEvents = 'none';
+                }
+            }
+        }
+
+        // 🔥 CORREÇÃO: Funções Pago/Não Pago funcionais
+        function marcarPago(petId) {
+            const pet = pets.find(p => p.id === petId);
+            if (!pet) return;
+            
+            // 🔥 ATUALIZA STATUS E ARQUIVA
+            pet.pagamento = 'Pago';
+            pet.arquivado = true;
+            
+            salvarPets();
+            mostrarPets();
+            mostrarMensagem('✅ Marcado como Pago!', 'success');
+        }
+
+        function marcarNaoPago(petId) {
+            const pet = pets.find(p => p.id === petId);
+            if (!pet) return;
+            
+            // 🔥 ATUALIZA STATUS E ARQUIVA
+            pet.pagamento = 'Não pago';
+            pet.arquivado = true;
+            
+            salvarPets();
+            mostrarPets();
+            mostrarMensagem('❌ Marcado como Não Pago!', 'warning');
+        }
+
+        // ========== CORREÇÃO 1: ORDENAÇÃO QUE MANTÉM POSIÇÃO ==========
         function aplicarOrdenacaoDinamicaCorrigida() {
             if (isReordering) return;
             isReordering = true;
             
-            // Separar pets VISÍVEIS (não arquivados ou admin vê tudo)
             let petsVisiveis = isAdmin ? [...pets] : pets.filter(p => !p.arquivado);
             
-            // 1. Pets EM TRANSPORTE (no topo)
+            // 🔥 CORREÇÃO: Manter ordem relativa - entregues NÃO vão para o final
             const emTransporte = petsVisiveis.filter(p => 
                 p.status === 'A caminho da loja' || 
                 p.status === 'A caminho da entrega'
             );
             
-            // 2. Pets AGUARDANDO (no meio)
-            const aguardando = petsVisiveis.filter(p => 
-                p.status === 'Aguardando retirada'
+            const outros = petsVisiveis.filter(p => 
+                !(p.status === 'A caminho da loja' || p.status === 'A caminho da entrega')
             );
             
-            // 3. Pets ENTREGUES (no final)
-            const entregues = petsVisiveis.filter(p => 
-                p.status === 'Entregue'
-            );
-            
-            // 4. Pets ARQUIVADOS (só admin vê, no final)
-            const arquivados = petsVisiveis.filter(p => 
-                p.arquivado && p.status !== 'Entregue'
-            );
-            
-            // Ordenar cada grupo por horário
+            // Ordenar apenas os em transporte por horário
             emTransporte.sort((a, b) => (a.horaRetirada || '').localeCompare(b.horaRetirada || ''));
-            aguardando.sort((a, b) => (a.horaRetirada || '').localeCompare(b.horaRetirada || ''));
-            entregues.sort((a, b) => (b.horaEntregue || '').localeCompare(a.horaEntregue || ''));
-            arquivados.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
             
-            // Juntar tudo
-            const novaOrdem = [...emTransporte, ...aguardando, ...entregues, ...arquivados];
+            // 🔥 Juntar mantendo ordem relativa (entregues ficam onde estão)
+            const novaOrdem = [...emTransporte, ...outros];
             
-            // 🔥 CORREÇÃO: Atualizar array ORIGINAL mantendo objetos
+            // Atualizar array original
             pets.forEach(pet => {
                 const novoPet = novaOrdem.find(p => p.id === pet.id);
                 if (novoPet) {
-                    // Atualizar propriedades mantendo referência
                     Object.assign(pet, novoPet);
                 }
             });
             
-            // 🔥 CORREÇÃO: Salvar a NOVA ORDEM no JSONBin
             salvarPets();
-            
             isReordering = false;
             return novaOrdem;
         }
@@ -1878,19 +1905,15 @@
             const container = document.getElementById('petsList');
             const cards = container.querySelectorAll('.pet-card');
             
-            // Adicionar classe de animação suave
             cards.forEach(card => {
                 card.classList.add('smooth-move');
             });
             
-            // Pequeno delay para animação
             await new Promise(resolve => setTimeout(resolve, 50));
             
-            // Reaplicar ordenação e mostrar
             const petsOrdenados = aplicarOrdenacaoDinamicaCorrigida();
             await mostrarPetsComOrdem(petsOrdenados);
             
-            // Remover classe após animação
             setTimeout(() => {
                 cards.forEach(card => {
                     card.classList.remove('smooth-move');
@@ -1945,7 +1968,6 @@
             const agora = new Date();
             const horaAtual = agora.getHours() * 60 + agora.getMinutes();
             
-            // Encontrar próximo pet aguardando retirada
             const proximoPet = pets.find(p => 
                 !p.arquivado && 
                 p.status === 'Aguardando retirada' && 
@@ -1957,7 +1979,6 @@
                     parseInt(proximoPet.horaRetirada.split(':')[0]) * 60 + 
                     parseInt(proximoPet.horaRetirada.split(':')[1]) : 0;
                 
-                // Mostrar se estiver dentro de 2 horas
                 if (horaPet - horaAtual <= 120) {
                     highlight.style.display = 'block';
                     highlight.innerHTML = `
@@ -2069,7 +2090,6 @@
             const modal = document.getElementById('pixModal');
             const pixValor = document.getElementById('pixValor');
             
-            // Encontrar o pet para mostrar valor específico
             const pet = pets.find(p => p.id === petId);
             if (pet && pet.valorPix) {
                 pixValor.textContent = parseFloat(pet.valorPix).toFixed(2).replace('.', ',');
@@ -2093,17 +2113,14 @@
 
         // ========== SESSÃO VALOR RECEBIDO ==========
         function mostrarSessaoValor(petId) {
-            // Esconder todas as outras sessões primeiro
             document.querySelectorAll('.valor-recebido-section').forEach(section => {
                 section.classList.remove('active');
             });
             
-            // Mostrar sessão para este pet
             const section = document.getElementById(`valorRecebido-${petId}`);
             if (section) {
                 section.classList.add('active');
                 
-                // Focar no input
                 const input = section.querySelector('.valor-input');
                 if (input) {
                     setTimeout(() => input.focus(), 100);
@@ -2125,7 +2142,6 @@
                 pet.valorRecebido = parseFloat(valor).toFixed(2);
                 pet.dataPagamento = new Date().toISOString();
                 
-                // Marcar como pago se valor recebido
                 if (parseFloat(valor) > 0) {
                     atualizarPetStatus(petId, 'pagamento', 'Pago');
                 }
@@ -2135,7 +2151,6 @@
                 
                 mostrarMensagem(`✅ Valor R$ ${parseFloat(valor).toFixed(2)} registrado!`, 'success');
                 
-                // Esconder sessão
                 document.getElementById(`valorRecebido-${petId}`).classList.remove('active');
             }
         }
@@ -2149,7 +2164,6 @@
             
             editingPetId = petId;
             
-            // Preencher formulário com dados do pet
             document.getElementById('cliente').value = pet.cliente;
             document.getElementById('nomePet').value = pet.nomePet;
             document.getElementById('raca').value = pet.raca;
@@ -2159,15 +2173,12 @@
             document.getElementById('horaRetirada').value = pet.horaRetirada;
             document.getElementById('valorPix').value = pet.valorPix || '50.00';
             
-            // Mostrar formulário NO TOPO
             const form = document.getElementById('formContainer');
             const btn = document.getElementById('addBtn');
             const submitBtn = form.querySelector('.submit-btn');
             
-            // Rolar para o topo primeiro
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // Depois de rolar, mostrar formulário
             setTimeout(() => {
                 form.classList.add('active');
                 btn.textContent = '❌ Cancelar';
@@ -2182,7 +2193,6 @@
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
-            // Atualizar dados do pet
             pet.cliente = document.getElementById('cliente').value.trim();
             pet.nomePet = document.getElementById('nomePet').value.trim();
             pet.raca = document.getElementById('raca').value;
@@ -2202,7 +2212,6 @@
         function cancelarEdicao() {
             editingPetId = null;
             
-            // Limpar formulário
             document.getElementById('cliente').value = '';
             document.getElementById('nomePet').value = '';
             document.getElementById('raca').value = '';
@@ -2212,12 +2221,10 @@
             document.getElementById('horaRetirada').value = '14:30';
             document.getElementById('valorPix').value = '50.00';
             
-            // Restaurar botão do formulário
             const submitBtn = document.querySelector('.submit-btn');
             submitBtn.textContent = '✨ Adicionar Pet';
             submitBtn.onclick = adicionarPet;
             
-            // Fechar formulário se estiver aberto
             const form = document.getElementById('formContainer');
             const btn = document.getElementById('addBtn');
             if (form.classList.contains('active')) {
@@ -2252,17 +2259,14 @@
                 pagamentoCollapsed: false
             };
 
-            // Validar
             if (!pet.cliente || !pet.nomePet || !pet.raca || !pet.cor || !pet.endereco) {
                 mostrarMensagem('⚠️ Preencha todos os campos!', 'warning');
                 return;
             }
 
             if (editingPetId) {
-                // Atualizar pet existente
                 const index = pets.findIndex(p => p.id === editingPetId);
                 if (index !== -1) {
-                    // Manter alguns dados originais
                     const originalPet = pets[index];
                     pet.status = originalPet.status;
                     pet.pagamento = originalPet.pagamento;
@@ -2277,7 +2281,6 @@
                     pets[index] = pet;
                 }
             } else {
-                // Adicionar novo pet
                 pets.push(pet);
             }
             
@@ -2287,25 +2290,19 @@
             mostrarProximaRetirada();
             atualizarHistoricoEntregas();
             
-            // Limpar formulário
             cancelarEdicao();
             
-            // Feedback
             mostrarMensagem(editingPetId ? '✅ Pet atualizado!' : '✅ Pet adicionado!', 'success');
         }
 
-        // ========== CORREÇÃO 2: SINCRONIZAÇÃO ADMIN/MOTORISTA ==========
+        // ========== CORREÇÃO 3: COMPORTAMENTO DIFERENCIADO MOTORISTA/ADMIN ==========
         async function atualizarPetStatus(petId, campo, valor) {
-            // 🔥 CORREÇÃO: Remover bloqueio do admin
-            // if (isAdmin && campo !== 'pagamento') return; // REMOVIDO!
-            
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
             const valorAnterior = pet[campo];
             pet[campo] = valor;
             
-            // Se marcou como ENTREGUE, registrar a hora
             if (campo === 'status' && valor === 'Entregue' && valorAnterior !== 'Entregue') {
                 const agora = new Date();
                 pet.horaEntregue = agora.toLocaleTimeString('pt-BR', { 
@@ -2313,23 +2310,44 @@
                     minute: '2-digit'
                 });
                 
-                // Mostrar sessão de valor recebido para motorista
                 if (!isAdmin) {
                     setTimeout(() => mostrarSessaoValor(petId), 500);
                 }
             }
             
-            // Se marcou como pago ou não pago, arquivar
-            if (campo === 'pagamento' && (valor === 'Pago' || valor === 'Não pago')) {
-                pet.arquivado = true;
+            // 🔥 CORREÇÃO: COMPORTAMENTO DIFERENCIADO PARA PAGAMENTO
+            if (campo === 'pagamento') {
+                if (!isAdmin) {
+                    // 🔥 MOTORISTA: Quando marca Pago/Não Pago → ARQUIVA (some da lista)
+                    pet.arquivado = true;
+                    mostrarMensagem(`✅ ${valor} - Pet arquivado!`, 'success');
+                } else {
+                    // 🔥 ADMIN: Apenas muda status, NÃO arquiva
+                    mostrarMensagem(`✅ Status de pagamento atualizado!`, 'success');
+                }
             }
             
-            // 🔥 CORREÇÃO: Sempre salvar e reordenar quando houver mudança de status
             await salvarPets();
             
             if (campo === 'status' || campo === 'pagamento') {
-                // Reordenar com animação
-                await reordenarComAnimacao();
+                // 🔥 CORREÇÃO: Reordenar SEM mover entregues para baixo
+                const container = document.getElementById('petsList');
+                const cards = container.querySelectorAll('.pet-card');
+                
+                cards.forEach(card => {
+                    card.classList.add('smooth-move');
+                });
+                
+                await new Promise(resolve => setTimeout(resolve, 50));
+                
+                const petsOrdenados = aplicarOrdenacaoDinamicaCorrigida();
+                await mostrarPetsComOrdem(petsOrdenados);
+                
+                setTimeout(() => {
+                    cards.forEach(card => {
+                        card.classList.remove('smooth-move');
+                    });
+                }, 600);
             } else {
                 await mostrarPets();
             }
@@ -2337,9 +2355,6 @@
             atualizarEstatisticas();
             mostrarProximaRetirada();
             atualizarHistoricoEntregas();
-            
-            // Feedback
-            mostrarMensagem('✅ Status atualizado!', 'success');
         }
 
         async function atualizarObservacoes(petId, tipo, texto) {
@@ -2354,7 +2369,6 @@
             
             await salvarPets();
             
-            // Feedback
             mostrarMensagem('✅ Observação salva!', 'success');
         }
 
@@ -2381,7 +2395,6 @@
         async function mostrarPets() {
             const container = document.getElementById('petsList');
             
-            // Aplicar ordenação dinâmica primeiro
             const petsOrdenados = aplicarOrdenacaoDinamicaCorrigida();
             await mostrarPetsComOrdem(petsOrdenados);
         }
@@ -2406,9 +2419,15 @@
                 const isEntregue = pet.status === 'Entregue';
                 const isEmTransporte = pet.status === 'A caminho da loja' || pet.status === 'A caminho da entrega';
                 const isPagamentoCollapsed = pet.pagamentoCollapsed || false;
+                const isPagoOuNaoPago = pet.pagamento === 'Pago' || pet.pagamento === 'Não pago';
+                
+                // 🔥 CORREÇÃO: Classe diferenciada para admin ver pets arquivados
+                const cardClass = isArquivado ? 'arquivado' : '';
+                const transporteClass = isEmTransporte ? 'priority-high' : '';
+                const adminArquivadoClass = (isAdmin && isPagoOuNaoPago) ? 'admin-arquivado' : '';
                 
                 return `
-                <div class="pet-card ${isArquivado ? 'arquivado' : ''} ${isEmTransporte ? 'priority-high' : ''}">
+                <div class="pet-card ${cardClass} ${transporteClass} ${adminArquivadoClass}">
                     
                     <div class="pet-card-header">
                         <div class="pet-name-section">
@@ -2628,17 +2647,14 @@
             configurarInterface();
             carregarPets();
             
-            // Fechar modal ao clicar fora
             document.getElementById('pixModal').addEventListener('click', (e) => {
                 if (e.target.id === 'pixModal') {
                     fecharModalPix();
                 }
             });
             
-            // 🔥 CORREÇÃO: Sincronização mais frequente (15 segundos)
             setInterval(carregarPets, 15000);
             
-            // Atualizar quando a página ganha foco
             document.addEventListener('visibilitychange', () => {
                 if (document.visibilityState === 'visible') {
                     carregarPets();
