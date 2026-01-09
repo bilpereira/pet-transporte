@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐾 Pet Bosque</title>
+    <title>🐾 Pet Shop Transport</title>
     <style>
         /* ============ VARIÁVEIS CSS ============ */
         :root {
@@ -16,6 +16,8 @@
             --warning-dark: #d97706;
             --danger: #ef4444;
             --danger-dark: #dc2626;
+            --pix-green: #32BCAD;
+            --pix-dark: #2A9B8E;
             --gray-50: #f9fafb;
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
@@ -28,6 +30,7 @@
             --success-gradient: linear-gradient(135deg, var(--success) 0%, var(--success-dark) 100%);
             --warning-gradient: linear-gradient(135deg, var(--warning) 0%, var(--warning-dark) 100%);
             --danger-gradient: linear-gradient(135deg, var(--danger) 0%, var(--danger-dark) 100%);
+            --pix-gradient: linear-gradient(135deg, var(--pix-green) 0%, var(--pix-dark) 100%);
             
             --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.08);
             --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
@@ -68,7 +71,7 @@
             margin: 0 auto; 
         }
         
-        /* ============ HEADER PREMIUM ============ */
+        /* ============ HEADER COM CONTADORES ============ */
         .header { 
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -135,6 +138,38 @@
             font-weight: 500;
         }
         
+        .stats-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+        
+        .stat-badge .count {
+            background: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
         .user-badge { 
             background: var(--primary-gradient);
             color: white; 
@@ -168,6 +203,125 @@
         
         .user-badge.admin { 
             background: var(--success-gradient);
+        }
+        
+        /* ============ MODAL PIX ============ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal-pix {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+            width: 350px;
+            max-width: 90vw;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--glass-border);
+            animation: slideInUp 0.4s ease-out;
+            text-align: center;
+        }
+        
+        .modal-pix h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .qrcode-container {
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .qrcode-img {
+            width: 250px;
+            height: 250px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+        
+        .pix-info {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: left;
+            border: 1px solid var(--gray-200);
+        }
+        
+        .pix-info p {
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .pix-info strong {
+            color: var(--gray-900);
+            min-width: 80px;
+            display: inline-block;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+        }
+        
+        .modal-btn.copy {
+            background: var(--primary-gradient);
+            color: white;
+        }
+        
+        .modal-btn.close {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+        
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
         
         /* ============ STATUS & SYNC ============ */
@@ -256,6 +410,37 @@
             transform: rotate(180deg);
         }
         
+        /* ============ DESTAQUE PRÓXIMA RETIRADA ============ */
+        .next-pickup-highlight {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-lg);
+            animation: pulse 2s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: var(--shadow-lg); }
+            50% { box-shadow: 0 0 25px rgba(59, 130, 246, 0.3); }
+        }
+        
+        .next-pickup-highlight::before {
+            content: '⏰ PRÓXIMA RETIRADA';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        
         /* ============ BOTÕES ============ */
         .add-btn { 
             width: 100%;
@@ -274,11 +459,6 @@
             position: relative;
             overflow: hidden;
             animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { box-shadow: var(--shadow-lg); }
-            50% { box-shadow: 0 0 25px rgba(59, 130, 246, 0.5); }
         }
         
         .add-btn::before {
@@ -462,13 +642,13 @@
         }
         
         .pet-card.priority-high {
-            border-left: 6px solid var(--danger);
+            border-left: 6px solid var(--warning);
             animation: priorityPulse 2s infinite;
         }
         
         @keyframes priorityPulse {
             0%, 100% { box-shadow: var(--shadow-lg); }
-            50% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.3); }
         }
         
         /* ============ HEADER DO CARD ============ */
@@ -611,6 +791,55 @@
             display: block; 
         }
         
+        /* ============ BOTÃO PIX ============ */
+        .pix-btn { 
+            background: var(--pix-gradient);
+            color: white; 
+            border: none; 
+            width: 44px;
+            height: 44px;
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-size: 20px;
+            font-weight: 600; 
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+            margin-left: 8px;
+        }
+        
+        .pix-btn:hover { 
+            transform: translateY(-2px) scale(1.1); 
+            box-shadow: 0 6px 15px rgba(50, 188, 173, 0.4);
+        }
+        
+        /* ============ BOTÃO EDITAR (ADMIN) ============ */
+        .edit-btn { 
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+            color: white; 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-size: 13px; 
+            font-weight: 600; 
+            transition: var(--transition);
+            display: none;
+            box-shadow: var(--shadow-md);
+            margin-left: 8px;
+        }
+        
+        .edit-btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .edit-btn.visible { 
+            display: inline-block; 
+        }
+        
         /* ============ INFORMAÇÕES DO PET ============ */
         .pet-info { 
             display: grid; 
@@ -748,6 +977,71 @@
             transform: none !important;
         }
         
+        /* ============ SESSÃO VALOR RECEBIDO ============ */
+        .valor-recebido-section {
+            margin-top: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-radius: 12px;
+            border: 2px solid #86efac;
+            display: none;
+        }
+        
+        .valor-recebido-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .valor-recebido-label {
+            font-weight: 700;
+            color: var(--success-dark);
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .valor-input-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .valor-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #86efac;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            background: white;
+        }
+        
+        .valor-input:focus {
+            outline: none;
+            border-color: var(--success);
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+        }
+        
+        .confirmar-valor-btn {
+            background: var(--success-gradient);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        
+        .confirmar-valor-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
         /* ============ OBSERVAÇÕES OTIMIZADAS ============ */
         .observacoes-container { 
             margin-top: 15px; 
@@ -807,6 +1101,142 @@
             background: var(--gray-50); 
             color: var(--gray-600); 
             cursor: not-allowed;
+        }
+        
+        /* ============ HISTÓRICO DE ENTREGAS ============ */
+        .delivered-sidebar {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 350px;
+            height: 100vh;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-xl);
+            z-index: 999;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .delivered-sidebar.active {
+            right: 0;
+        }
+        
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--gray-200);
+        }
+        
+        .sidebar-header h3 {
+            font-size: 20px;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .close-sidebar {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray-600);
+            transition: var(--transition);
+        }
+        
+        .close-sidebar:hover {
+            color: var(--danger);
+            transform: scale(1.1);
+        }
+        
+        .delivered-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .delivered-item {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid var(--success);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        
+        .delivered-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .delivered-item.paid {
+            border-left-color: var(--success);
+        }
+        
+        .delivered-item.unpaid {
+            border-left-color: var(--danger);
+        }
+        
+        .delivered-item h4 {
+            font-size: 16px;
+            color: var(--gray-900);
+            margin-bottom: 5px;
+        }
+        
+        .delivered-item p {
+            font-size: 14px;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+        }
+        
+        .delivered-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-paid {
+            background: var(--success-gradient);
+            color: white;
+        }
+        
+        .status-unpaid {
+            background: var(--danger-gradient);
+            color: white;
+        }
+        
+        /* ============ BOTÃO HISTÓRICO ============ */
+        .history-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            box-shadow: var(--shadow-xl);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            z-index: 998;
+            transition: var(--transition);
+        }
+        
+        .history-btn:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
         }
         
         /* ============ ESTADO VAZIO ============ */
@@ -881,6 +1311,11 @@
             .pet-name-section h3 {
                 font-size: 22px;
             }
+            
+            .delivered-sidebar {
+                width: 300px;
+                right: -300px;
+            }
         }
         
         @media (max-width: 768px) {
@@ -893,6 +1328,10 @@
             
             .header-content { 
                 text-align: center; 
+            }
+            
+            .stats-container {
+                justify-content: center;
             }
             
             .form-row, 
@@ -917,6 +1356,9 @@
             
             .pet-details-right { 
                 margin-top: 10px; 
+                display: flex;
+                justify-content: center;
+                gap: 10px;
             }
             
             .observacoes { 
@@ -925,6 +1367,27 @@
             
             .pet-info {
                 grid-template-columns: 1fr;
+            }
+            
+            .delivered-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .history-btn {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            .valor-input-container {
+                flex-direction: column;
+            }
+            
+            .valor-input {
+                width: 100%;
             }
         }
         
@@ -963,16 +1426,83 @@
                 min-height: 60px;
                 font-size: 12px;
             }
+            
+            .modal-pix {
+                padding: 20px;
+            }
+            
+            .qrcode-container {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .qrcode-img {
+                width: 220px;
+                height: 220px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- MODAL PIX -->
+    <div class="modal-overlay" id="pixModal">
+        <div class="modal-pix">
+            <h3>💰 Pagamento PIX</h3>
+            <div class="qrcode-container">
+                <img src="https://imgur.com/paZK1Tx" 
+                     alt="QR Code PIX" 
+                     class="qrcode-img"
+                     onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020126580014BR.GOV.BCB.PIX013634508807000151520400005303986540550.005802BR5913PETSHOPBOSQUE6009SAO PAULO62070503***6304E2CA'">
+            </div>
+            <div class="pix-info">
+                <p>🔢 <strong>Chave:</strong> 34.508.807/0001-51</p>
+                <p>👤 <strong>Beneficiário:</strong> PET SHOP BOSQUE DA SAUDE</p>
+                <p>💵 <strong>Valor Sugerido:</strong> R$ <span id="suggestedValue">50,00</span></p>
+                <p>📱 <strong>Status:</strong> <span id="pixStatus">Aguardando pagamento</span></p>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn copy" onclick="copiarChavePix()">📋 Copiar Chave</button>
+                <button class="modal-btn close" onclick="fecharModalPix()">✖ Fechar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- HISTÓRICO DE ENTREGAS -->
+    <div class="delivered-sidebar" id="deliveredSidebar">
+        <div class="sidebar-header">
+            <h3>📋 Entregues Hoje</h3>
+            <button class="close-sidebar" onclick="toggleDeliveredSidebar()">×</button>
+        </div>
+        <div class="delivered-list" id="deliveredList">
+            <!-- Itens serão preenchidos via JavaScript -->
+        </div>
+    </div>
+    
+    <!-- BOTÃO FLUTUANTE HISTÓRICO -->
+    <button class="history-btn" onclick="toggleDeliveredSidebar()">
+        📋
+    </button>
+    
     <div class="container">
         <!-- Cabeçalho Premium -->
         <div class="header">
             <div class="header-content">
-                <h1>🐾 Pet Bosque</h1>
-                <p id="userRole">Sistema transporte</p>
+                <h1>🐾 Pet Shop Transport</h1>
+                <p id="userRole">Sistema premium de transporte de pets</p>
+                <div class="stats-container">
+                    <div class="stat-badge">
+                        <span class="count" id="countWaiting">0</span>
+                        <span>Aguardando</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="count" id="countInTransit">0</span>
+                        <span>Em Transporte</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="count" id="countDelivered">0</span>
+                        <span>Entregues Hoje</span>
+                    </div>
+                </div>
             </div>
             <div class="user-badge" id="userBadge">Motorista</div>
         </div>
@@ -990,6 +1520,11 @@
             <button class="sync-btn" onclick="carregarPets()">
                 <span>Atualizar</span>
             </button>
+        </div>
+        
+        <!-- Área de Destaque Próxima Retirada -->
+        <div class="next-pickup-highlight" id="nextPickupHighlight" style="display: none;">
+            <!-- Conteúdo será preenchido via JavaScript -->
         </div>
         
         <!-- Botão Adicionar (só admin) -->
@@ -1018,14 +1553,14 @@
                     <select id="raca">
                         <option value="">Selecione</option>
                         <option>Shitzu</option>
-                        <option>Lhasa</option>
-                        <option>Maltes</option>
-                        <option>Yorkshire</option>
                         <option>Poodle</option>
                         <option>Labrador</option>
-                        <option>Bulldog frances</option>
+                        <option>Bulldog</option>
                         <option>Golden Retriever</option>
                         <option>Vira-lata</option>
+                        <option>Persa</option>
+                        <option>Siamês</option>
+                        <option>Maine Coon</option>
                         <option>Outro</option>
                     </select>
                 </div>
@@ -1040,6 +1575,7 @@
                         <option>Caramelo</option>
                         <option>Cinza</option>
                         <option>Malhado</option>
+                        <option>Outra</option>
                     </select>
                 </div>
                 
@@ -1083,6 +1619,15 @@
         const isAdmin = urlParams.get('modo') === 'admin';
 
         let pets = [];
+        let editingPetId = null;
+
+        // ========== PIX CONFIG ==========
+        const PIX_CONFIG = {
+            chave: '34.508.807/0001-51',
+            beneficiario: 'PET SHOP BOSQUE DA SAUDE',
+            qrcodeUrl: 'https://imgur.com/paZK1Tx',
+            valorSugerido: 50.00
+        };
 
         // ========== FUNÇÕES BÁSICAS ==========
         function configurarInterface() {
@@ -1109,6 +1654,11 @@
             const btn = document.getElementById('addBtn');
             form.classList.toggle('active');
             btn.textContent = form.classList.contains('active') ? '❌ Cancelar' : '➕ Adicionar Pet';
+            
+            // Se estiver editando, cancela edição
+            if (form.classList.contains('active') && editingPetId) {
+                cancelarEdicao();
+            }
         }
 
         // ========== FUNÇÕES JSONBIN ==========
@@ -1119,13 +1669,21 @@
                 });
                 const data = await response.json();
                 pets = data.record?.pets || [];
+                aplicarOrdenacaoDinamica();
                 mostrarPets();
                 atualizarHora();
+                atualizarEstatisticas();
+                mostrarProximaRetirada();
+                atualizarHistoricoEntregas();
             } catch (error) {
                 console.log('Usando dados locais');
                 const local = localStorage.getItem('meusPets');
                 pets = local ? JSON.parse(local) : [];
+                aplicarOrdenacaoDinamica();
                 mostrarPets();
+                atualizarEstatisticas();
+                mostrarProximaRetirada();
+                atualizarHistoricoEntregas();
             }
         }
 
@@ -1146,12 +1704,312 @@
             }
         }
 
-        // ========== CRUD PETS ==========
-        async function adicionarPet() {
+        // ========== SISTEMA DE ORDENAÇÃO DINÂMICA ==========
+        function aplicarOrdenacaoDinamica() {
+            // Separar pets por status
+            const aguardando = pets.filter(p => 
+                !p.arquivado && p.status === 'Aguardando retirada'
+            );
+            
+            const emTransporte = pets.filter(p => 
+                !p.arquivado && (
+                    p.status === 'A caminho da loja' || 
+                    p.status === 'A caminho da entrega'
+                )
+            );
+            
+            const entregues = pets.filter(p => 
+                p.status === 'Entregue' || p.arquivado
+            );
+            
+            // Ordenar cada grupo por horário
+            aguardando.sort((a, b) => (a.horaRetirada || '').localeCompare(b.horaRetirada || ''));
+            emTransporte.sort((a, b) => (a.horaRetirada || '').localeCompare(b.horaRetirada || ''));
+            entregues.sort((a, b) => (a.horaEntregue || '').localeCompare(b.horaEntregue || ''));
+            
+            // Juntar tudo: em transporte primeiro, depois aguardando, depois entregues
+            pets = [...emTransporte, ...aguardando, ...entregues];
+        }
+
+        // ========== PRÓXIMA RETIRADA ==========
+        function mostrarProximaRetirada() {
+            const highlight = document.getElementById('nextPickupHighlight');
+            const agora = new Date();
+            const horaAtual = agora.getHours() * 60 + agora.getMinutes();
+            
+            // Encontrar próximo pet aguardando retirada
+            const proximoPet = pets.find(p => 
+                !p.arquivado && 
+                p.status === 'Aguardando retirada' && 
+                p.horaRetirada
+            );
+            
+            if (proximoPet && !isAdmin) {
+                const horaPet = parseInt(proximoPet.horaRetirada.split(':')[0]) * 60 + 
+                               parseInt(proximoPet.horaRetirada.split(':')[1]);
+                
+                // Mostrar se estiver dentro de 2 horas
+                if (horaPet - horaAtual <= 120) {
+                    highlight.style.display = 'block';
+                    highlight.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="font-size: 32px;">⏰</div>
+                            <div>
+                                <h3 style="margin-bottom: 5px; color: var(--primary-dark);">
+                                    ${proximoPet.nomePet} - ${proximoPet.cliente}
+                                </h3>
+                                <p style="color: var(--gray-700); margin-bottom: 5px;">
+                                    <strong>Hora:</strong> ${proximoPet.horaRetirada} | 
+                                    <strong>Raça:</strong> ${proximoPet.raca} | 
+                                    <strong>Tempo:</strong> ${proximoPet.tempo}
+                                </p>
+                                <p style="color: var(--gray-600); font-size: 14px;">
+                                    ${proximoPet.endereco}
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    highlight.style.display = 'none';
+                }
+            } else {
+                highlight.style.display = 'none';
+            }
+        }
+
+        // ========== ATUALIZAR ESTATÍSTICAS ==========
+        function atualizarEstatisticas() {
+            const countWaiting = document.getElementById('countWaiting');
+            const countInTransit = document.getElementById('countInTransit');
+            const countDelivered = document.getElementById('countDelivered');
+            
+            const hoje = new Date().toISOString().split('T')[0];
+            
+            const waiting = pets.filter(p => 
+                !p.arquivado && p.status === 'Aguardando retirada'
+            ).length;
+            
+            const inTransit = pets.filter(p => 
+                !p.arquivado && (
+                    p.status === 'A caminho da loja' || 
+                    p.status === 'A caminho da entrega'
+                )
+            ).length;
+            
+            const delivered = pets.filter(p => 
+                p.status === 'Entregue' && 
+                p.dataCriacao && 
+                p.dataCriacao.startsWith(hoje)
+            ).length;
+            
+            countWaiting.textContent = waiting;
+            countInTransit.textContent = inTransit;
+            countDelivered.textContent = delivered;
+        }
+
+        // ========== HISTÓRICO DE ENTREGAS ==========
+        function toggleDeliveredSidebar() {
+            const sidebar = document.getElementById('deliveredSidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        function atualizarHistoricoEntregas() {
+            const deliveredList = document.getElementById('deliveredList');
+            const hoje = new Date().toISOString().split('T')[0];
+            
+            const entreguesHoje = pets.filter(p => 
+                p.status === 'Entregue' && 
+                p.dataCriacao && 
+                p.dataCriacao.startsWith(hoje)
+            );
+            
+            if (entreguesHoje.length === 0) {
+                deliveredList.innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px; color: var(--gray-500);">
+                        <div style="font-size: 48px; margin-bottom: 15px;">📭</div>
+                        <p style="font-weight: 600; margin-bottom: 10px;">Nenhuma entrega hoje</p>
+                        <p style="font-size: 14px;">As entregas do dia aparecerão aqui</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            deliveredList.innerHTML = entreguesHoje.map(pet => `
+                <div class="delivered-item ${pet.pagamento === 'Pago' ? 'paid' : 'unpaid'}">
+                    <h4>${pet.nomePet}</h4>
+                    <p>${pet.cliente}</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="delivered-status ${pet.pagamento === 'Pago' ? 'status-paid' : 'status-unpaid'}">
+                            ${pet.pagamento === 'Pago' ? '✅ Pago' : '❌ Não Pago'}
+                        </span>
+                        <span style="font-size: 12px; color: var(--gray-500);">
+                            ${pet.horaEntregue || '--:--'}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ========== SISTEMA PIX ==========
+        function mostrarModalPix(petId) {
+            const modal = document.getElementById('pixModal');
+            const suggestedValue = document.getElementById('suggestedValue');
+            
+            // Encontrar o pet para sugerir valor baseado no serviço
+            const pet = pets.find(p => p.id === petId);
+            if (pet) {
+                // Lógica para calcular valor sugerido (pode ser personalizada)
+                const valorSugerido = PIX_CONFIG.valorSugerido;
+                suggestedValue.textContent = valorSugerido.toFixed(2).replace('.', ',');
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function fecharModalPix() {
+            const modal = document.getElementById('pixModal');
+            modal.classList.remove('active');
+        }
+
+        function copiarChavePix() {
+            navigator.clipboard.writeText(PIX_CONFIG.chave)
+                .then(() => mostrarMensagem('✅ Chave PIX copiada!', 'success'))
+                .catch(() => mostrarMensagem('❌ Erro ao copiar chave', 'error'));
+        }
+
+        // ========== SESSÃO VALOR RECEBIDO ==========
+        function mostrarSessaoValor(petId) {
+            // Esconder todas as outras sessões primeiro
+            document.querySelectorAll('.valor-recebido-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar sessão para este pet
+            const section = document.getElementById(`valorRecebido-${petId}`);
+            if (section) {
+                section.classList.add('active');
+                
+                // Focar no input
+                const input = section.querySelector('.valor-input');
+                if (input) {
+                    setTimeout(() => input.focus(), 100);
+                }
+            }
+        }
+
+        function confirmarValorRecebido(petId) {
+            const input = document.querySelector(`#valorRecebido-${petId} .valor-input`);
+            const valor = input.value.replace(',', '.');
+            
+            if (!valor || isNaN(valor) || parseFloat(valor) <= 0) {
+                mostrarMensagem('⚠️ Digite um valor válido', 'warning');
+                return;
+            }
+            
+            const pet = pets.find(p => p.id === petId);
+            if (pet) {
+                pet.valorRecebido = parseFloat(valor).toFixed(2);
+                pet.dataPagamento = new Date().toISOString();
+                
+                // Marcar como pago se valor recebido
+                if (parseFloat(valor) > 0) {
+                    atualizarPetStatus(petId, 'pagamento', 'Pago');
+                }
+                
+                salvarPets();
+                mostrarPets();
+                
+                mostrarMensagem(`✅ Valor R$ ${parseFloat(valor).toFixed(2)} registrado!`, 'success');
+                
+                // Esconder sessão
+                document.getElementById(`valorRecebido-${petId}`).classList.remove('active');
+            }
+        }
+
+        // ========== SISTEMA DE EDIÇÃO (ADMIN) ==========
+        function habilitarEdicao(petId) {
             if (!isAdmin) return;
             
+            const pet = pets.find(p => p.id === petId);
+            if (!pet) return;
+            
+            editingPetId = petId;
+            
+            // Preencher formulário com dados do pet
+            document.getElementById('cliente').value = pet.cliente;
+            document.getElementById('nomePet').value = pet.nomePet;
+            document.getElementById('raca').value = pet.raca;
+            document.getElementById('cor').value = pet.cor;
+            document.getElementById('endereco').value = pet.endereco;
+            document.getElementById('tempo').value = pet.tempo;
+            document.getElementById('horaRetirada').value = pet.horaRetirada;
+            
+            // Mostrar formulário
+            const form = document.getElementById('formContainer');
+            const btn = document.getElementById('addBtn');
+            form.classList.add('active');
+            btn.textContent = '❌ Cancelar';
+            
+            // Alterar botão do formulário
+            const submitBtn = form.querySelector('.submit-btn');
+            submitBtn.textContent = '💾 Salvar Alterações';
+            submitBtn.onclick = () => salvarEdicao(petId);
+        }
+
+        function salvarEdicao(petId) {
+            if (!isAdmin) return;
+            
+            const pet = pets.find(p => p.id === petId);
+            if (!pet) return;
+            
+            // Atualizar dados do pet
+            pet.cliente = document.getElementById('cliente').value.trim();
+            pet.nomePet = document.getElementById('nomePet').value.trim();
+            pet.raca = document.getElementById('raca').value;
+            pet.cor = document.getElementById('cor').value;
+            pet.endereco = document.getElementById('endereco').value.trim();
+            pet.tempo = document.getElementById('tempo').value.trim();
+            pet.horaRetirada = document.getElementById('horaRetirada').value;
+            
+            salvarPets();
+            mostrarPets();
+            cancelarEdicao();
+            
+            mostrarMensagem('✅ Pet atualizado com sucesso!', 'success');
+        }
+
+        function cancelarEdicao() {
+            editingPetId = null;
+            
+            // Limpar formulário
+            document.getElementById('cliente').value = '';
+            document.getElementById('nomePet').value = '';
+            document.getElementById('raca').value = '';
+            document.getElementById('cor').value = '';
+            document.getElementById('endereco').value = '';
+            document.getElementById('tempo').value = '';
+            document.getElementById('horaRetirada').value = '14:30';
+            
+            // Restaurar botão do formulário
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.textContent = '✨ Adicionar Pet';
+            submitBtn.onclick = adicionarPet;
+            
+            // Fechar formulário se estiver aberto
+            const form = document.getElementById('formContainer');
+            const btn = document.getElementById('addBtn');
+            if (form.classList.contains('active')) {
+                form.classList.remove('active');
+                btn.textContent = '➕ Adicionar Pet';
+            }
+        }
+
+        // ========== CRUD PETS ==========
+        async function adicionarPet() {
+            if (!isAdmin && !editingPetId) return;
+            
             const pet = {
-                id: Date.now(),
+                id: editingPetId || Date.now(),
                 cliente: document.getElementById('cliente').value.trim(),
                 nomePet: document.getElementById('nomePet').value.trim(),
                 raca: document.getElementById('raca').value,
@@ -1164,7 +2022,9 @@
                 observacoesAdmin: '',
                 observacoesMotorista: '',
                 horaEntregue: null,
-                dataCriacao: new Date().toISOString(),
+                valorRecebido: null,
+                dataPagamento: null,
+                dataCriacao: editingPetId ? pets.find(p => p.id === editingPetId)?.dataCriacao || new Date().toISOString() : new Date().toISOString(),
                 arquivado: false
             };
 
@@ -1174,7 +2034,28 @@
                 return;
             }
 
-            pets.push(pet);
+            if (editingPetId) {
+                // Atualizar pet existente
+                const index = pets.findIndex(p => p.id === editingPetId);
+                if (index !== -1) {
+                    // Manter alguns dados originais
+                    const originalPet = pets[index];
+                    pet.status = originalPet.status;
+                    pet.pagamento = originalPet.pagamento;
+                    pet.observacoesAdmin = originalPet.observacoesAdmin;
+                    pet.observacoesMotorista = originalPet.observacoesMotorista;
+                    pet.horaEntregue = originalPet.horaEntregue;
+                    pet.valorRecebido = originalPet.valorRecebido;
+                    pet.dataPagamento = originalPet.dataPagamento;
+                    pet.arquivado = originalPet.arquivado;
+                    
+                    pets[index] = pet;
+                }
+            } else {
+                // Adicionar novo pet
+                pets.push(pet);
+            }
+            
             await salvarPets();
             
             // Limpar formulário
@@ -1186,15 +2067,23 @@
             document.getElementById('tempo').value = '';
             document.getElementById('horaRetirada').value = '14:30';
             
-            mostrarFormulario();
+            if (editingPetId) {
+                cancelarEdicao();
+            } else {
+                mostrarFormulario();
+            }
+            
+            aplicarOrdenacaoDinamica();
             mostrarPets();
+            atualizarEstatisticas();
+            mostrarProximaRetirada();
             
             // Feedback
-            mostrarMensagem('✅ Pet adicionado!', 'success');
+            mostrarMensagem(editingPetId ? '✅ Pet atualizado!' : '✅ Pet adicionado!', 'success');
         }
 
         async function atualizarPetStatus(petId, campo, valor) {
-            if (isAdmin) return;
+            if (isAdmin && campo !== 'pagamento') return;
             
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
@@ -1202,21 +2091,39 @@
             const valorAnterior = pet[campo];
             pet[campo] = valor;
             
+            // Se marcou como ENTREGUE, registrar a hora
             if (campo === 'status' && valor === 'Entregue' && valorAnterior !== 'Entregue') {
                 const agora = new Date();
                 pet.horaEntregue = agora.toLocaleTimeString('pt-BR', { 
                     hour: '2-digit', 
                     minute: '2-digit'
                 });
+                
+                // Mostrar sessão de valor recebido para motorista
+                if (!isAdmin) {
+                    setTimeout(() => mostrarSessaoValor(petId), 500);
+                }
             }
             
+            // Se marcou como pago ou não pago, arquivar
             if (campo === 'pagamento' && (valor === 'Pago' || valor === 'Não pago')) {
                 pet.arquivado = true;
             }
             
-            await salvarPets();
-            mostrarPets();
+            // Reordenar dinamicamente
+            if (campo === 'status' && (valor === 'A caminho da loja' || valor === 'A caminho da entrega')) {
+                // Pet sobe para o topo quando motorista inicia transporte
+                aplicarOrdenacaoDinamica();
+            }
             
+            await salvarPets();
+            aplicarOrdenacaoDinamica();
+            mostrarPets();
+            atualizarEstatisticas();
+            mostrarProximaRetirada();
+            atualizarHistoricoEntregas();
+            
+            // Feedback
             mostrarMensagem('✅ Status atualizado!', 'success');
         }
 
@@ -1231,6 +2138,8 @@
             }
             
             await salvarPets();
+            
+            // Feedback
             mostrarMensagem('✅ Observação salva!', 'success');
         }
 
@@ -1239,7 +2148,11 @@
             
             pets = pets.filter(p => p.id !== petId);
             await salvarPets();
+            aplicarOrdenacaoDinamica();
             mostrarPets();
+            atualizarEstatisticas();
+            mostrarProximaRetirada();
+            atualizarHistoricoEntregas();
             
             mostrarMensagem('✅ Pet removido!', 'success');
         }
@@ -1266,13 +2179,14 @@
                 return;
             }
 
-            petsVisiveis.sort((a, b) => (a.horaRetirada || '').localeCompare(b.horaRetirada || ''));
-
             container.innerHTML = petsVisiveis.map((pet, index) => {
                 const isArquivado = pet.arquivado;
+                const isEntregue = pet.status === 'Entregue';
+                const isEmTransporte = pet.status === 'A caminho da loja' || pet.status === 'A caminho da entrega';
                 
                 return `
-                <div class="pet-card ${isArquivado ? 'arquivado' : ''}" style="animation-delay: ${index * 0.08}s">
+                <div class="pet-card ${isArquivado ? 'arquivado' : ''} ${isEmTransporte ? 'priority-high' : ''}" 
+                     style="animation-delay: ${index * 0.08}s">
                     
                     <div class="pet-card-header">
                         <div class="pet-name-section">
@@ -1299,11 +2213,21 @@
                                     ✅ <strong>Entregue:</strong> ${pet.horaEntregue}
                                 </div>
                             ` : ''}
-                            ${isAdmin ? `
-                                <button class="delete-btn visible" onclick="removerPet(${pet.id})">
-                                    🗑️ Remover
-                                </button>
-                            ` : ''}
+                            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                                ${!isAdmin && !isEntregue && !isArquivado ? `
+                                    <button class="pix-btn" onclick="mostrarModalPix(${pet.id})" title="Mostrar QR Code PIX">
+                                        💰
+                                    </button>
+                                ` : ''}
+                                ${isAdmin ? `
+                                    <button class="edit-btn visible" onclick="habilitarEdicao(${pet.id})">
+                                        ✏️ Editar
+                                    </button>
+                                    <button class="delete-btn visible" onclick="removerPet(${pet.id})">
+                                        🗑️ Remover
+                                    </button>
+                                ` : ''}
+                            </div>
                         </div>
                     </div>
                     
@@ -1328,30 +2252,60 @@
                         ` : ''}
                     </div>
                     
+                    <!-- SESSÃO VALOR RECEBIDO (só para motorista quando entregue) -->
+                    ${!isAdmin && isEntregue && !pet.valorRecebido ? `
+                        <div class="valor-recebido-section" id="valorRecebido-${pet.id}">
+                            <div class="valor-recebido-label">
+                                💰 Valor Recebido (PIX)
+                            </div>
+                            <div class="valor-input-container">
+                                <input type="text" 
+                                       class="valor-input" 
+                                       placeholder="R$ 0,00"
+                                       onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode === 44 || event.charCode === 46"
+                                       onblur="formatarValor(this)">
+                                <button class="confirmar-valor-btn" onclick="confirmarValorRecebido(${pet.id})">
+                                    ✅ Confirmar
+                                </button>
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${pet.valorRecebido ? `
+                        <div style="margin-top: 15px; padding: 12px; background: #f0fdf4; border-radius: 10px; border: 2px solid #86efac;">
+                            <div style="display: flex; align-items: center; gap: 10px; color: var(--success-dark); font-weight: 600;">
+                                💰 Valor recebido: R$ ${parseFloat(pet.valorRecebido).toFixed(2).replace('.', ',')}
+                                ${pet.dataPagamento ? `<span style="font-size: 12px; color: var(--gray-500);">(${new Date(pet.dataPagamento).toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})})</span>` : ''}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
                     <div class="status-section">
                         ${!isAdmin ? `
                             <div class="status-buttons">
                                 ${['Aguardando retirada', 'A caminho da loja', 'A caminho da entrega', 'Entregue'].map(status => `
                                     <button class="status-btn ${pet.status === status ? 'active' : ''}" 
                                             onclick="atualizarPetStatus(${pet.id}, 'status', '${status}')"
-                                            ${isArquivado ? 'disabled' : ''}>
+                                            ${isArquivado || (isEntregue && status !== 'Entregue') ? 'disabled' : ''}>
                                         ${status}
                                     </button>
                                 `).join('')}
                             </div>
                             
-                            <div class="status-buttons" style="margin-top: 8px;">
-                                <button class="status-btn sutil ${pet.pagamento === 'Pago' ? 'active' : ''}" 
-                                        onclick="atualizarPetStatus(${pet.id}, 'pagamento', 'Pago')"
-                                        ${isArquivado ? 'disabled' : ''}>
-                                    ✅ Pago
-                                </button>
-                                <button class="status-btn sutil ${pet.pagamento === 'Não pago' ? 'active' : ''}" 
-                                        onclick="atualizarPetStatus(${pet.id}, 'pagamento', 'Não pago')"
-                                        ${isArquivado ? 'disabled' : ''}>
-                                    ❌ Não Pago
-                                </button>
-                            </div>
+                            ${!isEntregue ? `
+                                <div class="status-buttons" style="margin-top: 8px;">
+                                    <button class="status-btn sutil ${pet.pagamento === 'Pago' ? 'active' : ''}" 
+                                            onclick="atualizarPetStatus(${pet.id}, 'pagamento', 'Pago')"
+                                            ${isArquivado ? 'disabled' : ''}>
+                                        ✅ Pago
+                                    </button>
+                                    <button class="status-btn sutil ${pet.pagamento === 'Não pago' ? 'active' : ''}" 
+                                            onclick="atualizarPetStatus(${pet.id}, 'pagamento', 'Não pago')"
+                                            ${isArquivado ? 'disabled' : ''}>
+                                        ❌ Não Pago
+                                    </button>
+                                </div>
+                            ` : ''}
                         ` : ''}
                         
                         <div class="observacoes-container">
@@ -1391,6 +2345,13 @@
             atualizarHora();
         }
 
+        // ========== UTILITÁRIOS ==========
+        function formatarValor(input) {
+            let valor = input.value.replace(/\D/g, '');
+            valor = (parseInt(valor) / 100).toFixed(2);
+            input.value = valor.replace('.', ',');
+        }
+
         function mostrarMensagem(texto, tipo) {
             const status = document.getElementById('syncStatus');
             const cores = {
@@ -1401,11 +2362,13 @@
             
             status.style.background = cores[tipo] || '#f3f4f6';
             status.style.color = tipo === 'success' ? '#065f46' : tipo === 'error' ? '#991b1b' : '#92400e';
+            status.style.borderColor = tipo === 'success' ? '#10b981' : tipo === 'error' ? '#ef4444' : '#f59e0b';
             status.firstElementChild.innerHTML = `<strong>${texto}</strong>`;
             
             setTimeout(() => {
                 status.style.background = 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)';
                 status.style.color = '#92400e';
+                status.style.borderColor = '#fbbf24';
                 atualizarHora();
             }, 3000);
         }
@@ -1424,8 +2387,17 @@
             configurarInterface();
             carregarPets();
             
+            // Fechar modal ao clicar fora
+            document.getElementById('pixModal').addEventListener('click', (e) => {
+                if (e.target.id === 'pixModal') {
+                    fecharModalPix();
+                }
+            });
+            
+            // Atualizar automaticamente
             setInterval(carregarPets, 30000);
             
+            // Atualizar quando a página ganha foco
             document.addEventListener('visibilitychange', () => {
                 if (document.visibilityState === 'visible') {
                     carregarPets();
@@ -1435,4 +2407,3 @@
     </script>
 </body>
 </html>
-
