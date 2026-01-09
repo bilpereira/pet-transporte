@@ -1827,46 +1827,50 @@
             }
         }
 
-        // ========== CORREÇÃO 1 & 2: ORDENAÇÃO DINÂMICA MELHORADA ==========
+        // ========== CORREÇÃO 1: ORDENAÇÃO DINÂMICA (PARA TODOS OS STATUS EXCETO ENTREGUE) ==========
         function aplicarOrdenacaoDinamicaCorrigida() {
             if (isReordering) return;
             isReordering = true;
             
             let petsVisiveis = isAdmin ? [...pets] : pets.filter(p => !p.arquivado);
             
-            // 🔥 CORREÇÃO 1: Ordenar por qualquer status de transporte (exceto "Entregue")
-            // Status que devem ir para o topo quando ativados:
-            // "A caminho da loja", "A caminho retirada", "A caminho da entrega"
-            const statusTopo = [
-                'A caminho da loja', 
-                'A caminho retirada', 
-                'A caminho da entrega'
-            ];
-            
-            // 🔥 CORREÇÃO 2: Separar em duas listas
-            // 1. Pets que estão em status de transporte (vão para o topo)
-            // 2. Outros pets (mantêm ordem relativa)
+            // 🔥 CORREÇÃO 1: Funciona nas 3 ações (A caminho da loja, A caminho da entrega, Aguardando retirada)
             const emTransporte = petsVisiveis.filter(p => 
-                statusTopo.includes(p.status)
+                p.status === 'A caminho da loja' || 
+                p.status === 'A caminho da entrega' ||
+                p.status === 'A caminho retirada'  // ← ADICIONADO: status alterado para "A caminho retirada"
             );
             
             const outros = petsVisiveis.filter(p => 
-                !statusTopo.includes(p.status)
+                !(p.status === 'A caminho da loja' || 
+                  p.status === 'A caminho da entrega' || 
+                  p.status === 'A caminho retirada') // ← ADICIONADO
             );
             
-            // Ordenar os em transporte por horário de retirada (mais antigo primeiro)
+            // 🔥 CORREÇÃO 2: Ordenar por horário de retirada (os que receberem ação vão para primeira posição)
             emTransporte.sort((a, b) => {
-                const horaA = a.horaRetirada || '23:59';
-                const horaB = b.horaRetirada || '23:59';
-                return horaA.localeCompare(horaB);
+                // Primeiro, ordenar por status prioritário
+                const statusOrder = {
+                    'A caminho da loja': 1,
+                    'A caminho da entrega': 2,
+                    'A caminho retirada': 3  // ← ADICIONADO
+                };
+                
+                const orderA = statusOrder[a.status] || 999;
+                const orderB = statusOrder[b.status] || 999;
+                
+                if (orderA !== orderB) {
+                    return orderA - orderB;
+                }
+                
+                // Depois, ordenar por hora de retirada
+                return (a.horaRetirada || '').localeCompare(b.horaRetirada || '');
             });
             
-            // 🔥 NOVA LÓGICA: Quando um pet recebe status de transporte, ele vai para o TOPO da lista
-            // Mas mantém a ordem relativa dos outros pets
-            // Juntar: emTransporte (ordenados por horário) + outros (ordem original)
+            // 🔥 Juntar mantendo ordem relativa (entregues e outros ficam onde estão)
             const novaOrdem = [...emTransporte, ...outros];
             
-            // Atualizar array original mantendo a posição dos entregues
+            // Atualizar array original
             pets.forEach(pet => {
                 const novoPet = novaOrdem.find(p => p.id === pet.id);
                 if (novoPet) {
@@ -1947,9 +1951,10 @@
             const agora = new Date();
             const horaAtual = agora.getHours() * 60 + agora.getMinutes();
             
+            // 🔥 CORREÇÃO 1: Alterar filtro para buscar "A caminho retirada"
             const proximoPet = pets.find(p => 
                 !p.arquivado && 
-                p.status === 'Aguardando retirada' && 
+                p.status === 'A caminho retirada' &&  // ← ALTERADO: "Aguardando retirada" → "A caminho retirada"
                 p.horaRetirada
             );
             
@@ -1994,14 +1999,14 @@
             
             const hoje = new Date().toISOString().split('T')[0];
             
+            // 🔥 CORREÇÃO 1: Alterar filtro para "A caminho retirada"
             const waiting = pets.filter(p => 
-                !p.arquivado && p.status === 'Aguardando retirada'
+                !p.arquivado && p.status === 'A caminho retirada'  // ← ALTERADO
             ).length;
             
             const inTransit = pets.filter(p => 
                 !p.arquivado && (
                     p.status === 'A caminho da loja' || 
-                    p.status === 'A caminho retirada' ||  // 🔥 Atualizado
                     p.status === 'A caminho da entrega'
                 )
             ).length;
@@ -2227,7 +2232,7 @@
                 tempo: document.getElementById('tempo').value.trim(),
                 horaRetirada: document.getElementById('horaRetirada').value || '14:30',
                 valorPix: parseFloat(document.getElementById('valorPix').value) || 50.00,
-                status: 'Aguardando retirada',
+                status: 'A caminho retirada',  // ← CORREÇÃO 1: Alterado para "A caminho retirada"
                 pagamento: 'Pendente',
                 observacoesAdmin: '',
                 observacoesMotorista: '',
@@ -2275,18 +2280,13 @@
             mostrarMensagem(editingPetId ? '✅ Pet atualizado!' : '✅ Pet adicionado!', 'success');
         }
 
-        // ========== CORREÇÃO 3: COMPORTAMENTO DIFERENCIADO MOTORISTA/ADMIN ==========
+        // ========== CORREÇÃO 2: COMPORTAMENTO DIFERENCIADO MOTORISTA/ADMIN COM STATUS ENTREGUE ==========
         async function atualizarPetStatus(petId, campo, valor) {
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
             const valorAnterior = pet[campo];
             pet[campo] = valor;
-            
-            // 🔥 CORREÇÃO 1: Atualizar texto de status
-            if (campo === 'status' && valor === 'A caminho da entrega') {
-                pet.status = 'A caminho retirada'; // 🔥 Mudança solicitada
-            }
             
             if (campo === 'status' && valor === 'Entregue' && valorAnterior !== 'Entregue') {
                 const agora = new Date();
@@ -2300,22 +2300,29 @@
                 }
             }
             
-            // 🔥 CORREÇÃO 3: Motorista pode marcar Pago/Não Pago mesmo após "Entregue"
+            // 🔥 CORREÇÃO 2: Quando pet é marcado como ENTREGUE, não bloquear pagamento
+            if (campo === 'status' && valor === 'Entregue') {
+                // Manter a seção de pagamento disponível
+                pet.pagamentoCollapsed = false;
+                mostrarMensagem('✅ Pet entregue! Agora pode marcar o pagamento.', 'success');
+            }
+            
+            // 🔥 COMPORTAMENTO DIFERENCIADO PARA PAGAMENTO
             if (campo === 'pagamento') {
                 if (!isAdmin) {
-                    // Motorista: Quando marca Pago/Não Pago → ARQUIVA (some da lista)
+                    // MOTORISTA: Quando marca Pago/Não Pago → ARQUIVA (some da lista)
                     pet.arquivado = true;
                     mostrarMensagem(`✅ ${valor} - Pet arquivado!`, 'success');
                 } else {
-                    // Admin: Apenas muda status, NÃO arquiva
+                    // ADMIN: Apenas muda status, NÃO arquiva
                     mostrarMensagem(`✅ Status de pagamento atualizado!`, 'success');
                 }
             }
             
             await salvarPets();
             
-            if (campo === 'status' || campo === 'pagamento') {
-                // 🔥 CORREÇÃO 2: Reordenar dinamicamente
+            // 🔥 CORREÇÃO 1: Reordenar dinamicamente para as 3 ações
+            if (campo === 'status' && valor !== 'Entregue') {
                 const container = document.getElementById('petsList');
                 const cards = container.querySelectorAll('.pet-card');
                 
@@ -2403,11 +2410,10 @@
                 const isArquivado = pet.arquivado;
                 const isEntregue = pet.status === 'Entregue';
                 const isEmTransporte = pet.status === 'A caminho da loja' || 
-                                      pet.status === 'A caminho retirada' || // 🔥 Atualizado
-                                      pet.status === 'A caminho da entrega';
+                                       pet.status === 'A caminho da entrega' || 
+                                       pet.status === 'A caminho retirada'; // ← ADICIONADO
                 const isPagoOuNaoPago = pet.pagamento === 'Pago' || pet.pagamento === 'Não pago';
                 
-                // 🔥 CORREÇÃO: Classe diferenciada para admin ver pets arquivados
                 const cardClass = isArquivado ? 'arquivado' : '';
                 const transporteClass = isEmTransporte ? 'priority-high' : '';
                 const adminArquivadoClass = (isAdmin && isPagoOuNaoPago) ? 'admin-arquivado' : '';
@@ -2515,10 +2521,11 @@
                     <div class="status-section">
                         ${!isAdmin ? `
                             <div class="status-buttons">
-                                ${['Aguardando retirada', 'A caminho da loja', 'A caminho retirada', 'Entregue'].map(status => `
+                                <!-- 🔥 CORREÇÃO 1: Alterado "Aguardando retirada" para "A caminho retirada" -->
+                                ${['A caminho retirada', 'A caminho da loja', 'A caminho da entrega', 'Entregue'].map(status => `
                                     <button class="status-btn ${pet.status === status ? 'active' : ''}" 
                                             onclick="atualizarPetStatus(${pet.id}, 'status', '${status}')"
-                                            ${isArquivado ? 'disabled' : ''}> <!-- 🔥 Removido bloqueio para entregue -->
+                                            ${(isArquivado || isPagoOuNaoPago) && status !== 'Entregue' ? 'disabled' : ''}> <!-- 🔥 CORREÇÃO 2: Remove desabilitação -->
                                         ${status}
                                     </button>
                                 `).join('')}
@@ -2526,7 +2533,8 @@
                             
                             <!-- BOTÃO TOGGLE PAGAMENTO -->
                             <button class="toggle-pagamento-btn ${pet.pagamentoCollapsed ? 'collapsed' : ''}" 
-                                    onclick="togglePagamento(${pet.id})">
+                                    onclick="togglePagamento(${pet.id})"
+                                    ${isArquivado ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
                                 <div style="display: flex; align-items: center; gap: 8px;">
                                     <span class="arrow">▼</span>
                                     <span>💰 Pagamento</span>
@@ -2541,14 +2549,15 @@
                             <!-- SEÇÃO PAGAMENTO (EXPANDE/RECOLHE) -->
                             <div class="pagamento-section ${pet.pagamentoCollapsed ? 'collapsed' : ''}">
                                 <div class="pagamento-buttons">
+                                    <!-- 🔥 CORREÇÃO 2: Remover desabilitação quando entregue -->
                                     <button class="pagamento-btn pago ${pet.pagamento === 'Pago' ? 'active' : ''}" 
                                             onclick="marcarComoPago(${pet.id})"
-                                            ${pet.arquivado ? 'disabled' : ''}> <!-- 🔥 Removido bloqueio para status Entregue -->
+                                            ${pet.arquivado ? 'disabled' : ''}> <!-- Removido: || pet.status === 'Entregue' -->
                                         ✅ Marcar como Pago
                                     </button>
                                     <button class="pagamento-btn nao-pago ${pet.pagamento === 'Não pago' ? 'active' : ''}" 
                                             onclick="marcarComoNaoPago(${pet.id})"
-                                            ${pet.arquivado ? 'disabled' : ''}> <!-- 🔥 Removido bloqueio para status Entregue -->
+                                            ${pet.arquivado ? 'disabled' : ''}> <!-- Removido: || pet.status === 'Entregue' -->
                                         ❌ Marcar como Não Pago
                                     </button>
                                 </div>
@@ -2634,6 +2643,9 @@
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
+            // 🔥 CORREÇÃO 2: Não permitir alternar se arquivado
+            if (pet.arquivado) return;
+            
             // Alternar estado
             pet.pagamentoCollapsed = !pet.pagamentoCollapsed;
             
@@ -2649,12 +2661,15 @@
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
+            // 🔥 CORREÇÃO 2: Não permitir se arquivado
+            if (pet.arquivado) return;
+            
             // Confirmar
             if (!confirm(`Marcar ${pet.nomePet} como PAGO?`)) return;
             
             // Atualizar
             pet.pagamento = 'Pago';
-            pet.arquivado = true;
+            pet.arquivado = true; // 🔥 Arquiva ao marcar como pago
             pet.dataPagamento = new Date().toISOString();
             
             // Se entregue e sem valor, usar valorPix
@@ -2665,7 +2680,7 @@
             // Salvar
             await salvarPets();
             mostrarPets();
-            mostrarMensagem(`✅ ${pet.nomePet} marcado como PAGO!`, 'success');
+            mostrarMensagem(`✅ ${pet.nomePet} marcado como PAGO e arquivado!`, 'success');
         }
 
         // ========== MARCAR COMO NÃO PAGO ==========
@@ -2673,18 +2688,21 @@
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
+            // 🔥 CORREÇÃO 2: Não permitir se arquivado
+            if (pet.arquivado) return;
+            
             // Confirmar
             if (!confirm(`Marcar ${pet.nomePet} como NÃO PAGO?`)) return;
             
             // Atualizar
             pet.pagamento = 'Não pago';
-            pet.arquivado = true;
+            pet.arquivado = true; // 🔥 Arquiva ao marcar como não pago
             pet.dataPagamento = new Date().toISOString();
             
             // Salvar
             await salvarPets();
             mostrarPets();
-            mostrarMensagem(`❌ ${pet.nomePet} marcado como NÃO PAGO!`, 'warning');
+            mostrarMensagem(`❌ ${pet.nomePet} marcado como NÃO PAGO e arquivado!`, 'warning');
         }
 
         // ========== INICIAR ==========
