@@ -981,6 +981,57 @@
             transform: none !important;
         }
         
+        /* ============ BOTÃO TOGGLE PAGAMENTO ============ */
+        .toggle-pagamento-btn {
+            background: linear-gradient(90deg, #93c5fd, #60a5fa);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+        
+        .toggle-pagamento-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .toggle-pagamento-btn .arrow {
+            transition: transform 0.3s;
+        }
+        
+        .toggle-pagamento-btn.collapsed .arrow {
+            transform: rotate(180deg);
+        }
+        
+        /* ============ SEÇÃO PAGAMENTO ============ */
+        .pagamento-section {
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 1000px;
+            opacity: 1;
+        }
+        
+        .pagamento-section.collapsed {
+            max-height: 0;
+            opacity: 0;
+            margin-bottom: 0;
+        }
+        
+        .pagamento-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        
         /* ============ SESSÃO VALOR RECEBIDO ============ */
         .valor-recebido-section {
             margin-top: 15px;
@@ -1670,11 +1721,8 @@
                 submitBtn.textContent = '✨ Adicionar Pet';
                 submitBtn.onclick = adicionarPet;
                 cancelarEdicao();
-                
-                // Rolar para o topo
-                window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-                // Abrir formulário no topo
+                // Abrir formulário
                 form.classList.add('active');
                 btn.textContent = '❌ Cancelar';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1686,37 +1734,53 @@
             if (isReordering) return;
             isReordering = true;
             
-            // Criar cópia para ordenação
-            const petsOrdenados = [...pets];
+            // Separar pets VISÍVEIS (não arquivados ou admin vê tudo)
+            let petsVisiveis = isAdmin ? [...pets] : pets.filter(p => !p.arquivado);
             
             // 1. Pets EM TRANSPORTE (no topo)
-            const emTransporte = petsOrdenados.filter(p => 
-                !p.arquivado && (
-                    p.status === 'A caminho da loja' || 
-                    p.status === 'A caminho da entrega'
-                )
+            const emTransporte = petsVisiveis.filter(p => 
+                p.status === 'A caminho da loja' || 
+                p.status === 'A caminho da entrega'
             );
             
             // 2. Pets AGUARDANDO (no meio)
-            const aguardando = petsOrdenados.filter(p => 
-                !p.arquivado && p.status === 'Aguardando retirada'
+            const aguardando = petsVisiveis.filter(p => 
+                p.status === 'Aguardando retirada'
             );
             
-            // 3. Pets ENTREGUES (no final - só admin vê os arquivados)
-            const entregues = petsOrdenados.filter(p => 
-                p.status === 'Entregue' || p.arquivado
+            // 3. Pets ENTREGUES (no final)
+            const entregues = petsVisiveis.filter(p => 
+                p.status === 'Entregue'
             );
             
-            // Ordenar cada grupo
+            // 4. Pets ARQUIVADOS (só admin vê, no final)
+            const arquivados = petsVisiveis.filter(p => 
+                p.arquivado && p.status !== 'Entregue'
+            );
+            
+            // Ordenar cada grupo por horário
             emTransporte.sort((a, b) => (a.horaRetirada || '').localeCompare(b.horaRetirada || ''));
             aguardando.sort((a, b) => (a.horaRetirada || '').localeCompare(b.horaRetirada || ''));
             entregues.sort((a, b) => (b.horaEntregue || '').localeCompare(a.horaEntregue || ''));
+            arquivados.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
             
             // Juntar tudo
-            pets = [...emTransporte, ...aguardando, ...entregues];
-            isReordering = false;
+            const novaOrdem = [...emTransporte, ...aguardando, ...entregues, ...arquivados];
             
-            return pets;
+            // Atualizar array principal mantendo referências
+            petsVisiveis.forEach(pet => {
+                const novoIndex = novaOrdem.findIndex(p => p.id === pet.id);
+                if (novoIndex !== -1) {
+                    // Manter a referência do objeto, só atualizar posição
+                    const indexOriginal = pets.findIndex(p => p.id === pet.id);
+                    if (indexOriginal !== -1) {
+                        pets[indexOriginal] = pet;
+                    }
+                }
+            });
+            
+            isReordering = false;
+            return novaOrdem;
         }
 
         // ========== ANIMAÇÃO DE REORDENAÇÃO ==========
@@ -1732,9 +1796,9 @@
             // Pequeno delay para animação
             await new Promise(resolve => setTimeout(resolve, 50));
             
-            // Reaplicar ordenação
-            aplicarOrdenacaoDinamica();
-            mostrarPets();
+            // Reaplicar ordenação e mostrar
+            const petsOrdenados = aplicarOrdenacaoDinamica();
+            await mostrarPetsComOrdem(petsOrdenados);
             
             // Remover classe após animação
             setTimeout(() => {
@@ -1752,8 +1816,7 @@
                 });
                 const data = await response.json();
                 pets = data.record?.pets || [];
-                aplicarOrdenacaoDinamica();
-                mostrarPets();
+                await mostrarPets();
                 atualizarHora();
                 atualizarEstatisticas();
                 mostrarProximaRetirada();
@@ -1762,8 +1825,7 @@
                 console.log('Usando dados locais');
                 const local = localStorage.getItem('meusPets');
                 pets = local ? JSON.parse(local) : [];
-                aplicarOrdenacaoDinamica();
-                mostrarPets();
+                await mostrarPets();
                 atualizarEstatisticas();
                 mostrarProximaRetirada();
                 atualizarHistoricoEntregas();
@@ -2024,7 +2086,7 @@
             }, 300);
         }
 
-        function salvarEdicao(petId) {
+        async function salvarEdicao(petId) {
             if (!isAdmin) return;
             
             const pet = pets.find(p => p.id === petId);
@@ -2040,9 +2102,8 @@
             pet.horaRetirada = document.getElementById('horaRetirada').value;
             pet.valorPix = parseFloat(document.getElementById('valorPix').value) || 50.00;
             
-            salvarPets();
-            aplicarOrdenacaoDinamica();
-            mostrarPets();
+            await salvarPets();
+            await mostrarPets();
             cancelarEdicao();
             
             mostrarMensagem('✅ Pet atualizado com sucesso!', 'success');
@@ -2097,7 +2158,8 @@
                 valorRecebido: null,
                 dataPagamento: null,
                 dataCriacao: editingPetId ? pets.find(p => p.id === editingPetId)?.dataCriacao || new Date().toISOString() : new Date().toISOString(),
-                arquivado: false
+                arquivado: false,
+                pagamentoCollapsed: false  // Nova propriedade para controle do toggle
             };
 
             // Validar
@@ -2120,6 +2182,7 @@
                     pet.valorRecebido = originalPet.valorRecebido;
                     pet.dataPagamento = originalPet.dataPagamento;
                     pet.arquivado = originalPet.arquivado;
+                    pet.pagamentoCollapsed = originalPet.pagamentoCollapsed || false;
                     
                     pets[index] = pet;
                 }
@@ -2129,8 +2192,7 @@
             }
             
             await salvarPets();
-            aplicarOrdenacaoDinamica();
-            mostrarPets();
+            await mostrarPets();
             atualizarEstatisticas();
             mostrarProximaRetirada();
             atualizarHistoricoEntregas();
@@ -2170,14 +2232,13 @@
                 pet.arquivado = true;
             }
             
-            // Reordenar dinamicamente COM ANIMAÇÃO
+            // Se mudou para "A caminho", reordenar
             if (campo === 'status' && (valor === 'A caminho da loja' || valor === 'A caminho da entrega')) {
-                // Pet sobe para o topo quando motorista inicia transporte
+                // Forçar reordenação com animação
                 await reordenarComAnimacao();
             } else {
-                aplicarOrdenacaoDinamica();
                 await salvarPets();
-                mostrarPets();
+                await mostrarPets();
             }
             
             atualizarEstatisticas();
@@ -2186,6 +2247,16 @@
             
             // Feedback
             mostrarMensagem('✅ Status atualizado!', 'success');
+        }
+
+        // ========== TOGGLE PAGAMENTO ==========
+        function togglePagamento(petId) {
+            const pet = pets.find(p => p.id === petId);
+            if (!pet) return;
+            
+            pet.pagamentoCollapsed = !pet.pagamentoCollapsed;
+            salvarPets();
+            mostrarPets();
         }
 
         async function atualizarObservacoes(petId, tipo, texto) {
@@ -2209,8 +2280,7 @@
             
             pets = pets.filter(p => p.id !== petId);
             await salvarPets();
-            aplicarOrdenacaoDinamica();
-            mostrarPets();
+            await mostrarPets();
             atualizarEstatisticas();
             mostrarProximaRetirada();
             atualizarHistoricoEntregas();
@@ -2225,10 +2295,18 @@
         }
 
         // ========== RENDERIZAR PETS ==========
-        function mostrarPets() {
+        async function mostrarPets() {
             const container = document.getElementById('petsList');
             
-            let petsVisiveis = isAdmin ? pets : pets.filter(p => !p.arquivado);
+            // Aplicar ordenação dinâmica primeiro
+            const petsOrdenados = aplicarOrdenacaoDinamica();
+            await mostrarPetsComOrdem(petsOrdenados);
+        }
+
+        async function mostrarPetsComOrdem(petsOrdenados) {
+            const container = document.getElementById('petsList');
+            
+            let petsVisiveis = isAdmin ? petsOrdenados : petsOrdenados.filter(p => !p.arquivado);
             
             if (petsVisiveis.length === 0) {
                 container.innerHTML = `
@@ -2244,6 +2322,7 @@
                 const isArquivado = pet.arquivado;
                 const isEntregue = pet.status === 'Entregue';
                 const isEmTransporte = pet.status === 'A caminho da loja' || pet.status === 'A caminho da entrega';
+                const isPagamentoCollapsed = pet.pagamentoCollapsed || false;
                 
                 return `
                 <div class="pet-card ${isArquivado ? 'arquivado' : ''} ${isEmTransporte ? 'priority-high' : ''}">
@@ -2357,20 +2436,27 @@
                                 `).join('')}
                             </div>
                             
-                            ${!isEntregue ? `
-                                <div class="status-buttons" style="margin-top: 8px;">
+                            <!-- BOTÃO TOGGLE PAGAMENTO -->
+                            <button class="toggle-pagamento-btn ${isPagamentoCollapsed ? 'collapsed' : ''}" 
+                                    onclick="togglePagamento(${pet.id})">
+                                <span class="arrow">▼</span> Pagamento
+                            </button>
+                            
+                            <!-- SEÇÃO PAGAMENTO (expandida/colapsada) -->
+                            <div class="pagamento-section ${isPagamentoCollapsed ? 'collapsed' : ''}">
+                                <div class="pagamento-buttons">
                                     <button class="status-btn sutil ${pet.pagamento === 'Pago' ? 'active' : ''}" 
                                             onclick="atualizarPetStatus(${pet.id}, 'pagamento', 'Pago')"
-                                            ${isArquivado ? 'disabled' : ''}>
+                                            ${isArquivado || isEntregue ? 'disabled' : ''}>
                                         ✅ Pago
                                     </button>
                                     <button class="status-btn sutil ${pet.pagamento === 'Não pago' ? 'active' : ''}" 
                                             onclick="atualizarPetStatus(${pet.id}, 'pagamento', 'Não pago')"
-                                            ${isArquivado ? 'disabled' : ''}>
+                                            ${isArquivado || isEntregue ? 'disabled' : ''}>
                                         ❌ Não Pago
                                     </button>
                                 </div>
-                            ` : ''}
+                            </div>
                         ` : ''}
                         
                         <div class="observacoes-container">
