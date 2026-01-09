@@ -21,7 +21,6 @@
             --gray-50: #f9fafb;
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
-            --gray-300: #d1d5db;
             --gray-400: #9ca3af;
             --gray-600: #4b5563;
             --gray-700: #374151;
@@ -1009,95 +1008,6 @@
             transform: none !important;
         }
         
-        /* ============ NOVOS ESTILOS PAGAMENTO HOVER+CLICK ============ */
-        .pagamento-container {
-            position: relative;
-            margin-bottom: 15px;
-        }
-        
-        .toggle-hover {
-            background: linear-gradient(90deg, #93c5fd, #60a5fa);
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            width: 100%;
-            justify-content: space-between;
-        }
-        
-        .toggle-hover:hover {
-            background: linear-gradient(90deg, #60a5fa, #3b82f6);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .toggle-hover .arrow {
-            transition: transform 0.3s;
-            display: inline-block;
-        }
-        
-        .toggle-hover.collapsed .arrow {
-            transform: rotate(180deg);
-        }
-        
-        .botoes-pagamento {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-            padding: 12px;
-            background: var(--glass-bg);
-            border-radius: 12px;
-            border: 1px solid var(--gray-200);
-            box-shadow: var(--shadow-md);
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: none;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .botoes-pagamento.visible {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-        
-        .botoes-pagamento button {
-            flex: 1;
-            min-width: 120px;
-            padding: 10px 12px;
-            border: none;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .botoes-pagamento button:first-child {
-            background: linear-gradient(90deg, #10b981, #059669);
-            color: white;
-        }
-        
-        .botoes-pagamento button:last-child {
-            background: linear-gradient(90deg, #ef4444, #dc2626);
-            color: white;
-        }
-        
-        .botoes-pagamento button:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        
         /* ============ SESSÃO VALOR RECEBIDO ============ */
         .valor-recebido-section {
             margin-top: 15px;
@@ -1385,6 +1295,128 @@
         
         .empty-state p:last-child { 
             font-size: 16px; 
+        }
+        
+        /* ============ BOTÃO TOGGLE PAGAMENTO ============ */
+        .toggle-pagamento-btn {
+            background: linear-gradient(90deg, #93c5fd, #60a5fa);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0;
+            width: 100%;
+            justify-content: space-between;
+        }
+        
+        .toggle-pagamento-btn:hover {
+            background: linear-gradient(90deg, #60a5fa, #3b82f6);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .toggle-pagamento-btn .arrow {
+            transition: transform 0.3s ease;
+            font-size: 12px;
+        }
+        
+        .toggle-pagamento-btn.collapsed .arrow {
+            transform: rotate(-90deg);
+        }
+        
+        /* ============ SEÇÃO PAGAMENTO ============ */
+        .pagamento-section {
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 200px;
+            opacity: 1;
+            margin-bottom: 15px;
+        }
+        
+        .pagamento-section.collapsed {
+            max-height: 0;
+            opacity: 0;
+            margin-bottom: 0;
+            padding: 0;
+        }
+        
+        /* ============ BOTÕES PAGO/NÃO PAGO ============ */
+        .pagamento-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 15px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .pagamento-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .pagamento-btn.pago {
+            background: linear-gradient(90deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .pagamento-btn.nao-pago {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+            color: white;
+        }
+        
+        .pagamento-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .pagamento-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* ============ BADGE DE STATUS ============ */
+        .payment-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .payment-status-badge.pago {
+            background: rgba(16, 185, 129, 0.1);
+            color: #047857;
+            border: 1px solid #10b981;
+        }
+        
+        .payment-status-badge.nao-pago {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 1px solid #ef4444;
+        }
+        
+        .payment-status-badge.pendente {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+            border: 1px solid #f59e0b;
         }
         
         /* ============ ANIMAÇÕES ============ */
@@ -1795,75 +1827,6 @@
             }
         }
 
-        // ========== NOVAS FUNÇÕES PARA BOTÕES PAGAMENTO (HOVER+CLICK) ==========
-        function mostrarBotoesPagamento(petId) {
-            const botoesDiv = document.getElementById(`botoes-pagamento-${petId}`);
-            if (botoesDiv) {
-                botoesDiv.style.opacity = '1';
-                botoesDiv.style.transform = 'translateY(0)';
-                botoesDiv.style.pointerEvents = 'auto';
-            }
-        }
-
-        function esconderBotoesPagamento(petId) {
-            const botoesDiv = document.getElementById(`botoes-pagamento-${petId}`);
-            const pet = pets.find(p => p.id === petId);
-            
-            if (botoesDiv && (!pet || !pet.pagamentoCollapsed)) {
-                botoesDiv.style.opacity = '0';
-                botoesDiv.style.transform = 'translateY(-10px)';
-                botoesDiv.style.pointerEvents = 'none';
-            }
-        }
-
-        function alternarEstadoPagamento(petId) {
-            const pet = pets.find(p => p.id === petId);
-            if (!pet) return;
-            
-            pet.pagamentoCollapsed = !pet.pagamentoCollapsed;
-            salvarPets();
-            
-            const botoesDiv = document.getElementById(`botoes-pagamento-${petId}`);
-            if (botoesDiv) {
-                if (pet.pagamentoCollapsed) {
-                    botoesDiv.style.opacity = '1';
-                    botoesDiv.style.transform = 'translateY(0)';
-                    botoesDiv.style.pointerEvents = 'auto';
-                } else {
-                    botoesDiv.style.opacity = '0';
-                    botoesDiv.style.transform = 'translateY(-10px)';
-                    botoesDiv.style.pointerEvents = 'none';
-                }
-            }
-        }
-
-        // 🔥 CORREÇÃO: Funções Pago/Não Pago funcionais
-        function marcarPago(petId) {
-            const pet = pets.find(p => p.id === petId);
-            if (!pet) return;
-            
-            // 🔥 ATUALIZA STATUS E ARQUIVA
-            pet.pagamento = 'Pago';
-            pet.arquivado = true;
-            
-            salvarPets();
-            mostrarPets();
-            mostrarMensagem('✅ Marcado como Pago!', 'success');
-        }
-
-        function marcarNaoPago(petId) {
-            const pet = pets.find(p => p.id === petId);
-            if (!pet) return;
-            
-            // 🔥 ATUALIZA STATUS E ARQUIVA
-            pet.pagamento = 'Não pago';
-            pet.arquivado = true;
-            
-            salvarPets();
-            mostrarPets();
-            mostrarMensagem('❌ Marcado como Não Pago!', 'warning');
-        }
-
         // ========== CORREÇÃO 1: ORDENAÇÃO QUE MANTÉM POSIÇÃO ==========
         function aplicarOrdenacaoDinamicaCorrigida() {
             if (isReordering) return;
@@ -2248,7 +2211,7 @@
                 horaRetirada: document.getElementById('horaRetirada').value || '14:30',
                 valorPix: parseFloat(document.getElementById('valorPix').value) || 50.00,
                 status: 'Aguardando retirada',
-                pagamento: 'Pendente',
+                pagamento: 'Pendente',                    // ← ADICIONADO
                 observacoesAdmin: '',
                 observacoesMotorista: '',
                 horaEntregue: null,
@@ -2256,7 +2219,7 @@
                 dataPagamento: null,
                 dataCriacao: editingPetId ? pets.find(p => p.id === editingPetId)?.dataCriacao || new Date().toISOString() : new Date().toISOString(),
                 arquivado: false,
-                pagamentoCollapsed: false
+                pagamentoCollapsed: true                  // ← ADICIONADO (começa recolhido)
             };
 
             if (!pet.cliente || !pet.nomePet || !pet.raca || !pet.cor || !pet.endereco) {
@@ -2276,7 +2239,7 @@
                     pet.valorRecebido = originalPet.valorRecebido;
                     pet.dataPagamento = originalPet.dataPagamento;
                     pet.arquivado = originalPet.arquivado;
-                    pet.pagamentoCollapsed = originalPet.pagamentoCollapsed || false;
+                    pet.pagamentoCollapsed = originalPet.pagamentoCollapsed || true;
                     
                     pets[index] = pet;
                 }
@@ -2418,7 +2381,6 @@
                 const isArquivado = pet.arquivado;
                 const isEntregue = pet.status === 'Entregue';
                 const isEmTransporte = pet.status === 'A caminho da loja' || pet.status === 'A caminho da entrega';
-                const isPagamentoCollapsed = pet.pagamentoCollapsed || false;
                 const isPagoOuNaoPago = pet.pagamento === 'Pago' || pet.pagamento === 'Não pago';
                 
                 // 🔥 CORREÇÃO: Classe diferenciada para admin ver pets arquivados
@@ -2538,31 +2500,32 @@
                                 `).join('')}
                             </div>
                             
-                            <!-- 🔥 NOVO: TOGGLE COM HOVER + CLICK -->
-                            <div class="pagamento-container"
-                                 onmouseleave="esconderBotoesPagamento(${pet.id})">
+                            <!-- BOTÃO TOGGLE PAGAMENTO -->
+                            <button class="toggle-pagamento-btn ${pet.pagamentoCollapsed ? 'collapsed' : ''}" 
+                                    onclick="togglePagamento(${pet.id})">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span class="arrow">▼</span>
+                                    <span>💰 Pagamento</span>
+                                </div>
                                 
-                                <button class="toggle-hover ${pet.pagamentoCollapsed ? 'collapsed' : ''}"
-                                        onmouseenter="mostrarBotoesPagamento(${pet.id})"
-                                        onclick="alternarEstadoPagamento(${pet.id})">
-                                    <div style="display: flex; align-items: center; gap: 6px;">
-                                        <span class="arrow">▼</span> 
-                                        <span>Pagamento</span>
-                                    </div>
-                                    <span style="font-size: 11px; opacity: 0.8;">
-                                        ${pet.pagamento === 'Pago' ? '✅' : pet.pagamento === 'Não pago' ? '❌' : '⏳'}
-                                    </span>
-                                </button>
-                                
-                                <div class="botoes-pagamento ${pet.pagamentoCollapsed ? 'visible' : ''}" 
-                                     id="botoes-pagamento-${pet.id}">
-                                    <button onclick="marcarPago(${pet.id})"
-                                            ${isArquivado || isEntregue ? 'disabled' : ''}>
-                                        ✅ Pago
+                                <!-- BADGE COM STATUS ATUAL -->
+                                <span class="payment-status-badge ${pet.pagamento === 'Pago' ? 'pago' : pet.pagamento === 'Não pago' ? 'nao-pago' : 'pendente'}">
+                                    ${pet.pagamento === 'Pago' ? '✅ Pago' : pet.pagamento === 'Não pago' ? '❌ Não Pago' : '⏳ Pendente'}
+                                </span>
+                            </button>
+
+                            <!-- SEÇÃO PAGAMENTO (EXPANDE/RECOLHE) -->
+                            <div class="pagamento-section ${pet.pagamentoCollapsed ? 'collapsed' : ''}">
+                                <div class="pagamento-buttons">
+                                    <button class="pagamento-btn pago ${pet.pagamento === 'Pago' ? 'active' : ''}" 
+                                            onclick="marcarComoPago(${pet.id})"
+                                            ${pet.arquivado || pet.status === 'Entregue' ? 'disabled' : ''}>
+                                        ✅ Marcar como Pago
                                     </button>
-                                    <button onclick="marcarNaoPago(${pet.id})"
-                                            ${isArquivado || isEntregue ? 'disabled' : ''}>
-                                        ❌ Não Pago
+                                    <button class="pagamento-btn nao-pago ${pet.pagamento === 'Não pago' ? 'active' : ''}" 
+                                            onclick="marcarComoNaoPago(${pet.id})"
+                                            ${pet.arquivado || pet.status === 'Entregue' ? 'disabled' : ''}>
+                                        ❌ Marcar como Não Pago
                                     </button>
                                 </div>
                             </div>
@@ -2640,6 +2603,64 @@
                 minute: '2-digit'
             });
             document.getElementById('lastUpdate').textContent = horaFormatada;
+        }
+
+        // ========== TOGGLE PAGAMENTO ==========
+        function togglePagamento(petId) {
+            const pet = pets.find(p => p.id === petId);
+            if (!pet) return;
+            
+            // Alternar estado
+            pet.pagamentoCollapsed = !pet.pagamentoCollapsed;
+            
+            // Salvar
+            salvarPets();
+            
+            // Atualizar visual
+            mostrarPets();
+        }
+
+        // ========== MARCAR COMO PAGO ==========
+        async function marcarComoPago(petId) {
+            const pet = pets.find(p => p.id === petId);
+            if (!pet) return;
+            
+            // Confirmar
+            if (!confirm(`Marcar ${pet.nomePet} como PAGO?`)) return;
+            
+            // Atualizar
+            pet.pagamento = 'Pago';
+            pet.arquivado = true;
+            pet.dataPagamento = new Date().toISOString();
+            
+            // Se entregue e sem valor, usar valorPix
+            if (pet.status === 'Entregue' && !pet.valorRecebido) {
+                pet.valorRecebido = pet.valorPix || 50.00;
+            }
+            
+            // Salvar
+            await salvarPets();
+            mostrarPets();
+            mostrarMensagem(`✅ ${pet.nomePet} marcado como PAGO!`, 'success');
+        }
+
+        // ========== MARCAR COMO NÃO PAGO ==========
+        async function marcarComoNaoPago(petId) {
+            const pet = pets.find(p => p.id === petId);
+            if (!pet) return;
+            
+            // Confirmar
+            if (!confirm(`Marcar ${pet.nomePet} como NÃO PAGO?`)) return;
+            
+            // Atualizar
+            pet.pagamento = 'Não pago';
+            pet.arquivado = true;
+            pet.dataPagamento = new Date().toISOString();
+            
+            // Salvar
+            await salvarPets();
+            mostrarPets();
+            mostrarMensagem(`❌ ${pet.nomePet} marcado como NÃO PAGO!`, 'warning');
         }
 
         // ========== INICIAR ==========
