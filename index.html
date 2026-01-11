@@ -2351,7 +2351,7 @@
             }
         }
 
-        // ========== PRÓXIMA RETIRADA COM DUAS FUNÇÕES ==========
+        // ========== PRÓXIMA RETIRADA - CORREÇÃO IMPLEMENTADA ==========
         function mostrarProximaRetirada() {
             const highlight = document.getElementById('nextPickupHighlight');
             const agora = new Date();
@@ -2371,11 +2371,11 @@
               .sort((a, b) => a.diferenca - b.diferenca)
               .map(item => item.pet);
             
-            // 🔥 FUNÇÃO 2: Pets com prioridade alta + status "A caminho da loja"
+            // 🔥 CORREÇÃO: Pets com prioridade alta - SEM verificação de status "A caminho da loja"
             const petsPrioridadeAlta = pets.filter(p => 
                 !p.arquivado && 
-                p.prioridade === 'alta' && 
-                p.status === 'A caminho da loja'
+                p.prioridade === 'alta' 
+                // ❌ REMOVIDO: && p.status === 'A caminho da loja'
             );
             
             // Juntar ambas as listas
@@ -2394,7 +2394,7 @@
                 </div>`;
                 
                 todosPetsProximaRetirada.forEach(pet => {
-                    const isPrioridadeAlta = pet.prioridade === 'alta' && pet.status === 'A caminho da loja';
+                    const isPrioridadeAlta = pet.prioridade === 'alta';
                     
                     html += `
                         <div style="background: white; padding: 12px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid ${isPrioridadeAlta ? '#ef4444' : '#8b5cf6'};">
@@ -2911,10 +2911,10 @@
                         raca: petData.raca,
                         cor: petData.cor,
                         endereco: endereco,
-                        tempo: tempo, // 🔥 TEMPO ÚNICO PARA TODOS
+                        tempo: tempo,
                         horaRetirada: horaRetirada,
-                        valorPix: valorPix, // 🔥 VALOR ÚNICO PARA TODOS
-                        status: '', // 🔥 INICIA SEM STATUS
+                        valorPix: valorPix,
+                        status: '',
                         pagamento: 'Pendente',
                         observacoesAdmin: '',
                         observacoesMotorista: '',
@@ -2947,7 +2947,7 @@
             mostrarMensagem(`✅ ${todosPets.length} pet(s) adicionado(s) com sucesso!`, 'success');
         }
 
-        // ========== ATUALIZAR STATUS DO PET ==========
+        // ========== ATUALIZAR STATUS DO PET - CORREÇÕES IMPLEMENTADAS ==========
         async function atualizarPetStatus(petId, campo, valor) {
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
@@ -2966,7 +2966,11 @@
                 // Expandir seção de pagamento automaticamente
                 pet.pagamentoCollapsed = false;
                 
-                if (!isAdmin) {
+                // 🔥 CORREÇÃO: Se admin já marcou como Pago, arquivar automaticamente
+                if (pet.pagamento === 'Pago') {
+                    pet.arquivado = true;
+                    mostrarMensagem('✅ Entregue! Pet arquivado automaticamente (já estava marcado como Pago pelo admin).', 'success');
+                } else if (!isAdmin) {
                     setTimeout(() => mostrarSessaoValor(petId), 500);
                 }
                 
@@ -3022,7 +3026,7 @@
             }
         }
 
-        // ========== FUNÇÕES DE PRIORIDADE (APENAS ALTA E MÉDIA) ==========
+        // ========== FUNÇÕES DE PRIORIDADE ==========
         function definirPrioridade(petId, prioridade) {
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
@@ -3030,6 +3034,7 @@
             pet.prioridade = prioridade;
             salvarPets();
             mostrarPets();
+            mostrarProximaRetirada(); // 🔥 Atualizar próxima retirada imediatamente
             
             mostrarMensagem(`✅ Prioridade definida como ${prioridade}!`, 'success');
         }
@@ -3049,24 +3054,23 @@
             mostrarMensagem('✅ Observação salva!', 'success');
         }
 
-        // ========== ADMIN MARCAR COMO PAGO ==========
+        // ========== ADMIN MARCAR COMO PAGO - CORREÇÃO IMPLEMENTADA ==========
         async function adminMarcarComoPago(petId) {
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
-            if (pet.status !== 'Entregue') {
-                mostrarMensagem('⚠️ O pet precisa estar marcado como "Entregue"!', 'warning');
-                return;
-            }
-            
             if (!confirm(`Marcar ${pet.nomePet} como PAGO?`)) return;
             
             pet.pagamento = 'Pago';
-            pet.arquivado = true;
             pet.dataPagamento = new Date().toISOString();
             
             if (!pet.valorRecebido) {
                 pet.valorRecebido = pet.valorPix || 50.00;
+            }
+            
+            // 🔥 CORREÇÃO: Se já estiver como entregue, arquivar automaticamente
+            if (pet.status === 'Entregue') {
+                pet.arquivado = true;
             }
             
             await salvarPets();
@@ -3103,7 +3107,7 @@
                 .catch(() => mostrarMensagem('❌ Erro ao copiar', 'error'));
         }
 
-        // ========== RENDERIZAR PETS ==========
+        // ========== RENDERIZAR PETS - CORREÇÕES IMPLEMENTADAS ==========
         async function mostrarPets() {
             const container = document.getElementById('petsList');
             
@@ -3142,13 +3146,13 @@
             });
 
             container.innerHTML = Object.values(petsAgrupados).map((grupo, index) => {
-                // Usar o primeiro pet do grupo como principal
                 const petPrincipal = grupo[0];
                 const outrosPets = grupo.slice(1);
                 
                 const isEntregue = petPrincipal.status === 'Entregue';
                 const isPagoOuNaoPago = petPrincipal.pagamento === 'Pago' || petPrincipal.pagamento === 'Não pago';
                 const petColor = getPetColor(petPrincipal);
+                const adminJaMarcouPago = petPrincipal.pagamento === 'Pago';
                 
                 // Definir cor da borda baseada na prioridade
                 let borderColor = petColor;
@@ -3168,7 +3172,7 @@
                                     ${petPrincipal.status ? `<span class="badge-status ${petPrincipal.status.replace(/ /g, '-').toLowerCase()}">
                                         ${petPrincipal.status}
                                     </span>` : ''}
-                                    <span class="badge-status ${petPrincipal.pagamento === 'Pago' ? 'pago' : 'nao-pago'}">
+                                    <span class="badge-status ${petPrincipal.pagamento === 'Pago' ? 'pago' : petPrincipal.pagamento === 'Não pago' ? 'nao-pago' : ''}">
                                         ${petPrincipal.pagamento}
                                     </span>
                                     ${petPrincipal.prioridade ? `<span class="badge-status" style="background: ${petPrincipal.prioridade === 'alta' ? '#ef4444' : '#f59e0b'}; color: white;">
@@ -3196,11 +3200,10 @@
                                             🟡 Média
                                         </button>
                                     </div>
-                                    ${isEntregue ? `
-                                        <button class="admin-pagamento-btn" onclick="adminMarcarComoPago(${petPrincipal.id})">
-                                            💰 Pago
-                                        </button>
-                                    ` : ''}
+                                    <!-- 🔥 CORREÇÃO: Botão sempre visível para admin -->
+                                    <button class="admin-pagamento-btn" onclick="adminMarcarComoPago(${petPrincipal.id})">
+                                        💰 Pago
+                                    </button>
                                 </div>
                             ` : ''}
                             <div style="display: flex; gap: 8px; margin-top: 10px;">
@@ -3265,8 +3268,8 @@
                         ` : ''}
                     </div>
                     
-                    <!-- SESSÃO VALOR RECEBIDO (só para motorista quando entregue) -->
-                    ${!isAdmin && isEntregue && !petPrincipal.valorRecebido ? `
+                    <!-- SESSÃO VALOR RECEBIDO (só para motorista quando entregue e admin NÃO marcou como pago) -->
+                    ${!isAdmin && isEntregue && !petPrincipal.valorRecebido && !adminJaMarcouPago ? `
                         <div class="valor-recebido-section" id="valorRecebido-${petPrincipal.id}">
                             <div class="valor-recebido-label">
                                 💰 Valor Recebido (PIX)
@@ -3296,7 +3299,6 @@
                     <div class="status-section">
                         ${!isAdmin ? `
                             <div class="status-buttons">
-                                <!-- 🔥 APENAS 4 BOTÕES: "sem ação" removido -->
                                 ${['A caminho retirada', 'A caminho da loja', 'A caminho da entrega', 'Entregue'].map(status => `
                                     <button class="status-btn ${petPrincipal.status === status ? 'active' : ''}" 
                                             onclick="atualizarPetStatus(${petPrincipal.id}, 'status', '${status}')"
@@ -3306,37 +3308,45 @@
                                 `).join('')}
                             </div>
                             
-                            <!-- BOTÃO TOGGLE PAGAMENTO -->
-                            <button class="toggle-pagamento-btn ${petPrincipal.pagamentoCollapsed ? 'collapsed' : ''}" 
-                                    onclick="togglePagamento(${petPrincipal.id})"
-                                    ${petPrincipal.status !== 'Entregue' ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <span class="arrow">▼</span>
-                                    <span>💰 Pagamento</span>
-                                </div>
-                                
-                                <!-- BADGE COM STATUS ATUAL -->
-                                <span class="payment-status-badge ${petPrincipal.pagamento === 'Pago' ? 'pago' : petPrincipal.pagamento === 'Não pago' ? 'nao-pago' : 'pendente'}">
-                                    ${petPrincipal.pagamento === 'Pago' ? '✅ Pago' : petPrincipal.pagamento === 'Não pago' ? '❌ Não Pago' : '⏳ Pendente'}
-                                </span>
-                            </button>
+                            <!-- 🔥 CORREÇÃO: Se admin já marcou como pago, NÃO mostrar seção de pagamento -->
+                            ${!adminJaMarcouPago ? `
+                                <button class="toggle-pagamento-btn ${petPrincipal.pagamentoCollapsed ? 'collapsed' : ''}" 
+                                        onclick="togglePagamento(${petPrincipal.id})"
+                                        ${petPrincipal.status !== 'Entregue' ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <span class="arrow">▼</span>
+                                        <span>💰 Pagamento</span>
+                                    </div>
+                                    
+                                    <span class="payment-status-badge ${petPrincipal.pagamento === 'Pago' ? 'pago' : petPrincipal.pagamento === 'Não pago' ? 'nao-pago' : 'pendente'}">
+                                        ${petPrincipal.pagamento === 'Pago' ? '✅ Pago' : petPrincipal.pagamento === 'Não pago' ? '❌ Não Pago' : '⏳ Pendente'}
+                                    </span>
+                                </button>
 
-                            <!-- SEÇÃO PAGAMENTO (EXPANDE/RECOLHE) -->
-                            <div class="pagamento-section ${petPrincipal.pagamentoCollapsed ? 'collapsed' : ''}">
-                                <div class="pagamento-buttons">
-                                    <!-- 🔥 SÓ HABILITA SE STATUS FOR ENTREGUE -->
-                                    <button class="pagamento-btn pago ${petPrincipal.pagamento === 'Pago' ? 'active' : ''}" 
-                                            onclick="marcarComoPago(${petPrincipal.id})"
-                                            ${petPrincipal.arquivado || petPrincipal.status !== 'Entregue' ? 'disabled' : ''}>
-                                        ✅ Marcar como Pago
-                                    </button>
-                                    <button class="pagamento-btn nao-pago ${petPrincipal.pagamento === 'Não pago' ? 'active' : ''}" 
-                                            onclick="marcarComoNaoPago(${petPrincipal.id})"
-                                            ${petPrincipal.arquivado || petPrincipal.status !== 'Entregue' ? 'disabled' : ''}>
-                                        ❌ Marcar como Não Pago
-                                    </button>
+                                <div class="pagamento-section ${petPrincipal.pagamentoCollapsed ? 'collapsed' : ''}">
+                                    <div class="pagamento-buttons">
+                                        <button class="pagamento-btn pago ${petPrincipal.pagamento === 'Pago' ? 'active' : ''}" 
+                                                onclick="marcarComoPago(${petPrincipal.id})"
+                                                ${petPrincipal.arquivado || petPrincipal.status !== 'Entregue' ? 'disabled' : ''}>
+                                            ✅ Marcar como Pago
+                                        </button>
+                                        <button class="pagamento-btn nao-pago ${petPrincipal.pagamento === 'Não pago' ? 'active' : ''}" 
+                                                onclick="marcarComoNaoPago(${petPrincipal.id})"
+                                                ${petPrincipal.arquivado || petPrincipal.status !== 'Entregue' ? 'disabled' : ''}>
+                                            ❌ Marcar como Não Pago
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            ` : `
+                                <div style="padding: 15px; background: #f0fdf4; border-radius: 12px; border: 2px solid #86efac; text-align: center; margin-top: 15px;">
+                                    <div style="color: var(--success-dark); font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                        ✅ Admin já marcou como Pago
+                                    </div>
+                                    <div style="font-size: 12px; color: var(--gray-600); margin-top: 5px;">
+                                        Clique "Entregue" para arquivar automaticamente
+                                    </div>
+                                </div>
+                            `}
                         ` : ''}
                         
                         <div class="observacoes-container">
@@ -3384,7 +3394,6 @@
         }
 
         function mostrarMensagem(texto, tipo) {
-            // Criar notificação flutuante
             const notification = document.createElement('div');
             notification.style.cssText = `
                 position: fixed;
@@ -3432,19 +3441,13 @@
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
-            // 🔥 Só permite alternar se status for Entregue
             if (pet.status !== 'Entregue') {
                 mostrarMensagem('⚠️ Marque como "Entregue" primeiro!', 'warning');
                 return;
             }
             
-            // Alternar estado
             pet.pagamentoCollapsed = !pet.pagamentoCollapsed;
-            
-            // Salvar
             salvarPets();
-            
-            // Atualizar visual
             mostrarPets();
         }
 
@@ -3453,26 +3456,21 @@
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
-            // 🔥 Verificar se status é Entregue
             if (pet.status !== 'Entregue') {
                 mostrarMensagem('⚠️ Marque como "Entregue" primeiro!', 'warning');
                 return;
             }
             
-            // Confirmar
             if (!confirm(`Marcar ${pet.nomePet} como PAGO?`)) return;
             
-            // Atualizar
             pet.pagamento = 'Pago';
-            pet.arquivado = true; // 🔥 OCULTA AO MARCAR COMO PAGO
+            pet.arquivado = true;
             pet.dataPagamento = new Date().toISOString();
             
-            // Se entregue e sem valor, usar valorPix
             if (pet.status === 'Entregue' && !pet.valorRecebido) {
                 pet.valorRecebido = pet.valorPix || 50.00;
             }
             
-            // Salvar
             await salvarPets();
             mostrarPets();
             mostrarMensagem(`✅ ${pet.nomePet} marcado como PAGO e arquivado!`, 'success');
@@ -3483,21 +3481,17 @@
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
-            // 🔥 Verificar se status é Entregue
             if (pet.status !== 'Entregue') {
                 mostrarMensagem('⚠️ Marque como "Entregue" primeiro!', 'warning');
                 return;
             }
             
-            // Confirmar
             if (!confirm(`Marcar ${pet.nomePet} como NÃO PAGO?`)) return;
             
-            // Atualizar
             pet.pagamento = 'Não pago';
-            pet.arquivado = true; // 🔥 OCULTA AO MARCAR COMO NÃO PAGO
+            pet.arquivado = true;
             pet.dataPagamento = new Date().toISOString();
             
-            // Salvar
             await salvarPets();
             mostrarPets();
             mostrarMensagem(`❌ ${pet.nomePet} marcado como NÃO PAGO e arquivado!`, 'warning');
@@ -3522,7 +3516,6 @@
                 }
             });
             
-            // Adicionar estilos para animações
             const style = document.createElement('style');
             style.textContent = `
                 @keyframes slideInLeft {
@@ -3554,6 +3547,12 @@
             `;
             document.head.appendChild(style);
         });
+
+        // Função auxiliar para mostrar pets com ordem
+        async function mostrarPetsComOrdem(petsOrdenados) {
+            // Implementação simplificada - em produção faria uma renderização otimizada
+            await mostrarPets();
+        }
     </script>
 </body>
 </html>
