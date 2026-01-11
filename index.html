@@ -1421,37 +1421,63 @@
         
         /* ============ NOVOS ESTILOS PARA MELHORIAS ============ */
         
-        /* Contadores visuais para admin */
+        /* Cards visuais recolhíveis para admin */
         .visual-counters {
             display: flex;
-            gap: 15px;
+            flex-direction: column;
+            gap: 10px;
             margin-top: 15px;
-            flex-wrap: wrap;
         }
         
-        .visual-counter-item {
-            flex: 1;
-            min-width: 200px;
+        .visual-counter-card {
             background: var(--glass-bg);
-            border-radius: 15px;
-            padding: 15px;
-            box-shadow: var(--shadow-md);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: var(--shadow-sm);
             border: 1px solid var(--glass-border);
             transition: var(--transition);
+            cursor: pointer;
         }
         
-        .visual-counter-item:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
+        .visual-counter-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
         
-        .visual-counter-item h4 {
-            font-size: 14px;
-            color: var(--gray-600);
+        .visual-counter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 10px;
+        }
+        
+        .visual-counter-header h4 {
+            font-size: 14px;
+            color: var(--gray-700);
             display: flex;
             align-items: center;
             gap: 8px;
+            font-weight: 600;
+        }
+        
+        .visual-counter-toggle {
+            background: none;
+            border: none;
+            font-size: 12px;
+            color: var(--gray-500);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .visual-counter-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+        
+        .visual-counter-content.expanded {
+            max-height: 300px;
+            overflow-y: auto;
         }
         
         .pet-list-mini {
@@ -1468,16 +1494,19 @@
             background: var(--gray-50);
             border-radius: 8px;
             transition: var(--transition);
+            cursor: pointer;
         }
         
         .pet-mini-item:hover {
             background: var(--gray-100);
+            transform: translateX(3px);
         }
         
         .pet-mini-color {
             width: 12px;
             height: 12px;
             border-radius: 50%;
+            flex-shrink: 0;
         }
         
         .pet-mini-info {
@@ -1486,7 +1515,11 @@
             color: var(--gray-700);
         }
         
-        /* Botões de prioridade */
+        .pet-mini-info strong {
+            color: var(--gray-900);
+        }
+        
+        /* Botões de prioridade (apenas alta e média) */
         .priority-buttons {
             display: flex;
             gap: 8px;
@@ -1510,11 +1543,6 @@
         
         .priority-btn.media {
             background: linear-gradient(90deg, #f59e0b, #d97706);
-            color: white;
-        }
-        
-        .priority-btn.baixa {
-            background: linear-gradient(90deg, #10b981, #059669);
             color: white;
         }
         
@@ -1552,27 +1580,62 @@
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
         }
         
-        /* Formulário multi-pet */
-        .pets-container {
-            display: grid;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .pet-form-section {
+        /* Formulário multi-pet agrupado */
+        .multi-pets-container {
             background: #f8fafc;
             padding: 15px;
             border-radius: 12px;
+            margin-bottom: 15px;
             border: 2px dashed #cbd5e1;
         }
         
-        .pet-form-section h4 {
-            font-size: 14px;
-            color: var(--gray-700);
+        .multi-pet-item {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
             margin-bottom: 10px;
+            border: 1px solid var(--gray-200);
+        }
+        
+        .multi-pet-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .multi-pet-number {
+            background: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .multi-pet-fields {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .remove-pet-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
         }
         
         .add-pet-btn {
@@ -1587,6 +1650,10 @@
             transition: var(--transition);
             width: 100%;
             margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .add-pet-btn:hover {
@@ -1594,25 +1661,49 @@
             transform: translateY(-2px);
         }
         
-        /* Contadores para motorista (escondidos) */
-        .stats-container.motorista {
-            display: none;
+        /* Display de múltiplos pets no card */
+        .multi-pets-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
         }
         
-        /* Status neutro */
-        .status-btn.neutro {
+        .pet-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
             background: var(--gray-100);
-            color: var(--gray-500);
+            border-radius: 15px;
+            font-size: 12px;
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
         }
         
-        .status-btn.neutro.active {
-            background: var(--primary-gradient);
+        .pet-tag-color {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        /* Botão admin marcar como pago */
+        .admin-pagamento-btn {
+            background: linear-gradient(90deg, #10b981, #059669);
             color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-left: 8px;
         }
         
-        /* Card entregue oculto para admin */
-        .pet-card.entregue-admin {
-            display: none;
+        .admin-pagamento-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
         }
         
         /* ============ ANIMAÇÕES ============ */
@@ -1664,10 +1755,6 @@
             .delivered-sidebar {
                 width: 300px;
                 right: -300px;
-            }
-            
-            .visual-counter-item {
-                min-width: 100%;
             }
         }
         
@@ -1743,12 +1830,8 @@
                 width: 100%;
             }
             
-            .priority-buttons {
-                flex-wrap: wrap;
-            }
-            
-            .visual-counters {
-                flex-direction: column;
+            .multi-pet-fields {
+                grid-template-columns: 1fr;
             }
         }
         
@@ -1851,23 +1934,7 @@
                 <h1>🐾 Pet Shop Transport</h1>
                 <p id="userRole">Sistema premium de transporte de pets</p>
                 
-                <!-- Contadores para Admin -->
-                <div class="stats-container" id="adminStats" style="display: none;">
-                    <div class="stat-badge">
-                        <span class="count" id="countWaitingAdmin">0</span>
-                        <span>Aguardando</span>
-                    </div>
-                    <div class="stat-badge">
-                        <span class="count" id="countInTransitAdmin">0</span>
-                        <span>Em Transporte</span>
-                    </div>
-                    <div class="stat-badge">
-                        <span class="count" id="countDeliveredAdmin">0</span>
-                        <span>Entregues</span>
-                    </div>
-                </div>
-                
-                <!-- Contadores visuais para Admin -->
+                <!-- Cards visuais recolhíveis para Admin -->
                 <div class="visual-counters" id="visualCounters" style="display: none;">
                     <!-- Será preenchido via JavaScript -->
                 </div>
@@ -1926,65 +1993,61 @@
                 </div>
             </div>
             
-            <!-- Container para múltiplos pets -->
-            <div class="pets-container" id="petsContainer">
-                <!-- Pet 1 -->
-                <div class="pet-form-section" id="petSection1">
-                    <h4>🐕 Pet 1</h4>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Nome do Pet</label>
-                            <input type="text" class="nomePet" placeholder="Ex: Max">
-                        </div>
-                        <div class="form-group">
-                            <label>🎨 Raça</label>
-                            <select class="raca">
-                                <option value="">Selecione</option>
-                                <option>Shitzu</option>
-                                <option>Poodle</option>
-                                <option>Labrador</option>
-                                <option>Bulldog</option>
-                                <option>Golden Retriever</option>
-                                <option>Vira-lata</option>
-                                <option>Persa</option>
-                                <option>Siamês</option>
-                                <option>Maine Coon</option>
-                                <option>Outro</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>🌈 Cor</label>
-                            <select class="cor">
-                                <option value="">Selecione</option>
-                                <option>Marrom</option>
-                                <option>Branco</option>
-                                <option>Preto</option>
-                                <option>Caramelo</option>
-                                <option>Cinza</option>
-                                <option>Malhado</option>
-                                <option>Outra</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>⏱️ Tempo</label>
-                            <input type="text" class="tempo" placeholder="Ex: 12 minutos">
-                        </div>
-                    </div>
-                    
-                    <!-- Seleção de cor personalizada -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label>⏱️ Tempo Estimado</label>
+                    <input type="text" id="tempo" placeholder="Ex: 12 minutos">
+                </div>
+            </div>
+            
+            <!-- Primeiro Pet -->
+            <div class="multi-pets-container">
+                <h4 style="margin-bottom: 15px; color: var(--gray-700); display: flex; align-items: center; gap: 8px;">
+                    🐕 Pet 1
+                </h4>
+                
+                <div class="form-row">
                     <div class="form-group">
-                        <label>🎨 Cor Personalizada (Prioridade)</label>
-                        <div class="priority-buttons">
-                            <button type="button" class="priority-btn alta" onclick="selecionarCorPrioridade(1, 'alta')">Alta</button>
-                            <button type="button" class="priority-btn media" onclick="selecionarCorPrioridade(1, 'media')">Média</button>
-                            <button type="button" class="priority-btn baixa" onclick="selecionarCorPrioridade(1, 'baixa')">Baixa</button>
-                        </div>
+                        <label>Nome do Pet</label>
+                        <input type="text" id="nomePet" placeholder="Ex: Max">
+                    </div>
+                    <div class="form-group">
+                        <label>🎨 Raça</label>
+                        <select id="raca">
+                            <option value="">Selecione</option>
+                            <option>Shitzu</option>
+                            <option>Poodle</option>
+                            <option>Labrador</option>
+                            <option>Bulldog</option>
+                            <option>Golden Retriever</option>
+                            <option>Vira-lata</option>
+                            <option>Persa</option>
+                            <option>Siamês</option>
+                            <option>Maine Coon</option>
+                            <option>Outro</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>🌈 Cor</label>
+                        <select id="cor">
+                            <option value="">Selecione</option>
+                            <option>Marrom</option>
+                            <option>Branco</option>
+                            <option>Preto</option>
+                            <option>Caramelo</option>
+                            <option>Cinza</option>
+                            <option>Malhado</option>
+                            <option>Outra</option>
+                        </select>
                     </div>
                 </div>
             </div>
+            
+            <!-- Container para pets adicionais -->
+            <div id="additionalPetsContainer"></div>
             
             <!-- Botão para adicionar mais pets -->
             <button type="button" class="add-pet-btn" id="addPetBtn" onclick="adicionarNovoPet()">
@@ -2000,8 +2063,8 @@
         <div class="pets-list" id="petsList"></div>
         
         <!-- Seção de entregues para Admin -->
-        <div id="adminDeliveredSection" style="display: none;">
-            <h2 style="margin: 30px 0 15px 0; color: var(--gray-800);">✅ Pets Entregues</h2>
+        <div id="adminDeliveredSection" style="display: none; margin-top: 30px;">
+            <h2 style="margin-bottom: 15px; color: var(--gray-800); padding-bottom: 10px; border-bottom: 2px solid var(--gray-200);">✅ Pets Entregues</h2>
             <div class="pets-list" id="adminDeliveredList"></div>
         </div>
     </div>
@@ -2022,7 +2085,7 @@
         let editingPetId = null;
         let isReordering = false;
         let totalPetsNoForm = 1;
-        let petColors = {};
+        let petsAdicionais = [];
 
         // ========== PIX CONFIG ==========
         const PIX_CONFIG = {
@@ -2037,7 +2100,6 @@
             const addBtn = document.getElementById('addBtn');
             const userBadge = document.getElementById('userBadge');
             const userRole = document.getElementById('userRole');
-            const adminStats = document.getElementById('adminStats');
             const visualCounters = document.getElementById('visualCounters');
             const adminDeliveredSection = document.getElementById('adminDeliveredSection');
             
@@ -2046,7 +2108,6 @@
                 userBadge.textContent = 'Administrador';
                 userBadge.classList.add('admin');
                 userRole.textContent = 'Sistema de transporte - Modo Administrador';
-                adminStats.style.display = 'flex';
                 visualCounters.style.display = 'flex';
                 adminDeliveredSection.style.display = 'block';
             } else {
@@ -2054,7 +2115,6 @@
                 userBadge.textContent = 'Motorista';
                 userBadge.classList.remove('admin');
                 userRole.textContent = 'Sistema de transporte - Modo Motorista';
-                adminStats.style.display = 'none';
                 visualCounters.style.display = 'none';
                 adminDeliveredSection.style.display = 'none';
             }
@@ -2085,17 +2145,17 @@
         // ========== FUNÇÕES DO FORMULÁRIO MULTI-PET ==========
         function resetarFormularioMultiPet() {
             totalPetsNoForm = 1;
-            const petsContainer = document.getElementById('petsContainer');
-            petsContainer.innerHTML = '';
+            petsAdicionais = [];
+            const additionalPetsContainer = document.getElementById('additionalPetsContainer');
+            additionalPetsContainer.innerHTML = '';
             
-            // Adicionar primeiro pet
-            adicionarNovoPet(true);
-            
-            // Resetar cores
-            petColors = {};
+            // Resetar campos do primeiro pet
+            document.getElementById('nomePet').value = '';
+            document.getElementById('raca').value = '';
+            document.getElementById('cor').value = '';
         }
 
-        function adicionarNovoPet(isFirst = false) {
+        function adicionarNovoPet() {
             if (totalPetsNoForm >= 5) {
                 mostrarMensagem('⚠️ Máximo de 5 pets por cliente!', 'warning');
                 return;
@@ -2104,25 +2164,20 @@
             totalPetsNoForm++;
             const petId = totalPetsNoForm;
             
-            const petsContainer = document.getElementById('petsContainer');
-            const petSection = document.createElement('div');
-            petSection.className = 'pet-form-section';
-            petSection.id = `petSection${petId}`;
+            const additionalPetsContainer = document.getElementById('additionalPetsContainer');
+            const petDiv = document.createElement('div');
+            petDiv.className = 'multi-pet-item';
+            petDiv.id = `petAdicional${petId}`;
             
-            petSection.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <h4>🐕 Pet ${petId}</h4>
-                    ${!isFirst ? `<button type="button" style="background: var(--danger); color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer;" onclick="removerPetForm(${petId})">🗑️ Remover</button>` : ''}
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Nome do Pet</label>
-                        <input type="text" class="nomePet" placeholder="Ex: Max">
+            petDiv.innerHTML = `
+                <div class="multi-pet-number">${petId}</div>
+                <div class="multi-pet-fields">
+                    <div>
+                        <input type="text" class="nomePetAdicional" placeholder="Nome do Pet" style="width: 100%; padding: 8px; border: 2px solid var(--gray-200); border-radius: 8px;">
                     </div>
-                    <div class="form-group">
-                        <label>🎨 Raça</label>
-                        <select class="raca">
-                            <option value="">Selecione</option>
+                    <div>
+                        <select class="racaAdicional" style="width: 100%; padding: 8px; border: 2px solid var(--gray-200); border-radius: 8px;">
+                            <option value="">Raça</option>
                             <option>Shitzu</option>
                             <option>Poodle</option>
                             <option>Labrador</option>
@@ -2135,13 +2190,9 @@
                             <option>Outro</option>
                         </select>
                     </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>🌈 Cor</label>
-                        <select class="cor">
-                            <option value="">Selecione</option>
+                    <div>
+                        <select class="corAdicional" style="width: 100%; padding: 8px; border: 2px solid var(--gray-200); border-radius: 8px;">
+                            <option value="">Cor</option>
                             <option>Marrom</option>
                             <option>Branco</option>
                             <option>Preto</option>
@@ -2151,72 +2202,106 @@
                             <option>Outra</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>⏱️ Tempo</label>
-                        <input type="text" class="tempo" placeholder="Ex: 12 minutos">
-                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label>🎨 Cor Personalizada (Prioridade)</label>
-                    <div class="priority-buttons">
-                        <button type="button" class="priority-btn alta" onclick="selecionarCorPrioridade(${petId}, 'alta')">Alta</button>
-                        <button type="button" class="priority-btn media" onclick="selecionarCorPrioridade(${petId}, 'media')">Média</button>
-                        <button type="button" class="priority-btn baixa" onclick="selecionarCorPrioridade(${petId}, 'baixa')">Baixa</button>
-                    </div>
-                </div>
+                <button type="button" class="remove-pet-btn" onclick="removerPetAdicional(${petId})">×</button>
             `;
             
-            petsContainer.appendChild(petSection);
+            additionalPetsContainer.appendChild(petDiv);
+            
+            // Salvar dados no array
+            petsAdicionais.push({
+                id: petId,
+                nomePet: '',
+                raca: '',
+                cor: ''
+            });
         }
 
-        function removerPetForm(petId) {
-            if (totalPetsNoForm <= 1) return;
-            
-            const petSection = document.getElementById(`petSection${petId}`);
-            if (petSection) {
-                petSection.remove();
+        function removerPetAdicional(petId) {
+            const petDiv = document.getElementById(`petAdicional${petId}`);
+            if (petDiv) {
+                petDiv.remove();
                 totalPetsNoForm--;
                 
+                // Remover do array
+                petsAdicionais = petsAdicionais.filter(p => p.id !== petId);
+                
                 // Renumerar os pets restantes
-                const sections = document.querySelectorAll('.pet-form-section');
-                sections.forEach((section, index) => {
-                    const newId = index + 1;
-                    section.id = `petSection${newId}`;
-                    const h4 = section.querySelector('h4');
-                    if (h4) h4.textContent = `🐕 Pet ${newId}`;
-                    
-                    // Atualizar botões de prioridade
-                    const buttons = section.querySelectorAll('.priority-btn');
-                    buttons.forEach(btn => {
-                        btn.onclick = function() {
-                            const priority = this.classList.contains('alta') ? 'alta' : 
-                                           this.classList.contains('media') ? 'media' : 'baixa';
-                            selecionarCorPrioridade(newId, priority);
-                        };
-                    });
+                const petItems = document.querySelectorAll('.multi-pet-item');
+                petItems.forEach((item, index) => {
+                    const newId = index + 2; // Começa do 2
+                    item.id = `petAdicional${newId}`;
+                    const numberDiv = item.querySelector('.multi-pet-number');
+                    if (numberDiv) numberDiv.textContent = newId;
                     
                     // Atualizar botão de remover
-                    const removeBtn = section.querySelector('button[onclick^="removerPetForm"]');
-                    if (removeBtn && newId > 1) {
-                        removeBtn.onclick = function() { removerPetForm(newId); };
+                    const removeBtn = item.querySelector('.remove-pet-btn');
+                    if (removeBtn) {
+                        removeBtn.onclick = function() { removerPetAdicional(newId); };
+                    }
+                    
+                    // Atualizar no array
+                    const petIndex = petsAdicionais.findIndex(p => p.id === parseInt(item.id.replace('petAdicional', '')));
+                    if (petIndex !== -1) {
+                        petsAdicionais[petIndex].id = newId;
                     }
                 });
             }
         }
 
-        function selecionarCorPrioridade(petId, prioridade) {
-            // Remover classe active de todos os botões deste pet
-            const section = document.getElementById(`petSection${petId}`);
-            const buttons = section.querySelectorAll('.priority-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
+        // ========== ORDENAÇÃO DINÂMICA (CÓDIGO ANTERIOR FUNCIONAL) ==========
+        function aplicarOrdenacaoDinamicaCorrigida() {
+            if (isReordering) return;
+            isReordering = true;
             
-            // Adicionar classe active ao botão clicado
-            const clickedBtn = section.querySelector(`.priority-btn.${prioridade}`);
-            clickedBtn.classList.add('active');
+            let petsVisiveis = isAdmin ? [...pets] : pets.filter(p => !p.arquivado && p.status !== 'Entregue');
             
-            // Salvar cor no objeto
-            petColors[petId] = prioridade;
+            // 🔥 ORDENAÇÃO ORIGINAL FUNCIONAL: Manter pets em transporte no topo
+            const emTransporte = petsVisiveis.filter(p => 
+                p.status === 'A caminho da loja' || 
+                p.status === 'A caminho da entrega' ||
+                p.status === 'A caminho retirada'
+            );
+            
+            const outros = petsVisiveis.filter(p => 
+                !(p.status === 'A caminho da loja' || 
+                  p.status === 'A caminho da entrega' || 
+                  p.status === 'A caminho retirada')
+            );
+            
+            // Ordenar por status prioritário
+            emTransporte.sort((a, b) => {
+                const statusOrder = {
+                    'A caminho da loja': 1,
+                    'A caminho da entrega': 2,
+                    'A caminho retirada': 3
+                };
+                
+                const orderA = statusOrder[a.status] || 999;
+                const orderB = statusOrder[b.status] || 999;
+                
+                if (orderA !== orderB) {
+                    return orderA - orderB;
+                }
+                
+                // Depois, ordenar por hora de retirada
+                return (a.horaRetirada || '').localeCompare(b.horaRetirada || '');
+            });
+            
+            // Juntar mantendo ordem relativa
+            const novaOrdem = [...emTransporte, ...outros];
+            
+            // Atualizar array original
+            pets.forEach(pet => {
+                const novoPet = novaOrdem.find(p => p.id === pet.id);
+                if (novoPet) {
+                    Object.assign(pet, novoPet);
+                }
+            });
+            
+            salvarPets();
+            isReordering = false;
+            return novaOrdem;
         }
 
         // ========== FUNÇÕES JSONBIN ==========
@@ -2229,11 +2314,10 @@
                 pets = data.record?.pets || [];
                 await mostrarPets();
                 atualizarHora();
-                atualizarEstatisticas();
                 mostrarProximaRetirada();
                 atualizarHistoricoEntregas();
                 if (isAdmin) {
-                    atualizarContadoresVisuais();
+                    atualizarCardsVisuaisAdmin();
                     mostrarEntreguesAdmin();
                 }
             } catch (error) {
@@ -2241,11 +2325,10 @@
                 const local = localStorage.getItem('meusPets');
                 pets = local ? JSON.parse(local) : [];
                 await mostrarPets();
-                atualizarEstatisticas();
                 mostrarProximaRetirada();
                 atualizarHistoricoEntregas();
                 if (isAdmin) {
-                    atualizarContadoresVisuais();
+                    atualizarCardsVisuaisAdmin();
                     mostrarEntreguesAdmin();
                 }
             }
@@ -2268,36 +2351,59 @@
             }
         }
 
-        // ========== PRÓXIMA RETIRADA ==========
+        // ========== PRÓXIMA RETIRADA COM DUAS FUNÇÕES ==========
         function mostrarProximaRetirada() {
             const highlight = document.getElementById('nextPickupHighlight');
+            const agora = new Date();
+            const horaAtual = agora.getHours() * 60 + agora.getMinutes();
             
-            // Buscar pets marcados como próxima retirada
-            const proximosPets = pets.filter(p => 
+            // 🔥 FUNÇÃO 1: Baseada no horário (pets com horário próximo)
+            const petsHorarioProximo = pets.filter(p => 
                 !p.arquivado && 
-                p.proximaRetirada === true
+                p.status !== 'Entregue' &&
+                p.horaRetirada
+            ).map(pet => {
+                const horaPet = pet.horaRetirada ? 
+                    parseInt(pet.horaRetirada.split(':')[0]) * 60 + 
+                    parseInt(pet.horaRetirada.split(':')[1]) : 0;
+                return { pet, diferenca: horaPet - horaAtual };
+            }).filter(item => item.diferenca > 0 && item.diferenca <= 120)
+              .sort((a, b) => a.diferenca - b.diferenca)
+              .map(item => item.pet);
+            
+            // 🔥 FUNÇÃO 2: Pets com prioridade alta + status "A caminho da loja"
+            const petsPrioridadeAlta = pets.filter(p => 
+                !p.arquivado && 
+                p.prioridade === 'alta' && 
+                p.status === 'A caminho da loja'
             );
             
-            if (proximosPets.length > 0 && !isAdmin) {
+            // Juntar ambas as listas
+            const todosPetsProximaRetirada = [...new Set([...petsHorarioProximo, ...petsPrioridadeAlta])];
+            
+            if (todosPetsProximaRetirada.length > 0 && !isAdmin) {
                 highlight.style.display = 'block';
                 
                 let html = `<div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
                     <div style="font-size: 32px;">⏰</div>
                     <div>
                         <h3 style="margin-bottom: 10px; color: var(--primary-dark);">
-                            Próxima Retirada Marcada
+                            Próxima Retirada
                         </h3>
                     </div>
                 </div>`;
                 
-                proximosPets.forEach(pet => {
+                todosPetsProximaRetirada.forEach(pet => {
+                    const isPrioridadeAlta = pet.prioridade === 'alta' && pet.status === 'A caminho da loja';
+                    
                     html += `
-                        <div style="background: white; padding: 12px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid #8b5cf6;">
+                        <div style="background: white; padding: 12px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid ${isPrioridadeAlta ? '#ef4444' : '#8b5cf6'};">
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <div style="width: 8px; height: 8px; border-radius: 50%; background: #8b5cf6;"></div>
-                                <div>
+                                <div style="width: 8px; height: 8px; border-radius: 50%; background: ${isPrioridadeAlta ? '#ef4444' : '#8b5cf6'};"></div>
+                                <div style="flex: 1;">
                                     <strong>${pet.nomePet}</strong> - ${pet.cliente}<br>
                                     <small style="color: var(--gray-600);">${pet.horaRetirada} | ${pet.raca}</small>
+                                    ${isPrioridadeAlta ? '<div style="font-size: 10px; color: #ef4444; margin-top: 2px;">⭐ Prioridade Alta</div>' : ''}
                                 </div>
                             </div>
                         </div>
@@ -2310,85 +2416,112 @@
             }
         }
 
-        // ========== ATUALIZAR ESTATÍSTICAS ==========
-        function atualizarEstatisticas() {
-            if (isAdmin) {
-                const countWaiting = document.getElementById('countWaitingAdmin');
-                const countInTransit = document.getElementById('countInTransitAdmin');
-                const countDelivered = document.getElementById('countDeliveredAdmin');
-                
-                const waiting = pets.filter(p => 
-                    !p.arquivado && !p.entregue && 
-                    (p.status === 'neutro' || p.status === 'A caminho retirada')
-                ).length;
-                
-                const inTransit = pets.filter(p => 
-                    !p.arquivado && !p.entregue && 
-                    (p.status === 'A caminho da loja' || p.status === 'A caminho da entrega')
-                ).length;
-                
-                const delivered = pets.filter(p => 
-                    p.status === 'Entregue' && !p.arquivado
-                ).length;
-                
-                countWaiting.textContent = waiting;
-                countInTransit.textContent = inTransit;
-                countDelivered.textContent = delivered;
-            }
-        }
-
-        // ========== CONTADORES VISUAIS PARA ADMIN ==========
-        function atualizarContadoresVisuais() {
+        // ========== CARDS VISUAIS RECOLHÍVEIS PARA ADMIN ==========
+        function atualizarCardsVisuaisAdmin() {
+            if (!isAdmin) return;
+            
             const visualCounters = document.getElementById('visualCounters');
             
-            // Filtrar pets não arquivados e não entregues
-            const petsAtivos = pets.filter(p => !p.arquivado && p.status !== 'Entregue');
+            // Filtrar pets por status
+            const aguardando = pets.filter(p => !p.arquivado && p.status !== 'Entregue' && 
+                (p.status === 'A caminho retirada' || !p.status || p.status === ''));
             
-            // Agrupar por status
-            const aguardando = petsAtivos.filter(p => p.status === 'neutro' || p.status === 'A caminho retirada');
-            const emTransporte = petsAtivos.filter(p => p.status === 'A caminho da loja' || p.status === 'A caminho da entrega');
+            const emTransporte = pets.filter(p => !p.arquivado && p.status !== 'Entregue' && 
+                (p.status === 'A caminho da loja' || p.status === 'A caminho da entrega'));
+            
+            const entregues = pets.filter(p => p.status === 'Entregue' && !p.arquivado);
             
             visualCounters.innerHTML = `
-                <div class="visual-counter-item">
-                    <h4>⏳ Aguardando (${aguardando.length})</h4>
-                    <div class="pet-list-mini">
-                        ${aguardando.slice(0, 5).map(pet => `
-                            <div class="pet-mini-item" onclick="scrollToPet(${pet.id})" style="cursor: pointer;">
-                                <div class="pet-mini-color" style="background: ${getPetColor(pet)}"></div>
-                                <div class="pet-mini-info">
-                                    <strong>${pet.nomePet}</strong><br>
-                                    <small>${pet.cliente}</small>
+                <div class="visual-counter-card" onclick="toggleCardVisual(this)">
+                    <div class="visual-counter-header">
+                        <h4>⏳ Aguardando (${aguardando.length})</h4>
+                        <button class="visual-counter-toggle">▼</button>
+                    </div>
+                    <div class="visual-counter-content">
+                        <div class="pet-list-mini">
+                            ${aguardando.length > 0 ? aguardando.map(pet => `
+                                <div class="pet-mini-item" onclick="scrollToPet(${pet.id})">
+                                    <div class="pet-mini-color" style="background: ${getPetColor(pet)}"></div>
+                                    <div class="pet-mini-info">
+                                        <strong>${pet.nomePet}</strong><br>
+                                        <small>${pet.cliente}</small>
+                                    </div>
                                 </div>
-                                ${pet.proximaRetirada ? '<span style="color: #8b5cf6; font-size: 10px;">⏰</span>' : ''}
-                            </div>
-                        `).join('')}
-                        ${aguardando.length > 5 ? `<div style="font-size: 11px; color: var(--gray-500); text-align: center; padding: 5px;">+${aguardando.length - 5} mais</div>` : ''}
+                            `).join('') : `
+                                <div style="text-align: center; padding: 10px; color: var(--gray-500); font-size: 12px;">
+                                    Nenhum pet aguardando
+                                </div>
+                            `}
+                        </div>
                     </div>
                 </div>
                 
-                <div class="visual-counter-item">
-                    <h4>🚗 Em Transporte (${emTransporte.length})</h4>
-                    <div class="pet-list-mini">
-                        ${emTransporte.slice(0, 5).map(pet => `
-                            <div class="pet-mini-item" onclick="scrollToPet(${pet.id})" style="cursor: pointer;">
-                                <div class="pet-mini-color" style="background: ${getPetColor(pet)}"></div>
-                                <div class="pet-mini-info">
-                                    <strong>${pet.nomePet}</strong><br>
-                                    <small>${pet.cliente}</small>
+                <div class="visual-counter-card" onclick="toggleCardVisual(this)">
+                    <div class="visual-counter-header">
+                        <h4>🚗 Em Transporte (${emTransporte.length})</h4>
+                        <button class="visual-counter-toggle">▼</button>
+                    </div>
+                    <div class="visual-counter-content">
+                        <div class="pet-list-mini">
+                            ${emTransporte.length > 0 ? emTransporte.map(pet => `
+                                <div class="pet-mini-item" onclick="scrollToPet(${pet.id})">
+                                    <div class="pet-mini-color" style="background: ${getPetColor(pet)}"></div>
+                                    <div class="pet-mini-info">
+                                        <strong>${pet.nomePet}</strong><br>
+                                        <small>${pet.cliente} - ${pet.status}</small>
+                                    </div>
                                 </div>
-                                <span style="font-size: 10px; color: var(--gray-500);">${pet.status}</span>
-                            </div>
-                        `).join('')}
-                        ${emTransporte.length > 5 ? `<div style="font-size: 11px; color: var(--gray-500); text-align: center; padding: 5px;">+${emTransporte.length - 5} mais</div>` : ''}
+                            `).join('') : `
+                                <div style="text-align: center; padding: 10px; color: var(--gray-500); font-size: 12px;">
+                                    Nenhum pet em transporte
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="visual-counter-card" onclick="toggleCardVisual(this)">
+                    <div class="visual-counter-header">
+                        <h4>✅ Entregues (${entregues.length})</h4>
+                        <button class="visual-counter-toggle">▼</button>
+                    </div>
+                    <div class="visual-counter-content">
+                        <div class="pet-list-mini">
+                            ${entregues.length > 0 ? entregues.map(pet => `
+                                <div class="pet-mini-item" onclick="scrollToPet(${pet.id})">
+                                    <div class="pet-mini-color" style="background: ${getPetColor(pet)}"></div>
+                                    <div class="pet-mini-info">
+                                        <strong>${pet.nomePet}</strong><br>
+                                        <small>${pet.cliente} - ${pet.pagamento === 'Pago' ? '✅ Pago' : '❌ Não Pago'}</small>
+                                    </div>
+                                </div>
+                            `).join('') : `
+                                <div style="text-align: center; padding: 10px; color: var(--gray-500); font-size: 12px;">
+                                    Nenhum pet entregue
+                                </div>
+                            `}
+                        </div>
                     </div>
                 </div>
             `;
         }
 
+        function toggleCardVisual(card) {
+            const content = card.querySelector('.visual-counter-content');
+            const toggleBtn = card.querySelector('.visual-counter-toggle');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                toggleBtn.textContent = '▼';
+            } else {
+                content.classList.add('expanded');
+                toggleBtn.textContent = '▲';
+            }
+        }
+
         function getPetColor(pet) {
-            if (pet.corPrioridade === 'alta') return '#ef4444';
-            if (pet.corPrioridade === 'media') return '#f59e0b';
-            if (pet.corPrioridade === 'baixa') return '#10b981';
+            if (pet.prioridade === 'alta') return '#ef4444';
+            if (pet.prioridade === 'media') return '#f59e0b';
             return '#6b7280';
         }
 
@@ -2539,7 +2672,7 @@
             `).join('');
         }
 
-        // ========== SISTEMA PIX CORRIGIDO ==========
+        // ========== SISTEMA PIX ==========
         function mostrarModalPix(petId) {
             const modal = document.getElementById('pixModal');
             const pixValor = document.getElementById('pixValor');
@@ -2609,7 +2742,7 @@
             }
         }
 
-        // ========== SISTEMA DE EDIÇÃO CORRIGIDO ==========
+        // ========== SISTEMA DE EDIÇÃO ==========
         function habilitarEdicao(petId) {
             if (!isAdmin) return;
             
@@ -2622,18 +2755,15 @@
             document.getElementById('endereco').value = pet.endereco;
             document.getElementById('horaRetirada').value = pet.horaRetirada;
             document.getElementById('valorPix').value = pet.valorPix || '50.00';
+            document.getElementById('tempo').value = pet.tempo || '';
             
             // Configurar primeiro pet
-            const petSection1 = document.getElementById('petSection1');
-            petSection1.querySelector('.nomePet').value = pet.nomePet;
-            petSection1.querySelector('.raca').value = pet.raca;
-            petSection1.querySelector('.cor').value = pet.cor;
-            petSection1.querySelector('.tempo').value = pet.tempo;
+            document.getElementById('nomePet').value = pet.nomePet;
+            document.getElementById('raca').value = pet.raca;
+            document.getElementById('cor').value = pet.cor;
             
-            // Configurar cor de prioridade
-            if (pet.corPrioridade) {
-                selecionarCorPrioridade(1, pet.corPrioridade);
-            }
+            // Limpar pets adicionais
+            resetarFormularioMultiPet();
             
             const form = document.getElementById('formContainer');
             const btn = document.getElementById('addBtn');
@@ -2659,18 +2789,21 @@
             pet.endereco = document.getElementById('endereco').value.trim();
             pet.horaRetirada = document.getElementById('horaRetirada').value;
             pet.valorPix = parseFloat(document.getElementById('valorPix').value) || 50.00;
+            pet.tempo = document.getElementById('tempo').value.trim();
             
             // Atualizar primeiro pet
-            const petSection1 = document.getElementById('petSection1');
-            pet.nomePet = petSection1.querySelector('.nomePet').value.trim();
-            pet.raca = petSection1.querySelector('.raca').value;
-            pet.cor = petSection1.querySelector('.cor').value;
-            pet.tempo = petSection1.querySelector('.tempo').value.trim();
-            pet.corPrioridade = petColors[1] || pet.corPrioridade;
+            pet.nomePet = document.getElementById('nomePet').value.trim();
+            pet.raca = document.getElementById('raca').value;
+            pet.cor = document.getElementById('cor').value;
             
             await salvarPets();
             await mostrarPets();
             cancelarEdicao();
+            
+            if (isAdmin) {
+                atualizarCardsVisuaisAdmin();
+                mostrarEntreguesAdmin();
+            }
             
             mostrarMensagem('✅ Pet atualizado com sucesso!', 'success');
         }
@@ -2682,6 +2815,7 @@
             document.getElementById('endereco').value = '';
             document.getElementById('horaRetirada').value = '14:30';
             document.getElementById('valorPix').value = '50.00';
+            document.getElementById('tempo').value = '';
             
             const submitBtn = document.querySelector('.submit-btn');
             submitBtn.textContent = '✨ Adicionar Transporte';
@@ -2697,7 +2831,7 @@
             resetarFormularioMultiPet();
         }
 
-        // ========== CRUD PETS COM VALOR PIX ==========
+        // ========== ADICIONAR PET COM MULTI-PETS ==========
         async function adicionarPet() {
             if (!isAdmin && !editingPetId) return;
             
@@ -2705,35 +2839,82 @@
             const endereco = document.getElementById('endereco').value.trim();
             const horaRetirada = document.getElementById('horaRetirada').value || '14:30';
             const valorPix = parseFloat(document.getElementById('valorPix').value) || 50.00;
+            const tempo = document.getElementById('tempo').value.trim() || '12 minutos';
             
             if (!cliente || !endereco) {
                 mostrarMensagem('⚠️ Preencha cliente e endereço!', 'warning');
                 return;
             }
             
-            // Coletar todos os pets do formulário
-            const petsToAdd = [];
-            const petSections = document.querySelectorAll('.pet-form-section');
+            // Coletar primeiro pet
+            const nomePet = document.getElementById('nomePet').value.trim();
+            const raca = document.getElementById('raca').value;
+            const cor = document.getElementById('cor').value;
             
-            petSections.forEach((section, index) => {
-                const petId = index + 1;
-                const nomePet = section.querySelector('.nomePet').value.trim();
-                const raca = section.querySelector('.raca').value;
-                const cor = section.querySelector('.cor').value;
-                const tempo = section.querySelector('.tempo').value.trim();
+            if (!nomePet || !raca || !cor) {
+                mostrarMensagem('⚠️ Preencha os dados do primeiro pet!', 'warning');
+                return;
+            }
+            
+            // Coletar pets adicionais
+            const petsAdicionaisColetados = [];
+            document.querySelectorAll('.multi-pet-item').forEach((item, index) => {
+                const nome = item.querySelector('.nomePetAdicional')?.value.trim();
+                const raca = item.querySelector('.racaAdicional')?.value;
+                const cor = item.querySelector('.corAdicional')?.value;
                 
-                if (nomePet && raca && cor) {
+                if (nome && raca && cor) {
+                    petsAdicionaisColetados.push({ nomePet: nome, raca, cor });
+                }
+            });
+            
+            // Criar array com todos os pets
+            const todosPets = [
+                { nomePet, raca, cor },
+                ...petsAdicionaisColetados
+            ];
+            
+            if (todosPets.length === 0) {
+                mostrarMensagem('⚠️ Adicione pelo menos um pet!', 'warning');
+                return;
+            }
+            
+            if (todosPets.length > 5) {
+                mostrarMensagem('⚠️ Máximo de 5 pets por cliente!', 'warning');
+                return;
+            }
+            
+            if (editingPetId) {
+                // Edição - atualizar apenas o pet principal
+                const pet = pets.find(p => p.id === editingPetId);
+                if (pet) {
+                    pet.cliente = cliente;
+                    pet.endereco = endereco;
+                    pet.horaRetirada = horaRetirada;
+                    pet.valorPix = valorPix;
+                    pet.tempo = tempo;
+                    pet.nomePet = nomePet;
+                    pet.raca = raca;
+                    pet.cor = cor;
+                    pet.petsAdicionais = petsAdicionaisColetados;
+                }
+            } else {
+                // Criação - adicionar todos os pets
+                const clienteId = Date.now();
+                
+                todosPets.forEach((petData, index) => {
                     const pet = {
-                        id: editingPetId ? petId + editingPetId : Date.now() + petId,
+                        id: clienteId + index,
+                        clienteId: clienteId,
                         cliente: cliente,
-                        nomePet: nomePet,
-                        raca: raca,
-                        cor: cor,
+                        nomePet: petData.nomePet,
+                        raca: petData.raca,
+                        cor: petData.cor,
                         endereco: endereco,
-                        tempo: tempo || '12 minutos',
+                        tempo: tempo, // 🔥 TEMPO ÚNICO PARA TODOS
                         horaRetirada: horaRetirada,
-                        valorPix: valorPix,
-                        status: 'neutro', // 🔥 CORREÇÃO: Status inicia como neutro
+                        valorPix: valorPix, // 🔥 VALOR ÚNICO PARA TODOS
+                        status: '', // 🔥 INICIA SEM STATUS
                         pagamento: 'Pendente',
                         observacoesAdmin: '',
                         observacoesMotorista: '',
@@ -2743,49 +2924,27 @@
                         dataCriacao: new Date().toISOString(),
                         arquivado: false,
                         pagamentoCollapsed: true,
-                        corPrioridade: petColors[petId] || 'baixa',
-                        proximaRetirada: false
+                        prioridade: null,
+                        petsAdicionais: index === 0 ? petsAdicionaisColetados : []
                     };
                     
-                    petsToAdd.push(pet);
-                }
-            });
-            
-            if (petsToAdd.length === 0) {
-                mostrarMensagem('⚠️ Adicione pelo menos um pet válido!', 'warning');
-                return;
-            }
-            
-            if (petsToAdd.length > 5) {
-                mostrarMensagem('⚠️ Máximo de 5 pets por cliente!', 'warning');
-                return;
-            }
-            
-            if (editingPetId) {
-                // Remover pets antigos deste cliente
-                pets = pets.filter(p => p.id < editingPetId || p.id >= editingPetId + 100);
-                
-                // Adicionar novos pets
-                pets.push(...petsToAdd);
-            } else {
-                // Adicionar novos pets
-                pets.push(...petsToAdd);
+                    pets.push(pet);
+                });
             }
             
             await salvarPets();
             await mostrarPets();
-            atualizarEstatisticas();
             mostrarProximaRetirada();
             atualizarHistoricoEntregas();
             
             if (isAdmin) {
-                atualizarContadoresVisuais();
+                atualizarCardsVisuaisAdmin();
                 mostrarEntreguesAdmin();
             }
             
             cancelarEdicao();
             
-            mostrarMensagem(`✅ ${petsToAdd.length} pet(s) adicionado(s) com sucesso!`, 'success');
+            mostrarMensagem(`✅ ${todosPets.length} pet(s) adicionado(s) com sucesso!`, 'success');
         }
 
         // ========== ATUALIZAR STATUS DO PET ==========
@@ -2796,7 +2955,7 @@
             const valorAnterior = pet[campo];
             pet[campo] = valor;
             
-            // 🔥 CORREÇÃO: Status "Entregue" agora funciona
+            // 🔥 CORREÇÃO: Status "Entregue" funciona corretamente
             if (campo === 'status' && valor === 'Entregue' && valorAnterior !== 'Entregue') {
                 const agora = new Date();
                 pet.horaEntregue = agora.toLocaleTimeString('pt-BR', { 
@@ -2814,7 +2973,7 @@
                 mostrarMensagem('✅ Pet marcado como entregue!', 'success');
             }
             
-            // 🔥 CORREÇÃO: Pagamento só pode ser marcado após entrega
+            // 🔥 CORREÇÃO: Pagamento só oculta quando marcado como Pago/Não Pago
             if (campo === 'pagamento') {
                 if (pet.status !== 'Entregue') {
                     mostrarMensagem('⚠️ Marque como "Entregue" antes de definir o pagamento!', 'warning');
@@ -2822,65 +2981,53 @@
                     return;
                 }
                 
-                if (!isAdmin) {
-                    // MOTORISTA: Quando marca Pago/Não Pago → ARQUIVA
+                // 🔥 OCULTAR CARD APENAS QUANDO MARCADO COMO PAGO/NÃO PAGO
+                if (valor === 'Pago' || valor === 'Não pago') {
                     pet.arquivado = true;
                     mostrarMensagem(`✅ ${valor} - Pet arquivado!`, 'success');
-                } else {
-                    // ADMIN: Apenas muda status
-                    mostrarMensagem(`✅ Status de pagamento atualizado!`, 'success');
                 }
             }
             
             await salvarPets();
             
-            if (campo === 'status' || campo === 'pagamento') {
+            // 🔥 ORDENAÇÃO DINÂMICA FUNCIONAL
+            if (campo === 'status' && valor !== 'Entregue') {
+                const container = document.getElementById('petsList');
+                const cards = container.querySelectorAll('.pet-card');
+                
+                cards.forEach(card => {
+                    card.classList.add('smooth-move');
+                });
+                
+                await new Promise(resolve => setTimeout(resolve, 50));
+                
+                const petsOrdenados = aplicarOrdenacaoDinamicaCorrigida();
+                await mostrarPetsComOrdem(petsOrdenados);
+                
+                setTimeout(() => {
+                    cards.forEach(card => {
+                        card.classList.remove('smooth-move');
+                    });
+                }, 600);
+            } else {
                 await mostrarPets();
             }
             
-            atualizarEstatisticas();
             mostrarProximaRetirada();
             atualizarHistoricoEntregas();
             
             if (isAdmin) {
-                atualizarContadoresVisuais();
+                atualizarCardsVisuaisAdmin();
                 mostrarEntreguesAdmin();
             }
         }
 
-        // ========== FUNÇÕES DE PRIORIDADE PARA ADMIN ==========
-        function marcarProximaRetirada(petId) {
-            const pet = pets.find(p => p.id === petId);
-            if (!pet) return;
-            
-            // Alternar estado
-            pet.proximaRetirada = !pet.proximaRetirada;
-            
-            // Remover próxima retirada de outros pets
-            if (pet.proximaRetirada) {
-                pets.forEach(p => {
-                    if (p.id !== petId) {
-                        p.proximaRetirada = false;
-                    }
-                });
-            }
-            
-            salvarPets();
-            mostrarPets();
-            mostrarProximaRetirada();
-            
-            mostrarMensagem(pet.proximaRetirada ? 
-                '✅ Marcado como próxima retirada!' : 
-                '❌ Removido das próximas retiradas', 
-                pet.proximaRetirada ? 'success' : 'warning'
-            );
-        }
-
+        // ========== FUNÇÕES DE PRIORIDADE (APENAS ALTA E MÉDIA) ==========
         function definirPrioridade(petId, prioridade) {
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
-            pet.corPrioridade = prioridade;
+            pet.prioridade = prioridade;
             salvarPets();
             mostrarPets();
             
@@ -2902,18 +3049,48 @@
             mostrarMensagem('✅ Observação salva!', 'success');
         }
 
+        // ========== ADMIN MARCAR COMO PAGO ==========
+        async function adminMarcarComoPago(petId) {
+            const pet = pets.find(p => p.id === petId);
+            if (!pet) return;
+            
+            if (pet.status !== 'Entregue') {
+                mostrarMensagem('⚠️ O pet precisa estar marcado como "Entregue"!', 'warning');
+                return;
+            }
+            
+            if (!confirm(`Marcar ${pet.nomePet} como PAGO?`)) return;
+            
+            pet.pagamento = 'Pago';
+            pet.arquivado = true;
+            pet.dataPagamento = new Date().toISOString();
+            
+            if (!pet.valorRecebido) {
+                pet.valorRecebido = pet.valorPix || 50.00;
+            }
+            
+            await salvarPets();
+            await mostrarPets();
+            
+            if (isAdmin) {
+                atualizarCardsVisuaisAdmin();
+                mostrarEntreguesAdmin();
+            }
+            
+            mostrarMensagem(`✅ ${pet.nomePet} marcado como PAGO!`, 'success');
+        }
+
         async function removerPet(petId) {
             if (!isAdmin || !confirm('Remover este pet?')) return;
             
             pets = pets.filter(p => p.id !== petId);
             await salvarPets();
             await mostrarPets();
-            atualizarEstatisticas();
             mostrarProximaRetirada();
             atualizarHistoricoEntregas();
             
             if (isAdmin) {
-                atualizarContadoresVisuais();
+                atualizarCardsVisuaisAdmin();
                 mostrarEntreguesAdmin();
             }
             
@@ -2930,15 +3107,20 @@
         async function mostrarPets() {
             const container = document.getElementById('petsList');
             
-            // Filtrar pets para cada tipo de usuário
+            // 🔥 FILTRAR: Motorista não vê arquivados nem entregues
+            // 🔥 FILTRAR: Admin vê todos exceto entregues (estes vão para seção separada)
             let petsVisiveis;
             if (isAdmin) {
-                // Admin: mostra tudo exceto entregues (estes vão para seção separada)
                 petsVisiveis = pets.filter(p => !p.arquivado && p.status !== 'Entregue');
             } else {
-                // Motorista: mostra não arquivados e não entregues
                 petsVisiveis = pets.filter(p => !p.arquivado && p.status !== 'Entregue');
             }
+            
+            // Aplicar ordenação dinâmica
+            const petsOrdenados = aplicarOrdenacaoDinamicaCorrigida();
+            petsVisiveis = petsOrdenados.filter(p => 
+                petsVisiveis.some(pet => pet.id === p.id)
+            );
             
             if (petsVisiveis.length === 0) {
                 container.innerHTML = `
@@ -2950,78 +3132,88 @@
                 return;
             }
 
-            container.innerHTML = petsVisiveis.map((pet, index) => {
-                const isEntregue = pet.status === 'Entregue';
-                const isPagoOuNaoPago = pet.pagamento === 'Pago' || pet.pagamento === 'Não pago';
-                const petColor = getPetColor(pet);
+            // Agrupar pets por clienteId para mostrar multi-pets em único card
+            const petsAgrupados = {};
+            petsVisiveis.forEach(pet => {
+                if (!petsAgrupados[pet.clienteId]) {
+                    petsAgrupados[pet.clienteId] = [];
+                }
+                petsAgrupados[pet.clienteId].push(pet);
+            });
+
+            container.innerHTML = Object.values(petsAgrupados).map((grupo, index) => {
+                // Usar o primeiro pet do grupo como principal
+                const petPrincipal = grupo[0];
+                const outrosPets = grupo.slice(1);
+                
+                const isEntregue = petPrincipal.status === 'Entregue';
+                const isPagoOuNaoPago = petPrincipal.pagamento === 'Pago' || petPrincipal.pagamento === 'Não pago';
+                const petColor = getPetColor(petPrincipal);
                 
                 // Definir cor da borda baseada na prioridade
                 let borderColor = petColor;
-                if (pet.proximaRetirada) {
-                    borderColor = '#8b5cf6'; // Roxo para próxima retirada
+                if (petPrincipal.proximaRetirada) {
+                    borderColor = '#8b5cf6';
                 }
                 
                 return `
-                <div class="pet-card" data-pet-id="${pet.id}" style="border-left-color: ${borderColor};">
+                <div class="pet-card" data-pet-id="${petPrincipal.id}" style="border-left-color: ${borderColor};">
                     
                     <div class="pet-card-header">
                         <div class="pet-name-section">
-                            <h3>${pet.nomePet}</h3>
-                            <p>${pet.cliente}</p>
+                            <h3>${petPrincipal.nomePet}${outrosPets.length > 0 ? ` +${outrosPets.length}` : ''}</h3>
+                            <p>${petPrincipal.cliente}</p>
                             <div class="badge-container">
                                 ${isAdmin ? `
-                                    <span class="badge-status ${pet.status.replace(/ /g, '-').toLowerCase()}">
-                                        ${pet.status === 'neutro' ? 'Sem ação' : pet.status}
+                                    ${petPrincipal.status ? `<span class="badge-status ${petPrincipal.status.replace(/ /g, '-').toLowerCase()}">
+                                        ${petPrincipal.status}
+                                    </span>` : ''}
+                                    <span class="badge-status ${petPrincipal.pagamento === 'Pago' ? 'pago' : 'nao-pago'}">
+                                        ${petPrincipal.pagamento}
                                     </span>
-                                    <span class="badge-status ${pet.pagamento === 'Pago' ? 'pago' : 'nao-pago'}">
-                                        ${pet.pagamento}
-                                    </span>
-                                    ${pet.proximaRetirada ? `<span class="badge-status" style="background: #8b5cf6; color: white;">⏰ Próxima</span>` : ''}
+                                    ${petPrincipal.prioridade ? `<span class="badge-status" style="background: ${petPrincipal.prioridade === 'alta' ? '#ef4444' : '#f59e0b'}; color: white;">
+                                        ${petPrincipal.prioridade === 'alta' ? '⭐ Alta' : '🟡 Média'}
+                                    </span>` : ''}
                                 ` : ''}
                             </div>
                         </div>
                         
                         <div class="pet-details-right">
                             <div class="pet-time">
-                                <span>⏰ <strong>Retirada:</strong> ${pet.horaRetirada || '--:--'}</span>
+                                <span>⏰ <strong>Retirada:</strong> ${petPrincipal.horaRetirada || '--:--'}</span>
                             </div>
                             ${isAdmin ? `
                                 <div style="margin-top: 10px; display: flex; gap: 8px;">
-                                    <button class="next-pickup-btn ${pet.proximaRetirada ? 'active' : ''}" 
-                                            onclick="marcarProximaRetirada(${pet.id})"
-                                            title="Marcar como próxima retirada">
-                                        ${pet.proximaRetirada ? '✅ Próxima' : '⏰ Próxima'}
-                                    </button>
                                     <div class="priority-buttons">
-                                        <button class="priority-btn alta ${pet.corPrioridade === 'alta' ? 'active' : ''}" 
-                                                onclick="definirPrioridade(${pet.id}, 'alta')"
+                                        <button class="priority-btn alta ${petPrincipal.prioridade === 'alta' ? 'active' : ''}" 
+                                                onclick="definirPrioridade(${petPrincipal.id}, 'alta')"
                                                 title="Prioridade Alta">
-                                            A
+                                            ⭐ Alta
                                         </button>
-                                        <button class="priority-btn media ${pet.corPrioridade === 'media' ? 'active' : ''}" 
-                                                onclick="definirPrioridade(${pet.id}, 'media')"
+                                        <button class="priority-btn media ${petPrincipal.prioridade === 'media' ? 'active' : ''}" 
+                                                onclick="definirPrioridade(${petPrincipal.id}, 'media')"
                                                 title="Prioridade Média">
-                                            M
-                                        </button>
-                                        <button class="priority-btn baixa ${pet.corPrioridade === 'baixa' ? 'active' : ''}" 
-                                                onclick="definirPrioridade(${pet.id}, 'baixa')"
-                                                title="Prioridade Baixa">
-                                            B
+                                            🟡 Média
                                         </button>
                                     </div>
+                                    ${isEntregue ? `
+                                        <button class="admin-pagamento-btn" onclick="adminMarcarComoPago(${petPrincipal.id})">
+                                            💰 Pago
+                                        </button>
+                                    ` : ''}
                                 </div>
                             ` : ''}
                             <div style="display: flex; gap: 8px; margin-top: 10px;">
                                 ${!isAdmin && !isEntregue ? `
-                                    <button class="pix-btn" onclick="mostrarModalPix(${pet.id})" title="Mostrar QR Code PIX">
+                                    <button class="pix-btn" onclick="mostrarModalPix(${petPrincipal.id})" title="Mostrar QR Code PIX">
                                         💰
                                     </button>
                                 ` : ''}
                                 ${isAdmin ? `
-                                    <button class="edit-btn visible" onclick="habilitarEdicao(${pet.id})">
+                                    <button class="edit-btn visible" onclick="habilitarEdicao(${petPrincipal.id})">
                                         ✏️ Editar
                                     </button>
-                                    <button class="delete-btn visible" onclick="removerPet(${pet.id})">
+                                    <button class="delete-btn visible" onclick="removerPet(${petPrincipal.id})">
                                         🗑️ Remover
                                     </button>
                                 ` : ''}
@@ -3029,40 +3221,53 @@
                         </div>
                     </div>
                     
+                    ${outrosPets.length > 0 ? `
+                        <div class="multi-pets-display">
+                            ${outrosPets.map((pet, idx) => `
+                                <div class="pet-tag">
+                                    <div class="pet-tag-color" style="background: ${getPetColor(pet)}"></div>
+                                    <span>${pet.nomePet} (${pet.raca})</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    
                     <div class="pet-info">
                         <div class="pet-info-item">
-                            <strong>🐕 Raça:</strong> ${pet.raca}
+                            <strong>🐕 Raça:</strong> ${petPrincipal.raca}
                         </div>
                         <div class="pet-info-item">
-                            <strong>🎨 Cor:</strong> ${pet.cor}
+                            <strong>🎨 Cor:</strong> ${petPrincipal.cor}
                         </div>
                         <div class="pet-info-item">
-                            <strong>⏱️ Tempo:</strong> ${pet.tempo}
+                            <strong>⏱️ Tempo:</strong> ${petPrincipal.tempo}
                         </div>
-                        ${pet.valorPix ? `
+                        ${petPrincipal.valorPix ? `
                             <div class="pet-info-item">
-                                <strong>💰 Valor:</strong> R$ ${parseFloat(pet.valorPix).toFixed(2).replace('.', ',')}
+                                <strong>💰 Valor:</strong> R$ ${parseFloat(petPrincipal.valorPix).toFixed(2).replace('.', ',')}
                             </div>
                         ` : ''}
-                        <div class="pet-info-item">
-                            <strong>🎨 Prioridade:</strong> 
-                            <span style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: ${petColor}; margin-left: 5px;"></span>
-                            ${pet.corPrioridade === 'alta' ? 'Alta' : pet.corPrioridade === 'media' ? 'Média' : 'Baixa'}
-                        </div>
+                        ${petPrincipal.prioridade ? `
+                            <div class="pet-info-item">
+                                <strong>🎯 Prioridade:</strong> 
+                                <span style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: ${petColor}; margin-left: 5px;"></span>
+                                ${petPrincipal.prioridade === 'alta' ? 'Alta' : 'Média'}
+                            </div>
+                        ` : ''}
                     </div>
                     
                     <div class="pet-address">
-                        <p>📍 <strong>Endereço:</strong> ${pet.endereco}</p>
+                        <p>📍 <strong>Endereço:</strong> ${petPrincipal.endereco}</p>
                         ${!isAdmin ? `
-                            <button class="copy-address-btn" onclick="copiarEndereco('${pet.endereco.replace(/'/g, "\\'")}')">
+                            <button class="copy-address-btn" onclick="copiarEndereco('${petPrincipal.endereco.replace(/'/g, "\\'")}')">
                                 📋 Copiar Endereço
                             </button>
                         ` : ''}
                     </div>
                     
                     <!-- SESSÃO VALOR RECEBIDO (só para motorista quando entregue) -->
-                    ${!isAdmin && isEntregue && !pet.valorRecebido ? `
-                        <div class="valor-recebido-section" id="valorRecebido-${pet.id}">
+                    ${!isAdmin && isEntregue && !petPrincipal.valorRecebido ? `
+                        <div class="valor-recebido-section" id="valorRecebido-${petPrincipal.id}">
                             <div class="valor-recebido-label">
                                 💰 Valor Recebido (PIX)
                             </div>
@@ -3072,18 +3277,18 @@
                                        placeholder="R$ 0,00"
                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode === 44 || event.charCode === 46"
                                        onblur="formatarValor(this)">
-                                <button class="confirmar-valor-btn" onclick="confirmarValorRecebido(${pet.id})">
+                                <button class="confirmar-valor-btn" onclick="confirmarValorRecebido(${petPrincipal.id})">
                                     ✅ Confirmar
                                 </button>
                             </div>
                         </div>
                     ` : ''}
                     
-                    ${pet.valorRecebido ? `
+                    ${petPrincipal.valorRecebido ? `
                         <div style="margin-top: 15px; padding: 12px; background: #f0fdf4; border-radius: 10px; border: 2px solid #86efac;">
                             <div style="display: flex; align-items: center; gap: 10px; color: var(--success-dark); font-weight: 600;">
-                                💰 Valor recebido: R$ ${parseFloat(pet.valorRecebido).toFixed(2).replace('.', ',')}
-                                ${pet.dataPagamento ? `<span style="font-size: 12px; color: var(--gray-500);">(${new Date(pet.dataPagamento).toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})})</span>` : ''}
+                                💰 Valor recebido: R$ ${parseFloat(petPrincipal.valorRecebido).toFixed(2).replace('.', ',')}
+                                ${petPrincipal.dataPagamento ? `<span style="font-size: 12px; color: var(--gray-500);">(${new Date(petPrincipal.dataPagamento).toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})})</span>` : ''}
                             </div>
                         </div>
                     ` : ''}
@@ -3091,43 +3296,43 @@
                     <div class="status-section">
                         ${!isAdmin ? `
                             <div class="status-buttons">
-                                <!-- 🔥 CORREÇÃO: Status inicia como neutro, motorista seleciona -->
-                                ${['neutro', 'A caminho retirada', 'A caminho da loja', 'A caminho da entrega', 'Entregue'].map(status => `
-                                    <button class="status-btn ${pet.status === status ? 'active' : ''} ${status === 'neutro' ? 'neutro' : ''}" 
-                                            onclick="atualizarPetStatus(${pet.id}, 'status', '${status}')"
+                                <!-- 🔥 APENAS 4 BOTÕES: "sem ação" removido -->
+                                ${['A caminho retirada', 'A caminho da loja', 'A caminho da entrega', 'Entregue'].map(status => `
+                                    <button class="status-btn ${petPrincipal.status === status ? 'active' : ''}" 
+                                            onclick="atualizarPetStatus(${petPrincipal.id}, 'status', '${status}')"
                                             ${isPagoOuNaoPago ? 'disabled' : ''}>
-                                        ${status === 'neutro' ? 'Sem ação' : status}
+                                        ${status}
                                     </button>
                                 `).join('')}
                             </div>
                             
                             <!-- BOTÃO TOGGLE PAGAMENTO -->
-                            <button class="toggle-pagamento-btn ${pet.pagamentoCollapsed ? 'collapsed' : ''}" 
-                                    onclick="togglePagamento(${pet.id})"
-                                    ${pet.status !== 'Entregue' ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                            <button class="toggle-pagamento-btn ${petPrincipal.pagamentoCollapsed ? 'collapsed' : ''}" 
+                                    onclick="togglePagamento(${petPrincipal.id})"
+                                    ${petPrincipal.status !== 'Entregue' ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
                                 <div style="display: flex; align-items: center; gap: 8px;">
                                     <span class="arrow">▼</span>
                                     <span>💰 Pagamento</span>
                                 </div>
                                 
                                 <!-- BADGE COM STATUS ATUAL -->
-                                <span class="payment-status-badge ${pet.pagamento === 'Pago' ? 'pago' : pet.pagamento === 'Não pago' ? 'nao-pago' : 'pendente'}">
-                                    ${pet.pagamento === 'Pago' ? '✅ Pago' : pet.pagamento === 'Não pago' ? '❌ Não Pago' : '⏳ Pendente'}
+                                <span class="payment-status-badge ${petPrincipal.pagamento === 'Pago' ? 'pago' : petPrincipal.pagamento === 'Não pago' ? 'nao-pago' : 'pendente'}">
+                                    ${petPrincipal.pagamento === 'Pago' ? '✅ Pago' : petPrincipal.pagamento === 'Não pago' ? '❌ Não Pago' : '⏳ Pendente'}
                                 </span>
                             </button>
 
                             <!-- SEÇÃO PAGAMENTO (EXPANDE/RECOLHE) -->
-                            <div class="pagamento-section ${pet.pagamentoCollapsed ? 'collapsed' : ''}">
+                            <div class="pagamento-section ${petPrincipal.pagamentoCollapsed ? 'collapsed' : ''}">
                                 <div class="pagamento-buttons">
-                                    <!-- 🔥 CORREÇÃO: Só habilita se status for Entregue -->
-                                    <button class="pagamento-btn pago ${pet.pagamento === 'Pago' ? 'active' : ''}" 
-                                            onclick="marcarComoPago(${pet.id})"
-                                            ${pet.arquivado || pet.status !== 'Entregue' ? 'disabled' : ''}>
+                                    <!-- 🔥 SÓ HABILITA SE STATUS FOR ENTREGUE -->
+                                    <button class="pagamento-btn pago ${petPrincipal.pagamento === 'Pago' ? 'active' : ''}" 
+                                            onclick="marcarComoPago(${petPrincipal.id})"
+                                            ${petPrincipal.arquivado || petPrincipal.status !== 'Entregue' ? 'disabled' : ''}>
                                         ✅ Marcar como Pago
                                     </button>
-                                    <button class="pagamento-btn nao-pago ${pet.pagamento === 'Não pago' ? 'active' : ''}" 
-                                            onclick="marcarComoNaoPago(${pet.id})"
-                                            ${pet.arquivado || pet.status !== 'Entregue' ? 'disabled' : ''}>
+                                    <button class="pagamento-btn nao-pago ${petPrincipal.pagamento === 'Não pago' ? 'active' : ''}" 
+                                            onclick="marcarComoNaoPago(${petPrincipal.id})"
+                                            ${petPrincipal.arquivado || petPrincipal.status !== 'Entregue' ? 'disabled' : ''}>
                                         ❌ Marcar como Não Pago
                                     </button>
                                 </div>
@@ -3139,27 +3344,27 @@
                                 <div>
                                     <span class="observacoes-label">📝 Minhas Observações (Admin):</span>
                                     <textarea class="observacoes observacoes-admin" 
-                                              onchange="atualizarObservacoes(${pet.id}, 'admin', this.value)"
-                                              onblur="atualizarObservacoes(${pet.id}, 'admin', this.value)"
-                                              placeholder="Digite observações administrativas...">${pet.observacoesAdmin || ''}</textarea>
+                                              onchange="atualizarObservacoes(${petPrincipal.id}, 'admin', this.value)"
+                                              onblur="atualizarObservacoes(${petPrincipal.id}, 'admin', this.value)"
+                                              placeholder="Digite observações administrativas...">${petPrincipal.observacoesAdmin || ''}</textarea>
                                     
                                     <span class="observacoes-label">📝 Observações do Motorista:</span>
                                     <textarea class="observacoes observacoes-motorista observacoes-readonly" 
                                               readonly
-                                              placeholder="Observações do motorista...">${pet.observacoesMotorista || ''}</textarea>
+                                              placeholder="Observações do motorista...">${petPrincipal.observacoesMotorista || ''}</textarea>
                                 </div>
                             ` : `
                                 <div>
                                     <span class="observacoes-label">📝 Observações do Admin:</span>
                                     <textarea class="observacoes observacoes-admin observacoes-readonly" 
                                               readonly
-                                              placeholder="Observações do admin...">${pet.observacoesAdmin || ''}</textarea>
+                                              placeholder="Observações do admin...">${petPrincipal.observacoesAdmin || ''}</textarea>
                                     
                                     <span class="observacoes-label">📝 Minhas Observações:</span>
                                     <textarea class="observacoes observacoes-motorista" 
-                                              onchange="atualizarObservacoes(${pet.id}, 'motorista', this.value)"
-                                              onblur="atualizarObservacoes(${pet.id}, 'motorista', this.value)"
-                                              placeholder="Digite suas observações...">${pet.observacoesMotorista || ''}</textarea>
+                                              onchange="atualizarObservacoes(${petPrincipal.id}, 'motorista', this.value)"
+                                              onblur="atualizarObservacoes(${petPrincipal.id}, 'motorista', this.value)"
+                                              placeholder="Digite suas observações...">${petPrincipal.observacoesMotorista || ''}</textarea>
                                 </div>
                             `}
                         </div>
@@ -3227,7 +3432,7 @@
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
-            // 🔥 CORREÇÃO: Só permite alternar se status for Entregue
+            // 🔥 Só permite alternar se status for Entregue
             if (pet.status !== 'Entregue') {
                 mostrarMensagem('⚠️ Marque como "Entregue" primeiro!', 'warning');
                 return;
@@ -3248,7 +3453,7 @@
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
-            // 🔥 CORREÇÃO: Verificar se status é Entregue
+            // 🔥 Verificar se status é Entregue
             if (pet.status !== 'Entregue') {
                 mostrarMensagem('⚠️ Marque como "Entregue" primeiro!', 'warning');
                 return;
@@ -3259,7 +3464,7 @@
             
             // Atualizar
             pet.pagamento = 'Pago';
-            pet.arquivado = true; // 🔥 Arquiva ao marcar como pago
+            pet.arquivado = true; // 🔥 OCULTA AO MARCAR COMO PAGO
             pet.dataPagamento = new Date().toISOString();
             
             // Se entregue e sem valor, usar valorPix
@@ -3278,7 +3483,7 @@
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
-            // 🔥 CORREÇÃO: Verificar se status é Entregue
+            // 🔥 Verificar se status é Entregue
             if (pet.status !== 'Entregue') {
                 mostrarMensagem('⚠️ Marque como "Entregue" primeiro!', 'warning');
                 return;
@@ -3289,7 +3494,7 @@
             
             // Atualizar
             pet.pagamento = 'Não pago';
-            pet.arquivado = true; // 🔥 Arquiva ao marcar como não pago
+            pet.arquivado = true; // 🔥 OCULTA AO MARCAR COMO NÃO PAGO
             pet.dataPagamento = new Date().toISOString();
             
             // Salvar
