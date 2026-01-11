@@ -1419,6 +1419,202 @@
             border: 1px solid #f59e0b;
         }
         
+        /* ============ NOVOS ESTILOS PARA MELHORIAS ============ */
+        
+        /* Contadores visuais para admin */
+        .visual-counters {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .visual-counter-item {
+            flex: 1;
+            min-width: 200px;
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+        }
+        
+        .visual-counter-item:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .visual-counter-item h4 {
+            font-size: 14px;
+            color: var(--gray-600);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .pet-list-mini {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .pet-mini-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            background: var(--gray-50);
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+        
+        .pet-mini-item:hover {
+            background: var(--gray-100);
+        }
+        
+        .pet-mini-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .pet-mini-info {
+            flex: 1;
+            font-size: 12px;
+            color: var(--gray-700);
+        }
+        
+        /* Botões de prioridade */
+        .priority-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .priority-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .priority-btn.alta {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+            color: white;
+        }
+        
+        .priority-btn.media {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .priority-btn.baixa {
+            background: linear-gradient(90deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .priority-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .priority-btn.active {
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+            transform: translateY(0);
+        }
+        
+        /* Botão próxima retirada */
+        .next-pickup-btn {
+            background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 8px;
+        }
+        
+        .next-pickup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .next-pickup-btn.active {
+            background: linear-gradient(90deg, #ec4899, #d946ef);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        /* Formulário multi-pet */
+        .pets-container {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .pet-form-section {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px dashed #cbd5e1;
+        }
+        
+        .pet-form-section h4 {
+            font-size: 14px;
+            color: var(--gray-700);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .add-pet-btn {
+            background: var(--gray-200);
+            color: var(--gray-700);
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .add-pet-btn:hover {
+            background: var(--gray-300);
+            transform: translateY(-2px);
+        }
+        
+        /* Contadores para motorista (escondidos) */
+        .stats-container.motorista {
+            display: none;
+        }
+        
+        /* Status neutro */
+        .status-btn.neutro {
+            background: var(--gray-100);
+            color: var(--gray-500);
+        }
+        
+        .status-btn.neutro.active {
+            background: var(--primary-gradient);
+            color: white;
+        }
+        
+        /* Card entregue oculto para admin */
+        .pet-card.entregue-admin {
+            display: none;
+        }
+        
         /* ============ ANIMAÇÕES ============ */
         @keyframes slideInDown {
             from {
@@ -1468,6 +1664,10 @@
             .delivered-sidebar {
                 width: 300px;
                 right: -300px;
+            }
+            
+            .visual-counter-item {
+                min-width: 100%;
             }
         }
         
@@ -1541,6 +1741,14 @@
             
             .valor-input {
                 width: 100%;
+            }
+            
+            .priority-buttons {
+                flex-wrap: wrap;
+            }
+            
+            .visual-counters {
+                flex-direction: column;
             }
         }
         
@@ -1629,7 +1837,7 @@
         <div class="delivered-list" id="deliveredList">
             <!-- Itens serão preenchidos via JavaScript -->
         </div>
-</div>
+    </div>
     
     <!-- BOTÃO FLUTUANTE HISTÓRICO -->
     <button class="history-btn" onclick="toggleDeliveredSidebar()">
@@ -1642,19 +1850,26 @@
             <div class="header-content">
                 <h1>🐾 Pet Shop Transport</h1>
                 <p id="userRole">Sistema premium de transporte de pets</p>
-                <div class="stats-container">
+                
+                <!-- Contadores para Admin -->
+                <div class="stats-container" id="adminStats" style="display: none;">
                     <div class="stat-badge">
-                        <span class="count" id="countWaiting">0</span>
+                        <span class="count" id="countWaitingAdmin">0</span>
                         <span>Aguardando</span>
                     </div>
                     <div class="stat-badge">
-                        <span class="count" id="countInTransit">0</span>
+                        <span class="count" id="countInTransitAdmin">0</span>
                         <span>Em Transporte</span>
                     </div>
                     <div class="stat-badge">
-                        <span class="count" id="countDelivered">0</span>
-                        <span>Entregues Hoje</span>
+                        <span class="count" id="countDeliveredAdmin">0</span>
+                        <span>Entregues</span>
                     </div>
+                </div>
+                
+                <!-- Contadores visuais para Admin -->
+                <div class="visual-counters" id="visualCounters" style="display: none;">
+                    <!-- Será preenchido via JavaScript -->
                 </div>
             </div>
             <div class="user-badge" id="userBadge">Motorista</div>
@@ -1695,46 +1910,8 @@
                     <input type="text" id="cliente" placeholder="Ex: Maria Silva">
                 </div>
                 <div class="form-group">
-                    <label>🐕 Nome do Pet</label>
-                    <input type="text" id="nomePet" placeholder="Ex: Max">
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label>🎨 Raça</label>
-                    <select id="raca">
-                        <option value="">Selecione</option>
-                        <option>Shitzu</option>
-                        <option>Poodle</option>
-                        <option>Labrador</option>
-                        <option>Bulldog</option>
-                        <option>Golden Retriever</option>
-                        <option>Vira-lata</option>
-                        <option>Persa</option>
-                        <option>Siamês</option>
-                        <option>Maine Coon</option>
-                        <option>Outro</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>🌈 Cor</label>
-                    <select id="cor">
-                        <option value="">Selecione</option>
-                        <option>Marrom</option>
-                        <option>Branco</option>
-                        <option>Preto</option>
-                        <option>Caramelo</option>
-                        <option>Cinza</option>
-                        <option>Malhado</option>
-                        <option>Outra</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>⏱️ Tempo</label>
-                    <input type="text" id="tempo" placeholder="Ex: 12 minutos">
+                    <label>📍 Endereço</label>
+                    <input type="text" id="endereco" placeholder="Av. Nossa Senhora da Saúde 403">
                 </div>
             </div>
             
@@ -1749,18 +1926,84 @@
                 </div>
             </div>
             
-            <div class="form-group">
-                <label>📍 Endereço</label>
-                <input type="text" id="endereco" placeholder="Av. Nossa Senhora da Saúde 403">
+            <!-- Container para múltiplos pets -->
+            <div class="pets-container" id="petsContainer">
+                <!-- Pet 1 -->
+                <div class="pet-form-section" id="petSection1">
+                    <h4>🐕 Pet 1</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nome do Pet</label>
+                            <input type="text" class="nomePet" placeholder="Ex: Max">
+                        </div>
+                        <div class="form-group">
+                            <label>🎨 Raça</label>
+                            <select class="raca">
+                                <option value="">Selecione</option>
+                                <option>Shitzu</option>
+                                <option>Poodle</option>
+                                <option>Labrador</option>
+                                <option>Bulldog</option>
+                                <option>Golden Retriever</option>
+                                <option>Vira-lata</option>
+                                <option>Persa</option>
+                                <option>Siamês</option>
+                                <option>Maine Coon</option>
+                                <option>Outro</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>🌈 Cor</label>
+                            <select class="cor">
+                                <option value="">Selecione</option>
+                                <option>Marrom</option>
+                                <option>Branco</option>
+                                <option>Preto</option>
+                                <option>Caramelo</option>
+                                <option>Cinza</option>
+                                <option>Malhado</option>
+                                <option>Outra</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>⏱️ Tempo</label>
+                            <input type="text" class="tempo" placeholder="Ex: 12 minutos">
+                        </div>
+                    </div>
+                    
+                    <!-- Seleção de cor personalizada -->
+                    <div class="form-group">
+                        <label>🎨 Cor Personalizada (Prioridade)</label>
+                        <div class="priority-buttons">
+                            <button type="button" class="priority-btn alta" onclick="selecionarCorPrioridade(1, 'alta')">Alta</button>
+                            <button type="button" class="priority-btn media" onclick="selecionarCorPrioridade(1, 'media')">Média</button>
+                            <button type="button" class="priority-btn baixa" onclick="selecionarCorPrioridade(1, 'baixa')">Baixa</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             
+            <!-- Botão para adicionar mais pets -->
+            <button type="button" class="add-pet-btn" id="addPetBtn" onclick="adicionarNovoPet()">
+                ➕ Adicionar Outro Pet
+            </button>
+            
             <button class="submit-btn" onclick="adicionarPet()">
-                <span>✨ Adicionar Pet</span>
+                <span>✨ Adicionar Transporte</span>
             </button>
         </div>
         
         <!-- Lista de Pets -->
         <div class="pets-list" id="petsList"></div>
+        
+        <!-- Seção de entregues para Admin -->
+        <div id="adminDeliveredSection" style="display: none;">
+            <h2 style="margin: 30px 0 15px 0; color: var(--gray-800);">✅ Pets Entregues</h2>
+            <div class="pets-list" id="adminDeliveredList"></div>
+        </div>
     </div>
 
     <script>
@@ -1778,6 +2021,8 @@
         let pets = [];
         let editingPetId = null;
         let isReordering = false;
+        let totalPetsNoForm = 1;
+        let petColors = {};
 
         // ========== PIX CONFIG ==========
         const PIX_CONFIG = {
@@ -1792,17 +2037,26 @@
             const addBtn = document.getElementById('addBtn');
             const userBadge = document.getElementById('userBadge');
             const userRole = document.getElementById('userRole');
+            const adminStats = document.getElementById('adminStats');
+            const visualCounters = document.getElementById('visualCounters');
+            const adminDeliveredSection = document.getElementById('adminDeliveredSection');
             
             if (isAdmin) {
                 addBtn.classList.add('visible');
                 userBadge.textContent = 'Administrador';
                 userBadge.classList.add('admin');
                 userRole.textContent = 'Sistema de transporte - Modo Administrador';
+                adminStats.style.display = 'flex';
+                visualCounters.style.display = 'flex';
+                adminDeliveredSection.style.display = 'block';
             } else {
                 addBtn.classList.remove('visible');
                 userBadge.textContent = 'Motorista';
                 userBadge.classList.remove('admin');
                 userRole.textContent = 'Sistema de transporte - Modo Motorista';
+                adminStats.style.display = 'none';
+                visualCounters.style.display = 'none';
+                adminDeliveredSection.style.display = 'none';
             }
         }
 
@@ -1816,9 +2070,10 @@
                 // Fechar formulário
                 form.classList.remove('active');
                 btn.textContent = '➕ Adicionar Pet';
-                submitBtn.textContent = '✨ Adicionar Pet';
+                submitBtn.textContent = '✨ Adicionar Transporte';
                 submitBtn.onclick = adicionarPet;
                 cancelarEdicao();
+                resetarFormularioMultiPet();
             } else {
                 // Abrir formulário
                 form.classList.add('active');
@@ -1827,81 +2082,141 @@
             }
         }
 
-        // ========== CORREÇÃO 1: ORDENAÇÃO DINÂMICA (PARA TODOS OS STATUS EXCETO ENTREGUE) ==========
-        function aplicarOrdenacaoDinamicaCorrigida() {
-            if (isReordering) return;
-            isReordering = true;
+        // ========== FUNÇÕES DO FORMULÁRIO MULTI-PET ==========
+        function resetarFormularioMultiPet() {
+            totalPetsNoForm = 1;
+            const petsContainer = document.getElementById('petsContainer');
+            petsContainer.innerHTML = '';
             
-            let petsVisiveis = isAdmin ? [...pets] : pets.filter(p => !p.arquivado);
+            // Adicionar primeiro pet
+            adicionarNovoPet(true);
             
-            // 🔥 CORREÇÃO 1: Funciona nas 3 ações (A caminho da loja, A caminho da entrega, Aguardando retirada)
-            const emTransporte = petsVisiveis.filter(p => 
-                p.status === 'A caminho da loja' || 
-                p.status === 'A caminho da entrega' ||
-                p.status === 'A caminho retirada'  // ← ADICIONADO: status alterado para "A caminho retirada"
-            );
-            
-            const outros = petsVisiveis.filter(p => 
-                !(p.status === 'A caminho da loja' || 
-                  p.status === 'A caminho da entrega' || 
-                  p.status === 'A caminho retirada') // ← ADICIONADO
-            );
-            
-            // 🔥 CORREÇÃO 2: Ordenar por horário de retirada (os que receberem ação vão para primeira posição)
-            emTransporte.sort((a, b) => {
-                // Primeiro, ordenar por status prioritário
-                const statusOrder = {
-                    'A caminho da loja': 1,
-                    'A caminho da entrega': 2,
-                    'A caminho retirada': 3  // ← ADICIONADO
-                };
-                
-                const orderA = statusOrder[a.status] || 999;
-                const orderB = statusOrder[b.status] || 999;
-                
-                if (orderA !== orderB) {
-                    return orderA - orderB;
-                }
-                
-                // Depois, ordenar por hora de retirada
-                return (a.horaRetirada || '').localeCompare(b.horaRetirada || '');
-            });
-            
-            // 🔥 Juntar mantendo ordem relativa (entregues e outros ficam onde estão)
-            const novaOrdem = [...emTransporte, ...outros];
-            
-            // Atualizar array original
-            pets.forEach(pet => {
-                const novoPet = novaOrdem.find(p => p.id === pet.id);
-                if (novoPet) {
-                    Object.assign(pet, novoPet);
-                }
-            });
-            
-            salvarPets();
-            isReordering = false;
-            return novaOrdem;
+            // Resetar cores
+            petColors = {};
         }
 
-        // ========== ANIMAÇÃO DE REORDENAÇÃO ==========
-        async function reordenarComAnimacao() {
-            const container = document.getElementById('petsList');
-            const cards = container.querySelectorAll('.pet-card');
+        function adicionarNovoPet(isFirst = false) {
+            if (totalPetsNoForm >= 5) {
+                mostrarMensagem('⚠️ Máximo de 5 pets por cliente!', 'warning');
+                return;
+            }
             
-            cards.forEach(card => {
-                card.classList.add('smooth-move');
-            });
+            totalPetsNoForm++;
+            const petId = totalPetsNoForm;
             
-            await new Promise(resolve => setTimeout(resolve, 50));
+            const petsContainer = document.getElementById('petsContainer');
+            const petSection = document.createElement('div');
+            petSection.className = 'pet-form-section';
+            petSection.id = `petSection${petId}`;
             
-            const petsOrdenados = aplicarOrdenacaoDinamicaCorrigida();
-            await mostrarPetsComOrdem(petsOrdenados);
+            petSection.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h4>🐕 Pet ${petId}</h4>
+                    ${!isFirst ? `<button type="button" style="background: var(--danger); color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer;" onclick="removerPetForm(${petId})">🗑️ Remover</button>` : ''}
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nome do Pet</label>
+                        <input type="text" class="nomePet" placeholder="Ex: Max">
+                    </div>
+                    <div class="form-group">
+                        <label>🎨 Raça</label>
+                        <select class="raca">
+                            <option value="">Selecione</option>
+                            <option>Shitzu</option>
+                            <option>Poodle</option>
+                            <option>Labrador</option>
+                            <option>Bulldog</option>
+                            <option>Golden Retriever</option>
+                            <option>Vira-lata</option>
+                            <option>Persa</option>
+                            <option>Siamês</option>
+                            <option>Maine Coon</option>
+                            <option>Outro</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>🌈 Cor</label>
+                        <select class="cor">
+                            <option value="">Selecione</option>
+                            <option>Marrom</option>
+                            <option>Branco</option>
+                            <option>Preto</option>
+                            <option>Caramelo</option>
+                            <option>Cinza</option>
+                            <option>Malhado</option>
+                            <option>Outra</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>⏱️ Tempo</label>
+                        <input type="text" class="tempo" placeholder="Ex: 12 minutos">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>🎨 Cor Personalizada (Prioridade)</label>
+                    <div class="priority-buttons">
+                        <button type="button" class="priority-btn alta" onclick="selecionarCorPrioridade(${petId}, 'alta')">Alta</button>
+                        <button type="button" class="priority-btn media" onclick="selecionarCorPrioridade(${petId}, 'media')">Média</button>
+                        <button type="button" class="priority-btn baixa" onclick="selecionarCorPrioridade(${petId}, 'baixa')">Baixa</button>
+                    </div>
+                </div>
+            `;
             
-            setTimeout(() => {
-                cards.forEach(card => {
-                    card.classList.remove('smooth-move');
+            petsContainer.appendChild(petSection);
+        }
+
+        function removerPetForm(petId) {
+            if (totalPetsNoForm <= 1) return;
+            
+            const petSection = document.getElementById(`petSection${petId}`);
+            if (petSection) {
+                petSection.remove();
+                totalPetsNoForm--;
+                
+                // Renumerar os pets restantes
+                const sections = document.querySelectorAll('.pet-form-section');
+                sections.forEach((section, index) => {
+                    const newId = index + 1;
+                    section.id = `petSection${newId}`;
+                    const h4 = section.querySelector('h4');
+                    if (h4) h4.textContent = `🐕 Pet ${newId}`;
+                    
+                    // Atualizar botões de prioridade
+                    const buttons = section.querySelectorAll('.priority-btn');
+                    buttons.forEach(btn => {
+                        btn.onclick = function() {
+                            const priority = this.classList.contains('alta') ? 'alta' : 
+                                           this.classList.contains('media') ? 'media' : 'baixa';
+                            selecionarCorPrioridade(newId, priority);
+                        };
+                    });
+                    
+                    // Atualizar botão de remover
+                    const removeBtn = section.querySelector('button[onclick^="removerPetForm"]');
+                    if (removeBtn && newId > 1) {
+                        removeBtn.onclick = function() { removerPetForm(newId); };
+                    }
                 });
-            }, 600);
+            }
+        }
+
+        function selecionarCorPrioridade(petId, prioridade) {
+            // Remover classe active de todos os botões deste pet
+            const section = document.getElementById(`petSection${petId}`);
+            const buttons = section.querySelectorAll('.priority-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Adicionar classe active ao botão clicado
+            const clickedBtn = section.querySelector(`.priority-btn.${prioridade}`);
+            clickedBtn.classList.add('active');
+            
+            // Salvar cor no objeto
+            petColors[petId] = prioridade;
         }
 
         // ========== FUNÇÕES JSONBIN ==========
@@ -1917,6 +2232,10 @@
                 atualizarEstatisticas();
                 mostrarProximaRetirada();
                 atualizarHistoricoEntregas();
+                if (isAdmin) {
+                    atualizarContadoresVisuais();
+                    mostrarEntreguesAdmin();
+                }
             } catch (error) {
                 console.log('Usando dados locais');
                 const local = localStorage.getItem('meusPets');
@@ -1925,6 +2244,10 @@
                 atualizarEstatisticas();
                 mostrarProximaRetirada();
                 atualizarHistoricoEntregas();
+                if (isAdmin) {
+                    atualizarContadoresVisuais();
+                    mostrarEntreguesAdmin();
+                }
             }
         }
 
@@ -1948,44 +2271,40 @@
         // ========== PRÓXIMA RETIRADA ==========
         function mostrarProximaRetirada() {
             const highlight = document.getElementById('nextPickupHighlight');
-            const agora = new Date();
-            const horaAtual = agora.getHours() * 60 + agora.getMinutes();
             
-            // 🔥 CORREÇÃO 1: Alterar filtro para buscar "A caminho retirada"
-            const proximoPet = pets.find(p => 
+            // Buscar pets marcados como próxima retirada
+            const proximosPets = pets.filter(p => 
                 !p.arquivado && 
-                p.status === 'A caminho retirada' &&  // ← ALTERADO: "Aguardando retirada" → "A caminho retirada"
-                p.horaRetirada
+                p.proximaRetirada === true
             );
             
-            if (proximoPet && !isAdmin) {
-                const horaPet = proximoPet.horaRetirada ? 
-                    parseInt(proximoPet.horaRetirada.split(':')[0]) * 60 + 
-                    parseInt(proximoPet.horaRetirada.split(':')[1]) : 0;
+            if (proximosPets.length > 0 && !isAdmin) {
+                highlight.style.display = 'block';
                 
-                if (horaPet - horaAtual <= 120) {
-                    highlight.style.display = 'block';
-                    highlight.innerHTML = `
-                        <div style="display: flex; align-items: center; gap: 15px;">
-                            <div style="font-size: 32px;">⏰</div>
-                            <div>
-                                <h3 style="margin-bottom: 5px; color: var(--primary-dark);">
-                                    ${proximoPet.nomePet} - ${proximoPet.cliente}
-                                </h3>
-                                <p style="color: var(--gray-700); margin-bottom: 5px;">
-                                    <strong>Hora:</strong> ${proximoPet.horaRetirada} | 
-                                    <strong>Raça:</strong> ${proximoPet.raca} | 
-                                    <strong>Tempo:</strong> ${proximoPet.tempo}
-                                </p>
-                                <p style="color: var(--gray-600); font-size: 14px;">
-                                    ${proximoPet.endereco}
-                                </p>
+                let html = `<div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
+                    <div style="font-size: 32px;">⏰</div>
+                    <div>
+                        <h3 style="margin-bottom: 10px; color: var(--primary-dark);">
+                            Próxima Retirada Marcada
+                        </h3>
+                    </div>
+                </div>`;
+                
+                proximosPets.forEach(pet => {
+                    html += `
+                        <div style="background: white; padding: 12px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid #8b5cf6;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div style="width: 8px; height: 8px; border-radius: 50%; background: #8b5cf6;"></div>
+                                <div>
+                                    <strong>${pet.nomePet}</strong> - ${pet.cliente}<br>
+                                    <small style="color: var(--gray-600);">${pet.horaRetirada} | ${pet.raca}</small>
+                                </div>
                             </div>
                         </div>
                     `;
-                } else {
-                    highlight.style.display = 'none';
-                }
+                });
+                
+                highlight.innerHTML = html;
             } else {
                 highlight.style.display = 'none';
             }
@@ -1993,33 +2312,95 @@
 
         // ========== ATUALIZAR ESTATÍSTICAS ==========
         function atualizarEstatisticas() {
-            const countWaiting = document.getElementById('countWaiting');
-            const countInTransit = document.getElementById('countInTransit');
-            const countDelivered = document.getElementById('countDelivered');
+            if (isAdmin) {
+                const countWaiting = document.getElementById('countWaitingAdmin');
+                const countInTransit = document.getElementById('countInTransitAdmin');
+                const countDelivered = document.getElementById('countDeliveredAdmin');
+                
+                const waiting = pets.filter(p => 
+                    !p.arquivado && !p.entregue && 
+                    (p.status === 'neutro' || p.status === 'A caminho retirada')
+                ).length;
+                
+                const inTransit = pets.filter(p => 
+                    !p.arquivado && !p.entregue && 
+                    (p.status === 'A caminho da loja' || p.status === 'A caminho da entrega')
+                ).length;
+                
+                const delivered = pets.filter(p => 
+                    p.status === 'Entregue' && !p.arquivado
+                ).length;
+                
+                countWaiting.textContent = waiting;
+                countInTransit.textContent = inTransit;
+                countDelivered.textContent = delivered;
+            }
+        }
+
+        // ========== CONTADORES VISUAIS PARA ADMIN ==========
+        function atualizarContadoresVisuais() {
+            const visualCounters = document.getElementById('visualCounters');
             
-            const hoje = new Date().toISOString().split('T')[0];
+            // Filtrar pets não arquivados e não entregues
+            const petsAtivos = pets.filter(p => !p.arquivado && p.status !== 'Entregue');
             
-            // 🔥 CORREÇÃO 1: Alterar filtro para "A caminho retirada"
-            const waiting = pets.filter(p => 
-                !p.arquivado && p.status === 'A caminho retirada'  // ← ALTERADO
-            ).length;
+            // Agrupar por status
+            const aguardando = petsAtivos.filter(p => p.status === 'neutro' || p.status === 'A caminho retirada');
+            const emTransporte = petsAtivos.filter(p => p.status === 'A caminho da loja' || p.status === 'A caminho da entrega');
             
-            const inTransit = pets.filter(p => 
-                !p.arquivado && (
-                    p.status === 'A caminho da loja' || 
-                    p.status === 'A caminho da entrega'
-                )
-            ).length;
-            
-            const delivered = pets.filter(p => 
-                p.status === 'Entregue' && 
-                p.dataCriacao && 
-                p.dataCriacao.startsWith(hoje)
-            ).length;
-            
-            countWaiting.textContent = waiting;
-            countInTransit.textContent = inTransit;
-            countDelivered.textContent = delivered;
+            visualCounters.innerHTML = `
+                <div class="visual-counter-item">
+                    <h4>⏳ Aguardando (${aguardando.length})</h4>
+                    <div class="pet-list-mini">
+                        ${aguardando.slice(0, 5).map(pet => `
+                            <div class="pet-mini-item" onclick="scrollToPet(${pet.id})" style="cursor: pointer;">
+                                <div class="pet-mini-color" style="background: ${getPetColor(pet)}"></div>
+                                <div class="pet-mini-info">
+                                    <strong>${pet.nomePet}</strong><br>
+                                    <small>${pet.cliente}</small>
+                                </div>
+                                ${pet.proximaRetirada ? '<span style="color: #8b5cf6; font-size: 10px;">⏰</span>' : ''}
+                            </div>
+                        `).join('')}
+                        ${aguardando.length > 5 ? `<div style="font-size: 11px; color: var(--gray-500); text-align: center; padding: 5px;">+${aguardando.length - 5} mais</div>` : ''}
+                    </div>
+                </div>
+                
+                <div class="visual-counter-item">
+                    <h4>🚗 Em Transporte (${emTransporte.length})</h4>
+                    <div class="pet-list-mini">
+                        ${emTransporte.slice(0, 5).map(pet => `
+                            <div class="pet-mini-item" onclick="scrollToPet(${pet.id})" style="cursor: pointer;">
+                                <div class="pet-mini-color" style="background: ${getPetColor(pet)}"></div>
+                                <div class="pet-mini-info">
+                                    <strong>${pet.nomePet}</strong><br>
+                                    <small>${pet.cliente}</small>
+                                </div>
+                                <span style="font-size: 10px; color: var(--gray-500);">${pet.status}</span>
+                            </div>
+                        `).join('')}
+                        ${emTransporte.length > 5 ? `<div style="font-size: 11px; color: var(--gray-500); text-align: center; padding: 5px;">+${emTransporte.length - 5} mais</div>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function getPetColor(pet) {
+            if (pet.corPrioridade === 'alta') return '#ef4444';
+            if (pet.corPrioridade === 'media') return '#f59e0b';
+            if (pet.corPrioridade === 'baixa') return '#10b981';
+            return '#6b7280';
+        }
+
+        function scrollToPet(petId) {
+            const element = document.querySelector(`[data-pet-id="${petId}"]`);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                element.style.animation = 'pulse 1s';
+                setTimeout(() => {
+                    element.style.animation = '';
+                }, 1000);
+            }
         }
 
         // ========== HISTÓRICO DE ENTREGAS ==========
@@ -2066,6 +2447,94 @@
                             💰 Valor: R$ ${parseFloat(pet.valorPix).toFixed(2).replace('.', ',')}
                         </div>
                     ` : ''}
+                </div>
+            `).join('');
+        }
+
+        // ========== MOSTRAR ENTREGUES PARA ADMIN ==========
+        function mostrarEntreguesAdmin() {
+            if (!isAdmin) return;
+            
+            const adminDeliveredList = document.getElementById('adminDeliveredList');
+            const entregues = pets.filter(p => p.status === 'Entregue' && !p.arquivado);
+            
+            if (entregues.length === 0) {
+                adminDeliveredList.innerHTML = `
+                    <div class="empty-state">
+                        <p>📭 Nenhum pet entregue</p>
+                        <p>Os pets entregues aparecerão aqui</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            adminDeliveredList.innerHTML = entregues.map(pet => `
+                <div class="pet-card entregue-admin" data-pet-id="${pet.id}">
+                    <div class="pet-card-header">
+                        <div class="pet-name-section">
+                            <h3>${pet.nomePet}</h3>
+                            <p>${pet.cliente}</p>
+                            <div class="badge-container">
+                                <span class="badge-status entregue">
+                                    Entregue
+                                </span>
+                                <span class="badge-status ${pet.pagamento === 'Pago' ? 'pago' : 'nao-pago'}">
+                                    ${pet.pagamento}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="pet-details-right">
+                            <div class="pet-time">
+                                <span>⏰ <strong>Entregue:</strong> ${pet.horaEntregue || '--:--'}</span>
+                            </div>
+                            ${pet.valorRecebido ? `
+                                <div class="hora-entregue">
+                                    💰 <strong>Recebido:</strong> R$ ${parseFloat(pet.valorRecebido).toFixed(2).replace('.', ',')}
+                                </div>
+                            ` : ''}
+                            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                                <button class="edit-btn visible" onclick="habilitarEdicao(${pet.id})">
+                                    ✏️ Editar
+                                </button>
+                                <button class="delete-btn visible" onclick="removerPet(${pet.id})">
+                                    🗑️ Remover
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pet-info">
+                        <div class="pet-info-item">
+                            <strong>🐕 Raça:</strong> ${pet.raca}
+                        </div>
+                        <div class="pet-info-item">
+                            <strong>🎨 Cor:</strong> ${pet.cor}
+                        </div>
+                        <div class="pet-info-item">
+                            <strong>⏱️ Tempo:</strong> ${pet.tempo}
+                        </div>
+                        ${pet.valorPix ? `
+                            <div class="pet-info-item">
+                                <strong>💰 Valor:</strong> R$ ${parseFloat(pet.valorPix).toFixed(2).replace('.', ',')}
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="observacoes-container">
+                        <div>
+                            <span class="observacoes-label">📝 Minhas Observações (Admin):</span>
+                            <textarea class="observacoes observacoes-admin" 
+                                      onchange="atualizarObservacoes(${pet.id}, 'admin', this.value)"
+                                      onblur="atualizarObservacoes(${pet.id}, 'admin', this.value)"
+                                      placeholder="Digite observações administrativas...">${pet.observacoesAdmin || ''}</textarea>
+                            
+                            <span class="observacoes-label">📝 Observações do Motorista:</span>
+                            <textarea class="observacoes observacoes-motorista observacoes-readonly" 
+                                      readonly
+                                      placeholder="Observações do motorista...">${pet.observacoesMotorista || ''}</textarea>
+                        </div>
+                    </div>
                 </div>
             `).join('');
         }
@@ -2150,13 +2619,21 @@
             editingPetId = petId;
             
             document.getElementById('cliente').value = pet.cliente;
-            document.getElementById('nomePet').value = pet.nomePet;
-            document.getElementById('raca').value = pet.raca;
-            document.getElementById('cor').value = pet.cor;
             document.getElementById('endereco').value = pet.endereco;
-            document.getElementById('tempo').value = pet.tempo;
             document.getElementById('horaRetirada').value = pet.horaRetirada;
             document.getElementById('valorPix').value = pet.valorPix || '50.00';
+            
+            // Configurar primeiro pet
+            const petSection1 = document.getElementById('petSection1');
+            petSection1.querySelector('.nomePet').value = pet.nomePet;
+            petSection1.querySelector('.raca').value = pet.raca;
+            petSection1.querySelector('.cor').value = pet.cor;
+            petSection1.querySelector('.tempo').value = pet.tempo;
+            
+            // Configurar cor de prioridade
+            if (pet.corPrioridade) {
+                selecionarCorPrioridade(1, pet.corPrioridade);
+            }
             
             const form = document.getElementById('formContainer');
             const btn = document.getElementById('addBtn');
@@ -2179,13 +2656,17 @@
             if (!pet) return;
             
             pet.cliente = document.getElementById('cliente').value.trim();
-            pet.nomePet = document.getElementById('nomePet').value.trim();
-            pet.raca = document.getElementById('raca').value;
-            pet.cor = document.getElementById('cor').value;
             pet.endereco = document.getElementById('endereco').value.trim();
-            pet.tempo = document.getElementById('tempo').value.trim();
             pet.horaRetirada = document.getElementById('horaRetirada').value;
             pet.valorPix = parseFloat(document.getElementById('valorPix').value) || 50.00;
+            
+            // Atualizar primeiro pet
+            const petSection1 = document.getElementById('petSection1');
+            pet.nomePet = petSection1.querySelector('.nomePet').value.trim();
+            pet.raca = petSection1.querySelector('.raca').value;
+            pet.cor = petSection1.querySelector('.cor').value;
+            pet.tempo = petSection1.querySelector('.tempo').value.trim();
+            pet.corPrioridade = petColors[1] || pet.corPrioridade;
             
             await salvarPets();
             await mostrarPets();
@@ -2198,16 +2679,12 @@
             editingPetId = null;
             
             document.getElementById('cliente').value = '';
-            document.getElementById('nomePet').value = '';
-            document.getElementById('raca').value = '';
-            document.getElementById('cor').value = '';
             document.getElementById('endereco').value = '';
-            document.getElementById('tempo').value = '';
             document.getElementById('horaRetirada').value = '14:30';
             document.getElementById('valorPix').value = '50.00';
             
             const submitBtn = document.querySelector('.submit-btn');
-            submitBtn.textContent = '✨ Adicionar Pet';
+            submitBtn.textContent = '✨ Adicionar Transporte';
             submitBtn.onclick = adicionarPet;
             
             const form = document.getElementById('formContainer');
@@ -2216,57 +2693,83 @@
                 form.classList.remove('active');
                 btn.textContent = '➕ Adicionar Pet';
             }
+            
+            resetarFormularioMultiPet();
         }
 
         // ========== CRUD PETS COM VALOR PIX ==========
         async function adicionarPet() {
             if (!isAdmin && !editingPetId) return;
             
-            const pet = {
-                id: editingPetId || Date.now(),
-                cliente: document.getElementById('cliente').value.trim(),
-                nomePet: document.getElementById('nomePet').value.trim(),
-                raca: document.getElementById('raca').value,
-                cor: document.getElementById('cor').value,
-                endereco: document.getElementById('endereco').value.trim(),
-                tempo: document.getElementById('tempo').value.trim(),
-                horaRetirada: document.getElementById('horaRetirada').value || '14:30',
-                valorPix: parseFloat(document.getElementById('valorPix').value) || 50.00,
-                status: 'A caminho retirada',  // ← CORREÇÃO 1: Alterado para "A caminho retirada"
-                pagamento: 'Pendente',
-                observacoesAdmin: '',
-                observacoesMotorista: '',
-                horaEntregue: null,
-                valorRecebido: null,
-                dataPagamento: null,
-                dataCriacao: editingPetId ? pets.find(p => p.id === editingPetId)?.dataCriacao || new Date().toISOString() : new Date().toISOString(),
-                arquivado: false,
-                pagamentoCollapsed: true
-            };
-
-            if (!pet.cliente || !pet.nomePet || !pet.raca || !pet.cor || !pet.endereco) {
-                mostrarMensagem('⚠️ Preencha todos os campos!', 'warning');
+            const cliente = document.getElementById('cliente').value.trim();
+            const endereco = document.getElementById('endereco').value.trim();
+            const horaRetirada = document.getElementById('horaRetirada').value || '14:30';
+            const valorPix = parseFloat(document.getElementById('valorPix').value) || 50.00;
+            
+            if (!cliente || !endereco) {
+                mostrarMensagem('⚠️ Preencha cliente e endereço!', 'warning');
                 return;
             }
-
-            if (editingPetId) {
-                const index = pets.findIndex(p => p.id === editingPetId);
-                if (index !== -1) {
-                    const originalPet = pets[index];
-                    pet.status = originalPet.status;
-                    pet.pagamento = originalPet.pagamento;
-                    pet.observacoesAdmin = originalPet.observacoesAdmin;
-                    pet.observacoesMotorista = originalPet.observacoesMotorista;
-                    pet.horaEntregue = originalPet.horaEntregue;
-                    pet.valorRecebido = originalPet.valorRecebido;
-                    pet.dataPagamento = originalPet.dataPagamento;
-                    pet.arquivado = originalPet.arquivado;
-                    pet.pagamentoCollapsed = originalPet.pagamentoCollapsed || true;
+            
+            // Coletar todos os pets do formulário
+            const petsToAdd = [];
+            const petSections = document.querySelectorAll('.pet-form-section');
+            
+            petSections.forEach((section, index) => {
+                const petId = index + 1;
+                const nomePet = section.querySelector('.nomePet').value.trim();
+                const raca = section.querySelector('.raca').value;
+                const cor = section.querySelector('.cor').value;
+                const tempo = section.querySelector('.tempo').value.trim();
+                
+                if (nomePet && raca && cor) {
+                    const pet = {
+                        id: editingPetId ? petId + editingPetId : Date.now() + petId,
+                        cliente: cliente,
+                        nomePet: nomePet,
+                        raca: raca,
+                        cor: cor,
+                        endereco: endereco,
+                        tempo: tempo || '12 minutos',
+                        horaRetirada: horaRetirada,
+                        valorPix: valorPix,
+                        status: 'neutro', // 🔥 CORREÇÃO: Status inicia como neutro
+                        pagamento: 'Pendente',
+                        observacoesAdmin: '',
+                        observacoesMotorista: '',
+                        horaEntregue: null,
+                        valorRecebido: null,
+                        dataPagamento: null,
+                        dataCriacao: new Date().toISOString(),
+                        arquivado: false,
+                        pagamentoCollapsed: true,
+                        corPrioridade: petColors[petId] || 'baixa',
+                        proximaRetirada: false
+                    };
                     
-                    pets[index] = pet;
+                    petsToAdd.push(pet);
                 }
+            });
+            
+            if (petsToAdd.length === 0) {
+                mostrarMensagem('⚠️ Adicione pelo menos um pet válido!', 'warning');
+                return;
+            }
+            
+            if (petsToAdd.length > 5) {
+                mostrarMensagem('⚠️ Máximo de 5 pets por cliente!', 'warning');
+                return;
+            }
+            
+            if (editingPetId) {
+                // Remover pets antigos deste cliente
+                pets = pets.filter(p => p.id < editingPetId || p.id >= editingPetId + 100);
+                
+                // Adicionar novos pets
+                pets.push(...petsToAdd);
             } else {
-                pets.push(pet);
+                // Adicionar novos pets
+                pets.push(...petsToAdd);
             }
             
             await salvarPets();
@@ -2275,12 +2778,17 @@
             mostrarProximaRetirada();
             atualizarHistoricoEntregas();
             
+            if (isAdmin) {
+                atualizarContadoresVisuais();
+                mostrarEntreguesAdmin();
+            }
+            
             cancelarEdicao();
             
-            mostrarMensagem(editingPetId ? '✅ Pet atualizado!' : '✅ Pet adicionado!', 'success');
+            mostrarMensagem(`✅ ${petsToAdd.length} pet(s) adicionado(s) com sucesso!`, 'success');
         }
 
-        // ========== CORREÇÃO 2: COMPORTAMENTO DIFERENCIADO MOTORISTA/ADMIN COM STATUS ENTREGUE ==========
+        // ========== ATUALIZAR STATUS DO PET ==========
         async function atualizarPetStatus(petId, campo, valor) {
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
@@ -2288,6 +2796,7 @@
             const valorAnterior = pet[campo];
             pet[campo] = valor;
             
+            // 🔥 CORREÇÃO: Status "Entregue" agora funciona
             if (campo === 'status' && valor === 'Entregue' && valorAnterior !== 'Entregue') {
                 const agora = new Date();
                 pet.horaEntregue = agora.toLocaleTimeString('pt-BR', { 
@@ -2295,58 +2804,87 @@
                     minute: '2-digit'
                 });
                 
+                // Expandir seção de pagamento automaticamente
+                pet.pagamentoCollapsed = false;
+                
                 if (!isAdmin) {
                     setTimeout(() => mostrarSessaoValor(petId), 500);
                 }
+                
+                mostrarMensagem('✅ Pet marcado como entregue!', 'success');
             }
             
-            // 🔥 CORREÇÃO 2: Quando pet é marcado como ENTREGUE, não bloquear pagamento
-            if (campo === 'status' && valor === 'Entregue') {
-                // Manter a seção de pagamento disponível
-                pet.pagamentoCollapsed = false;
-                mostrarMensagem('✅ Pet entregue! Agora pode marcar o pagamento.', 'success');
-            }
-            
-            // 🔥 COMPORTAMENTO DIFERENCIADO PARA PAGAMENTO
+            // 🔥 CORREÇÃO: Pagamento só pode ser marcado após entrega
             if (campo === 'pagamento') {
+                if (pet.status !== 'Entregue') {
+                    mostrarMensagem('⚠️ Marque como "Entregue" antes de definir o pagamento!', 'warning');
+                    pet[campo] = valorAnterior; // Reverte a alteração
+                    return;
+                }
+                
                 if (!isAdmin) {
-                    // MOTORISTA: Quando marca Pago/Não Pago → ARQUIVA (some da lista)
+                    // MOTORISTA: Quando marca Pago/Não Pago → ARQUIVA
                     pet.arquivado = true;
                     mostrarMensagem(`✅ ${valor} - Pet arquivado!`, 'success');
                 } else {
-                    // ADMIN: Apenas muda status, NÃO arquiva
+                    // ADMIN: Apenas muda status
                     mostrarMensagem(`✅ Status de pagamento atualizado!`, 'success');
                 }
             }
             
             await salvarPets();
             
-            // 🔥 CORREÇÃO 1: Reordenar dinamicamente para as 3 ações
-            if (campo === 'status' && valor !== 'Entregue') {
-                const container = document.getElementById('petsList');
-                const cards = container.querySelectorAll('.pet-card');
-                
-                cards.forEach(card => {
-                    card.classList.add('smooth-move');
-                });
-                
-                await new Promise(resolve => setTimeout(resolve, 50));
-                
-                const petsOrdenados = aplicarOrdenacaoDinamicaCorrigida();
-                await mostrarPetsComOrdem(petsOrdenados);
-                
-                setTimeout(() => {
-                    cards.forEach(card => {
-                        card.classList.remove('smooth-move');
-                    });
-                }, 600);
-            } else {
+            if (campo === 'status' || campo === 'pagamento') {
                 await mostrarPets();
             }
             
             atualizarEstatisticas();
             mostrarProximaRetirada();
             atualizarHistoricoEntregas();
+            
+            if (isAdmin) {
+                atualizarContadoresVisuais();
+                mostrarEntreguesAdmin();
+            }
+        }
+
+        // ========== FUNÇÕES DE PRIORIDADE PARA ADMIN ==========
+        function marcarProximaRetirada(petId) {
+            const pet = pets.find(p => p.id === petId);
+            if (!pet) return;
+            
+            // Alternar estado
+            pet.proximaRetirada = !pet.proximaRetirada;
+            
+            // Remover próxima retirada de outros pets
+            if (pet.proximaRetirada) {
+                pets.forEach(p => {
+                    if (p.id !== petId) {
+                        p.proximaRetirada = false;
+                    }
+                });
+            }
+            
+            salvarPets();
+            mostrarPets();
+            mostrarProximaRetirada();
+            
+            mostrarMensagem(pet.proximaRetirada ? 
+                '✅ Marcado como próxima retirada!' : 
+                '❌ Removido das próximas retiradas', 
+                pet.proximaRetirada ? 'success' : 'warning'
+            );
+        }
+
+        function definirPrioridade(petId, prioridade) {
+            const pet = pets.find(p => p.id === petId);
+            if (!pet) return;
+            
+            pet.corPrioridade = prioridade;
+            salvarPets();
+            mostrarPets();
+            
+            mostrarMensagem(`✅ Prioridade definida como ${prioridade}!`, 'success');
         }
 
         async function atualizarObservacoes(petId, tipo, texto) {
@@ -2374,6 +2912,11 @@
             mostrarProximaRetirada();
             atualizarHistoricoEntregas();
             
+            if (isAdmin) {
+                atualizarContadoresVisuais();
+                mostrarEntreguesAdmin();
+            }
+            
             mostrarMensagem('✅ Pet removido!', 'success');
         }
 
@@ -2387,19 +2930,20 @@
         async function mostrarPets() {
             const container = document.getElementById('petsList');
             
-            const petsOrdenados = aplicarOrdenacaoDinamicaCorrigida();
-            await mostrarPetsComOrdem(petsOrdenados);
-        }
-
-        async function mostrarPetsComOrdem(petsOrdenados) {
-            const container = document.getElementById('petsList');
-            
-            let petsVisiveis = isAdmin ? petsOrdenados : petsOrdenados.filter(p => !p.arquivado);
+            // Filtrar pets para cada tipo de usuário
+            let petsVisiveis;
+            if (isAdmin) {
+                // Admin: mostra tudo exceto entregues (estes vão para seção separada)
+                petsVisiveis = pets.filter(p => !p.arquivado && p.status !== 'Entregue');
+            } else {
+                // Motorista: mostra não arquivados e não entregues
+                petsVisiveis = pets.filter(p => !p.arquivado && p.status !== 'Entregue');
+            }
             
             if (petsVisiveis.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <p>${isAdmin ? '📋 Nenhum pet' : '📭 Nenhum pet para transporte'}</p>
+                        <p>${isAdmin ? '📋 Nenhum pet ativo' : '📭 Nenhum pet para transporte'}</p>
                         <p>${isAdmin ? 'Adicione um pet!' : 'Aguardando novos pets'}</p>
                     </div>
                 `;
@@ -2407,19 +2951,18 @@
             }
 
             container.innerHTML = petsVisiveis.map((pet, index) => {
-                const isArquivado = pet.arquivado;
                 const isEntregue = pet.status === 'Entregue';
-                const isEmTransporte = pet.status === 'A caminho da loja' || 
-                                       pet.status === 'A caminho da entrega' || 
-                                       pet.status === 'A caminho retirada'; // ← ADICIONADO
                 const isPagoOuNaoPago = pet.pagamento === 'Pago' || pet.pagamento === 'Não pago';
+                const petColor = getPetColor(pet);
                 
-                const cardClass = isArquivado ? 'arquivado' : '';
-                const transporteClass = isEmTransporte ? 'priority-high' : '';
-                const adminArquivadoClass = (isAdmin && isPagoOuNaoPago) ? 'admin-arquivado' : '';
+                // Definir cor da borda baseada na prioridade
+                let borderColor = petColor;
+                if (pet.proximaRetirada) {
+                    borderColor = '#8b5cf6'; // Roxo para próxima retirada
+                }
                 
                 return `
-                <div class="pet-card ${cardClass} ${transporteClass} ${adminArquivadoClass}">
+                <div class="pet-card" data-pet-id="${pet.id}" style="border-left-color: ${borderColor};">
                     
                     <div class="pet-card-header">
                         <div class="pet-name-section">
@@ -2428,11 +2971,12 @@
                             <div class="badge-container">
                                 ${isAdmin ? `
                                     <span class="badge-status ${pet.status.replace(/ /g, '-').toLowerCase()}">
-                                        ${pet.status}
+                                        ${pet.status === 'neutro' ? 'Sem ação' : pet.status}
                                     </span>
                                     <span class="badge-status ${pet.pagamento === 'Pago' ? 'pago' : 'nao-pago'}">
                                         ${pet.pagamento}
                                     </span>
+                                    ${pet.proximaRetirada ? `<span class="badge-status" style="background: #8b5cf6; color: white;">⏰ Próxima</span>` : ''}
                                 ` : ''}
                             </div>
                         </div>
@@ -2441,13 +2985,34 @@
                             <div class="pet-time">
                                 <span>⏰ <strong>Retirada:</strong> ${pet.horaRetirada || '--:--'}</span>
                             </div>
-                            ${pet.horaEntregue ? `
-                                <div class="hora-entregue">
-                                    ✅ <strong>Entregue:</strong> ${pet.horaEntregue}
+                            ${isAdmin ? `
+                                <div style="margin-top: 10px; display: flex; gap: 8px;">
+                                    <button class="next-pickup-btn ${pet.proximaRetirada ? 'active' : ''}" 
+                                            onclick="marcarProximaRetirada(${pet.id})"
+                                            title="Marcar como próxima retirada">
+                                        ${pet.proximaRetirada ? '✅ Próxima' : '⏰ Próxima'}
+                                    </button>
+                                    <div class="priority-buttons">
+                                        <button class="priority-btn alta ${pet.corPrioridade === 'alta' ? 'active' : ''}" 
+                                                onclick="definirPrioridade(${pet.id}, 'alta')"
+                                                title="Prioridade Alta">
+                                            A
+                                        </button>
+                                        <button class="priority-btn media ${pet.corPrioridade === 'media' ? 'active' : ''}" 
+                                                onclick="definirPrioridade(${pet.id}, 'media')"
+                                                title="Prioridade Média">
+                                            M
+                                        </button>
+                                        <button class="priority-btn baixa ${pet.corPrioridade === 'baixa' ? 'active' : ''}" 
+                                                onclick="definirPrioridade(${pet.id}, 'baixa')"
+                                                title="Prioridade Baixa">
+                                            B
+                                        </button>
+                                    </div>
                                 </div>
                             ` : ''}
                             <div style="display: flex; gap: 8px; margin-top: 10px;">
-                                ${!isAdmin && !isEntregue && !isArquivado ? `
+                                ${!isAdmin && !isEntregue ? `
                                     <button class="pix-btn" onclick="mostrarModalPix(${pet.id})" title="Mostrar QR Code PIX">
                                         💰
                                     </button>
@@ -2479,6 +3044,11 @@
                                 <strong>💰 Valor:</strong> R$ ${parseFloat(pet.valorPix).toFixed(2).replace('.', ',')}
                             </div>
                         ` : ''}
+                        <div class="pet-info-item">
+                            <strong>🎨 Prioridade:</strong> 
+                            <span style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: ${petColor}; margin-left: 5px;"></span>
+                            ${pet.corPrioridade === 'alta' ? 'Alta' : pet.corPrioridade === 'media' ? 'Média' : 'Baixa'}
+                        </div>
                     </div>
                     
                     <div class="pet-address">
@@ -2521,12 +3091,12 @@
                     <div class="status-section">
                         ${!isAdmin ? `
                             <div class="status-buttons">
-                                <!-- 🔥 CORREÇÃO 1: Alterado "Aguardando retirada" para "A caminho retirada" -->
-                                ${['A caminho retirada', 'A caminho da loja', 'A caminho da entrega', 'Entregue'].map(status => `
-                                    <button class="status-btn ${pet.status === status ? 'active' : ''}" 
+                                <!-- 🔥 CORREÇÃO: Status inicia como neutro, motorista seleciona -->
+                                ${['neutro', 'A caminho retirada', 'A caminho da loja', 'A caminho da entrega', 'Entregue'].map(status => `
+                                    <button class="status-btn ${pet.status === status ? 'active' : ''} ${status === 'neutro' ? 'neutro' : ''}" 
                                             onclick="atualizarPetStatus(${pet.id}, 'status', '${status}')"
-                                            ${(isArquivado || isPagoOuNaoPago) && status !== 'Entregue' ? 'disabled' : ''}> <!-- 🔥 CORREÇÃO 2: Remove desabilitação -->
-                                        ${status}
+                                            ${isPagoOuNaoPago ? 'disabled' : ''}>
+                                        ${status === 'neutro' ? 'Sem ação' : status}
                                     </button>
                                 `).join('')}
                             </div>
@@ -2534,7 +3104,7 @@
                             <!-- BOTÃO TOGGLE PAGAMENTO -->
                             <button class="toggle-pagamento-btn ${pet.pagamentoCollapsed ? 'collapsed' : ''}" 
                                     onclick="togglePagamento(${pet.id})"
-                                    ${isArquivado ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                                    ${pet.status !== 'Entregue' ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
                                 <div style="display: flex; align-items: center; gap: 8px;">
                                     <span class="arrow">▼</span>
                                     <span>💰 Pagamento</span>
@@ -2549,15 +3119,15 @@
                             <!-- SEÇÃO PAGAMENTO (EXPANDE/RECOLHE) -->
                             <div class="pagamento-section ${pet.pagamentoCollapsed ? 'collapsed' : ''}">
                                 <div class="pagamento-buttons">
-                                    <!-- 🔥 CORREÇÃO 2: Remover desabilitação quando entregue -->
+                                    <!-- 🔥 CORREÇÃO: Só habilita se status for Entregue -->
                                     <button class="pagamento-btn pago ${pet.pagamento === 'Pago' ? 'active' : ''}" 
                                             onclick="marcarComoPago(${pet.id})"
-                                            ${pet.arquivado ? 'disabled' : ''}> <!-- Removido: || pet.status === 'Entregue' -->
+                                            ${pet.arquivado || pet.status !== 'Entregue' ? 'disabled' : ''}>
                                         ✅ Marcar como Pago
                                     </button>
                                     <button class="pagamento-btn nao-pago ${pet.pagamento === 'Não pago' ? 'active' : ''}" 
                                             onclick="marcarComoNaoPago(${pet.id})"
-                                            ${pet.arquivado ? 'disabled' : ''}> <!-- Removido: || pet.status === 'Entregue' -->
+                                            ${pet.arquivado || pet.status !== 'Entregue' ? 'disabled' : ''}>
                                         ❌ Marcar como Não Pago
                                     </button>
                                 </div>
@@ -2609,23 +3179,37 @@
         }
 
         function mostrarMensagem(texto, tipo) {
-            const status = document.getElementById('syncStatus');
-            const cores = {
-                success: 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)',
-                error: 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)',
-                warning: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)'
-            };
+            // Criar notificação flutuante
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${tipo === 'success' ? '#10b981' : tipo === 'error' ? '#ef4444' : '#f59e0b'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 10px;
+                box-shadow: var(--shadow-lg);
+                z-index: 10000;
+                animation: slideInLeft 0.3s ease-out;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                max-width: 300px;
+            `;
             
-            status.style.background = cores[tipo] || '#f3f4f6';
-            status.style.color = tipo === 'success' ? '#065f46' : tipo === 'error' ? '#991b1b' : '#92400e';
-            status.style.borderColor = tipo === 'success' ? '#10b981' : tipo === 'error' ? '#ef4444' : '#f59e0b';
-            status.firstElementChild.innerHTML = `<strong>${texto}</strong>`;
+            notification.innerHTML = `
+                <span>${tipo === 'success' ? '✅' : tipo === 'error' ? '❌' : '⚠️'}</span>
+                <span>${texto}</span>
+            `;
+            
+            document.body.appendChild(notification);
             
             setTimeout(() => {
-                status.style.background = 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)';
-                status.style.color = '#92400e';
-                status.style.borderColor = '#fbbf24';
-                atualizarHora();
+                notification.style.animation = 'slideOutRight 0.3s ease-out';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
             }, 3000);
         }
 
@@ -2643,8 +3227,11 @@
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
-            // 🔥 CORREÇÃO 2: Não permitir alternar se arquivado
-            if (pet.arquivado) return;
+            // 🔥 CORREÇÃO: Só permite alternar se status for Entregue
+            if (pet.status !== 'Entregue') {
+                mostrarMensagem('⚠️ Marque como "Entregue" primeiro!', 'warning');
+                return;
+            }
             
             // Alternar estado
             pet.pagamentoCollapsed = !pet.pagamentoCollapsed;
@@ -2661,8 +3248,11 @@
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
-            // 🔥 CORREÇÃO 2: Não permitir se arquivado
-            if (pet.arquivado) return;
+            // 🔥 CORREÇÃO: Verificar se status é Entregue
+            if (pet.status !== 'Entregue') {
+                mostrarMensagem('⚠️ Marque como "Entregue" primeiro!', 'warning');
+                return;
+            }
             
             // Confirmar
             if (!confirm(`Marcar ${pet.nomePet} como PAGO?`)) return;
@@ -2688,8 +3278,11 @@
             const pet = pets.find(p => p.id === petId);
             if (!pet) return;
             
-            // 🔥 CORREÇÃO 2: Não permitir se arquivado
-            if (pet.arquivado) return;
+            // 🔥 CORREÇÃO: Verificar se status é Entregue
+            if (pet.status !== 'Entregue') {
+                mostrarMensagem('⚠️ Marque como "Entregue" primeiro!', 'warning');
+                return;
+            }
             
             // Confirmar
             if (!confirm(`Marcar ${pet.nomePet} como NÃO PAGO?`)) return;
@@ -2723,6 +3316,38 @@
                     carregarPets();
                 }
             });
+            
+            // Adicionar estilos para animações
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideInLeft {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+                
+                @keyframes slideOutRight {
+                    from {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                    to {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                }
+                
+                @keyframes pulse {
+                    0%, 100% { box-shadow: var(--shadow-lg); }
+                    50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.5); }
+                }
+            `;
+            document.head.appendChild(style);
         });
     </script>
 </body>
